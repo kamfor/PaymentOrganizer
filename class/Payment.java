@@ -12,9 +12,7 @@ public class Payment{
 	   
 	}
    
-	void pay(int arg_date, float arg_value){
+	void accept(int arg_date, float arg_value){
 	   
 	}
-
-
 }

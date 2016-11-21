@@ -1,3 +1,5 @@
+package pl.foryszewski ;
+
 class Supplier
 {
 	public String name; 
@@ -12,7 +14,7 @@ class Supplier
 	
 	Supplier() { reg = count++; } // konstruktor klasy 
 
-	public void setName(string Name){
-
+	public void setName(string username){
+		name = username;
 	}
 }

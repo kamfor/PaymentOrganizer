@@ -1,3 +1,5 @@
+package pl.foryszewski
+
 public class Payment{
 	int date; 
 	int end_date; 
@@ -8,11 +10,12 @@ public class Payment{
 	int actual_payoff; 
 	
 
-	void returnDate() {
-	   
+	int returnDate() {
+		return date;
 	}
    
-	void accept(int arg_date, float arg_value){
-	   
+	void accept(int userdate, float uservalue){
+	   	value = uservalue;
+		date = userdate;
 	}
 }

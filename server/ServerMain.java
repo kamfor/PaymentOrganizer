@@ -1,4 +1,4 @@
-package edu.lmu.cs.networking;
+package pl.foryszewski;
 
 import java.io.IOException;
 import java.io.PrintWriter;

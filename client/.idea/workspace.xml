@@ -6,14 +6,6 @@
       <change type="DELETED" beforePath="$PROJECT_DIR$/../class/Customer.java" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../class/Payment.java" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/../class/Supplier.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ClientController.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ClientMain.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ClientModel.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/ClientView.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server/ServerController.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server/ServerMain.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server/ServerModel.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../server/ServerViev.java" afterPath="" />
     </list>
     <ignored path="client.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,21 +25,7 @@
     <favorites_list name="client" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ClientMain.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/ClientMain.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="30" column="1" selection-start-line="30" selection-start-column="1" selection-end-line="30" selection-end-column="1" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -101,8 +79,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -138,6 +114,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -475,6 +453,17 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/ClientMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/ClientMain.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">

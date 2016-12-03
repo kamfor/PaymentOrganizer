@@ -1,9 +1,12 @@
+package classes;
+
+import java.io.Serializable;
 import java.util.Vector;
 
 /**
  * Created by kamil on 27.11.16.
  */
-public class Payment {
+public class Payment implements Serializable {
     public int id;
     public String type;
     public String value;
@@ -38,5 +41,17 @@ public class Payment {
         append.addElement(String.valueOf(subject_id));
         append.addElement(document_name);
         append.addElement(notes);
+    }
+
+    public void printPaymentObject(){
+        System.out.println("ID:"+id);
+        System.out.println("Type:"+type);
+        System.out.println("Value:"+value);
+        System.out.println("Begin Date:"+begin_date);
+        System.out.println("End Date:"+end_date);
+        System.out.println("Owner:"+owner_id);
+        System.out.println("Subject:"+subject_id);
+        System.out.println("Document:"+document_name);
+        System.out.println("Notes:"+notes);
     }
 }

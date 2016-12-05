@@ -10,14 +10,14 @@ public class Payment implements Serializable {
     public int id;
     public String type;
     public String value;
-    public java.util.Date begin_date;
-    public java.util.Date end_date;
+    public String begin_date;
+    public String end_date;
     public int owner_id;
     public int subject_id;
     public String document_name;
     public String notes;
 
-    public Payment(int par_id, String par_type, String par_value,java.util.Date par_begin_date, java.util.Date par_end_date,
+    public Payment(int par_id, String par_type, String par_value,String par_begin_date, String par_end_date,
                    int par_owner_id, int par_subject_id, String par_document_name, String par_notes){
         id  = par_id;
         type = par_type;;
@@ -35,8 +35,8 @@ public class Payment implements Serializable {
         append.addElement(String.valueOf(id));
         append.addElement(type);
         append.addElement(value);
-        append.addElement(begin_date.toString());
-        append.addElement(end_date.toString());
+        append.addElement(begin_date);
+        append.addElement(end_date);
         append.addElement(String.valueOf(owner_id));
         append.addElement(String.valueOf(subject_id));
         append.addElement(document_name);

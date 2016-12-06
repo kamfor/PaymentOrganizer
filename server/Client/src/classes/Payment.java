@@ -20,7 +20,7 @@ public class Payment implements Serializable {
     public Payment(int par_id, String par_type, String par_value,java.util.Date par_begin_date, java.util.Date par_end_date,
                    int par_owner_id, int par_subject_id, String par_document_name, String par_notes){
         id  = par_id;
-        type = par_type;;
+        type = par_type;
         value =par_value;
         begin_date = par_begin_date;
         end_date = par_end_date;
@@ -41,6 +41,20 @@ public class Payment implements Serializable {
         append.addElement(String.valueOf(subject_id));
         append.addElement(document_name);
         append.addElement(notes);
+    }
+
+    public Vector<String> toVector(){
+        Vector<String> temp = new Vector<String>();
+        temp.addElement(String.valueOf(id));
+        temp.addElement(type);
+        temp.addElement(value);
+        temp.addElement(begin_date.toString());
+        temp.addElement(end_date.toString());
+        temp.addElement(String.valueOf(owner_id));
+        temp.addElement(String.valueOf(subject_id));
+        temp.addElement(document_name);
+        temp.addElement(notes);
+        return temp;
     }
 
     public void printPaymentObject(){

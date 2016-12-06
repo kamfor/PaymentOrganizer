@@ -1,19 +1,25 @@
 /**
  * Created by kamil on 23.11.16.
  */
+import classes.Payment;
 import java.sql.*;
+import java.util.Vector;
 
 public class DatabaseConnector {
 
-   // JDBC driver name and database URL
-   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-   static final String DB_URL = "jdbc:mysql://s52.hekko.net.pl/kfforex_java";
+    // JDBC driver name and database URL
+    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    static final String DB_URL = "jdbc:mysql://s52.hekko.net.pl/kfforex_java";
 
-   //  Database credentials
-   static final String USER = "kfforex_java";
-   static final String PASS = "fasada";
+    //  Database credentials
+    static final String USER = "kfforex_java";
+    static final String PASS = "fasada";
 
-   public static void main(String[] args) {
+    private ResultSet rows;
+    public Vector<Payment> data = new Vector<>();
+
+
+    public void readMysqlData() {
        Connection conn = null;
        Statement stmt = null;
        try{
@@ -24,48 +30,20 @@ public class DatabaseConnector {
            System.out.println("Connecting to database...");
            conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-           //STEP 4: Execute a query
-           System.out.println("Creating statement...");
-           stmt = conn.createStatement();
-           String sql;
-           sql = "SELECT * FROM payments";
-           ResultSet rs = stmt.executeQuery(sql);
+           Statement sqlStatement = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+           String select = "SELECT id, type, value, begin_date, end_date, owner_id, subject_id, document_name, notes FROM payments";
+           rows = sqlStatement.executeQuery(select); // Execute the query
 
-           //STEP 5: Extract data from result set
-           while(rs.next()){
-               //Retrieve by column name
-               int id  = rs.getInt("id");
-               String value = rs.getString("value");
-
-
-               //Display values
-               System.out.print("ID: " + id);
-               System.out.print(", Value: " + value);
+           while(rows.next()) { // Add the information to the JTable
+               Payment sample = new Payment(rows.getInt(1),rows.getString(2),rows.getString(3),rows.getDate(4),rows.getDate(5),rows.getInt(6),rows.getInt(7),rows.getString(8),rows.getString(9));
+               //sample.printPaymentObject();
+               data.addElement(sample);
            }
-           //STEP 6: Clean-up environment
-           rs.close();
-           stmt.close();
-           conn.close();
-       }catch(SQLException se){
-           //Handle errors for JDBC
-           se.printStackTrace();
-       }catch(Exception e){
-           //Handle errors for Class.forName
-           e.printStackTrace();
-       }finally{
-           //finally block used to close resources
-           try{
-               if(stmt!=null)
-                   stmt.close();
-           }catch(SQLException se2){
-           }// nothing we can do
-           try{
-               if(conn!=null)
-                   conn.close();
-           }catch(SQLException se){
-               se.printStackTrace();
-           }//end finally try
-       }//end try
+       } catch (SQLException e) { // Print errors if exceptions occur
+           System.out.println(e.getMessage());
+       } catch (ClassNotFoundException e) {
+           System.out.println(e.getMessage());
+       }
        System.out.println("Goodbye!");
-   }//end main
+   }
 }

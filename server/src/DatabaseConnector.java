@@ -30,7 +30,7 @@ public class DatabaseConnector {
            System.out.println("Connecting to database...");
            conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
-           Statement sqlStatement = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+           Statement sqlStatement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
            String select = "SELECT id, type, value, begin_date, end_date, owner_id, subject_id, document_name, notes FROM payments";
            rows = sqlStatement.executeQuery(select); // Execute the query
 
@@ -45,5 +45,34 @@ public class DatabaseConnector {
            System.out.println(e.getMessage());
        }
        System.out.println("Goodbye!");
+   }
+
+   public void writeMysqlData(Vector<Payment> data) {
+
+       for(Payment toinsert: data) {
+           try { // Attempt to insert the information into the database
+               rows.last();
+               toinsert.id = rows.getInt(1)+1;
+               rows.moveToInsertRow();
+               rows.updateInt("id",toinsert.id);
+               rows.updateString("type", toinsert.type);
+               rows.updateString("value", toinsert.value);
+               rows.updateDate("begin_date", (Date)toinsert.begin_date);
+               rows.updateDate("end_date", (Date)toinsert.end_date);
+               rows.updateInt("owner_id",toinsert.owner_id);
+               rows.updateInt("subject_id",toinsert.subject_id);
+               rows.updateString("document_name", toinsert.document_name);
+               rows.updateString("notes", toinsert.notes);
+
+               rows.insertRow();
+               rows.updateRow();
+
+
+
+               rows.last();
+           } catch (SQLException e2) {
+               e2.printStackTrace();
+           }
+       }
    }
 }

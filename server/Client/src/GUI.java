@@ -8,6 +8,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
@@ -164,6 +165,18 @@ public class GUI extends JFrame {
                 // Attempt to insert the information into the database
 
                 Customer.db.rowData.addElement(toinsert);
+                Vector<Payment> tosend = new Vector<>();
+                tosend.addElement(toinsert);
+                try {
+                    Customer.db.sendObject(tosend);
+                    //Customer.db.rows.last(); //try to get id from sqlquery
+                    //customerID = Customer.db.rows.getInt(1);
+                    //Object[] customer = {customerID, firstName, lastName, phoneNumber, emailAddress, city, state, sqlDateRegistered};
+                    //Customer.db.defaultTableModel.addRow(customer); // Add the row to the screen
+
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
 
                 Customer.db.defaultTableModel.addRow(toinsert.toVector()); // Add the row to the screen
                 errorMessage.setText(""); // Remove the error message if one was displayed

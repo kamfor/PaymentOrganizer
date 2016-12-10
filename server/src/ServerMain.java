@@ -6,9 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Vector;
 
 import classes.Payment;
 
@@ -20,33 +18,75 @@ public class ServerMain {
      */
     public static void main(String[] args) throws IOException {
         ServerSocket listener = new ServerSocket(9091);
-        Socket fromClientSocket;
-        Payment incoming = null;
         DatabaseConnector data = new DatabaseConnector();
+        int clientNumber = 0;
         data.readMysqlData();
 
-        //System.out.println(data.data.get(0));
-
-        String str_date="2016-12-15";
-        DateFormat formatter ;
-        Date date = new Date();
-        formatter = new SimpleDateFormat("YYYY-MM-DD");
-        try{
-            date = formatter.parse(str_date);
+        try {
+            while (true) {
+                new ClientHandler(listener.accept(), clientNumber++, data).start();
+            }
+        }finally {
+            listener.close();
         }
-        catch(java.text.ParseException e){
-            e.printStackTrace();
-        }
-        Payment outgoing = data.data.get(0);
-
-        fromClientSocket = listener.accept();
-
-        ObjectOutputStream oos = new ObjectOutputStream(fromClientSocket.getOutputStream());
-
-        oos.writeObject(outgoing);
-
-        oos.close();
-
-        fromClientSocket.close();
     }
+
+    // therad handler
+
+    private static class ClientHandler extends Thread {
+        private Socket socket;
+        private int clientNumber;
+        private DatabaseConnector database;
+        private Vector<Payment> vectorin;
+
+        public ClientHandler(Socket socket, int clientNumber, DatabaseConnector tosend) {
+            this.socket = socket;
+            this.clientNumber = clientNumber;
+            this.database = tosend;
+            log("New connection with client# " + clientNumber + " at " + socket);
+        }
+
+        /**
+         * Services this thread's client by first sending the
+         * client a welcome message then repeatedly reading strings
+         * and sending back the capitalized version of the string.
+         */
+        public void run() {
+            try {
+
+                //Set streams
+
+                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+
+                ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+
+                // Send data to client
+                oos.writeObject(database.data);
+                System.out.println("data written");
+
+                //oos.close();
+
+                // Get data from the client
+                while (true) {
+                    vectorin = (Vector<Payment>)ois.readObject();
+                    database.writeMysqlData(vectorin);
+                }
+
+            } catch (IOException | ClassNotFoundException e) {
+                log("Error handling client# " + clientNumber + ": " + e);
+            } finally {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    log("Couldn't close a socket, what's going on?");
+                }
+                log("Connection with client# " + clientNumber + " closed");
+            }
+        }
+
+        private void log(String message) {
+            System.out.println(message);
+        }
+    }
+
 }

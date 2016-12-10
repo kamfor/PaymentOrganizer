@@ -20,7 +20,7 @@ public class Customer {
         gui = new GUI(db);
 
         gui.setColumnWidths(db.columns, 10, 60, 80, 100, 100, 80, 80, 80, 80);
-        gui.setSize(1110,700);
+        gui.setSize(1920,1080);
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gui.setVisible(true);
     }

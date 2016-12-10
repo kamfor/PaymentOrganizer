@@ -18,45 +18,25 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Database {
 
-    /**
-     * Object array used to hold the results retrieved from the database.
-     */
+    private ObjectOutputStream oos;
+    private ObjectInputStream ios;
     private Object[][] databaseResults;
-    /**
-     * String array used to hold the column names for the table.
-     */
     public Object[] columns = new Object[]{"ID", "Type", "Value", "Begin Date", "End Date", "Owner", "Subject", "Document", "Notes"};
-    /**
-     * The table model used for manipulation of the JTable.
-     */
     public DefaultTableModel defaultTableModel;
-
     public Vector<Payment> rowData = new Vector<>();
 
-    /**
-     * Database constructor
-     */
+
+
     public Database() {
 
-        String str_date="2016-12-15";
-        DateFormat formatter ;
-        Date date = new Date();
-        formatter = new SimpleDateFormat("YYYY-MM-DD");
         try{
-            date = formatter.parse(str_date);
-        }
-        catch(java.text.ParseException e){
+            this.connectToServer();
+        }catch(IOException e){
             e.printStackTrace();
         }
 
-        Payment sample = new Payment(12,"bill","100", date,date,1,1,"FV123/2","utd");
-        Payment sample1 = new Payment(112,"bilhjkl","1050",date,date,2,2,"FV153/2","ulktd");
-
-        rowData.addElement(sample);
-        rowData.addElement(sample1);
-
         try{
-            rowData.addElement((Payment)getDataFromServer());
+            rowData = (Vector<Payment>)getDataFromServer();
         } catch(IOException e){
             e.printStackTrace();
         }
@@ -83,39 +63,33 @@ public class Database {
         }
     }
 
+    public void connectToServer() throws IOException {
+
+        // Make connection and initialize streams
+        Socket socket = new Socket(InetAddress.getLocalHost(), 9091);
+        oos = new ObjectOutputStream(socket.getOutputStream());
+        ios = new ObjectInputStream(socket.getInputStream());
+    }
+
+
     public void sendObject(Object input) throws IOException {
-
-        Socket s = new Socket(InetAddress.getLocalHost(), 9091);
-
-        ObjectOutputStream oos = new ObjectOutputStream(s.getOutputStream());
 
         oos.writeObject(input);
 
-        oos.close();
-
-        s.close();
+        //oos.close();
+        //s.close();
     }
 
     public Object getDataFromServer() throws IOException{
 
-        Payment temp = null;
-
-        Socket s = new Socket(InetAddress.getLocalHost(), 9091);
-
-        ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
-
+        Vector<Payment> temp = null;
         try {
-            temp = (Payment)ois.readObject();
+            temp = (Vector<Payment>)ios.readObject();
         } catch (ClassNotFoundException e) {
             e.printStackTrace ();
         }
 
-        System.out.println(temp.toString());
-
-        ois.close();
-
-        s.close();
-
+        //ios.close();
         return temp;
     }
 }

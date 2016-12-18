@@ -16,6 +16,7 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -60,7 +61,13 @@ public class GUI extends JFrame {
 
         // Create a JScrollPane and add it to the center of the window
         JScrollPane scrollPane = new JScrollPane(table);
-        this.add(scrollPane, BorderLayout.CENTER);
+        //this.add(scrollPane, BorderLayout.CENTER);
+
+        //Create a JTabbedPane
+        JTabbedPane tabular = new JTabbedPane();
+
+        tabular.addTab("Customers", scrollPane);
+
 
         // Set button values
         addRecord = new JButton("Add Record");
@@ -115,6 +122,10 @@ public class GUI extends JFrame {
         // set the input panel to the bottom and the error panel to the top
         this.add(inputPanel, BorderLayout.SOUTH);
         this.add(errorPanel, BorderLayout.NORTH);
+        //tabular.add(inputPanel, BorderLayout.SOUTH);
+        //tabular.add(errorPanel, BorderLayout.NORTH);
+
+        this.add(tabular);
 
         // Center the ID column in the table
         DefaultTableCellRenderer centerColumns = new DefaultTableCellRenderer();
@@ -276,11 +287,7 @@ public class GUI extends JFrame {
         }
     }
 
-    /**
-     * Method used to set the column widths of the JTable being displayed.
-     * @param columns the Object array of column names.
-     * @param widths the specified widths to set the columns to.
-     */
+
     public void setColumnWidths(Object[] columns, int...widths) {
         TableColumn column;
         for(int i = 0; i < columns.length; i++) {
@@ -289,19 +296,12 @@ public class GUI extends JFrame {
         }
     }
 
-    /**
-     * Used to set the message on the errorPanel.
-     * @param message the message to display.
-     */
+
     public void setErrorMessage(String message) {
         errorMessage.setText(message);
     }
 
-    /**
-     * Converts a date into one that can be recorded into the database.
-     * @param dateRegistered the date that the user inputs in the Date Registered field.
-     * @return the newly converted date.
-     */
+
     public java.util.Date getADate(String dateRegistered) {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 

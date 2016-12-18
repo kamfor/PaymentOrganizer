@@ -84,8 +84,7 @@ public class ServerMain {
             }
         }
 
-        private void log(String message) {
-            System.out.println(message);
+        private void log(String message) {System.out.println(message);
         }
     }
 

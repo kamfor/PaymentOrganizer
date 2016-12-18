@@ -41,8 +41,6 @@ public class Database {
             e.printStackTrace();
         }
 
-
-
         defaultTableModel = new DefaultTableModel(databaseResults, columns) {
             public Class getColumnClass(int column) { // Override the getColumnClass method to get the
                 Class classToReturn;					// class types of the data retrieved from the database
@@ -55,8 +53,6 @@ public class Database {
                 return classToReturn;
             }
         };
-
-
 
         for(Payment item: rowData) {
             defaultTableModel.addRow(item.toVector());
@@ -76,8 +72,6 @@ public class Database {
 
         oos.writeObject(input);
 
-        //oos.close();
-        //s.close();
     }
 
     public Object getDataFromServer() throws IOException{
@@ -89,7 +83,6 @@ public class Database {
             e.printStackTrace ();
         }
 
-        //ios.close();
         return temp;
     }
 }

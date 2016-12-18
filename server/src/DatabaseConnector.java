@@ -66,9 +66,6 @@ public class DatabaseConnector {
 
                rows.insertRow();
                rows.updateRow();
-
-
-
                rows.last();
            } catch (SQLException e2) {
                e2.printStackTrace();

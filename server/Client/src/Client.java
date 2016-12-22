@@ -4,11 +4,11 @@ import javax.swing.JFrame;
  * The main driver class for the application working with JTables and
  * MySQL to read, edit, create, and delete customer records.
  */
-public class Customer {
+public class Client {
     /**
      * The GUI object to display data.
      */
-    static GUI gui;
+    static View gui;
 
     /**
      * The database object used to work with the database server.
@@ -17,11 +17,6 @@ public class Customer {
 
     public static void main (String[] args) {
         db = new Database();
-        gui = new GUI(db);
-
-        gui.setColumnWidths(db.columns, 10, 60, 80, 100, 100, 80, 80, 80, 80);
-        gui.setSize(1920,1080);
-        gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gui.setVisible(true);
+        gui = new View();
     }
 }

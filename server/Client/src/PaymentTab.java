@@ -1,7 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -13,16 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTabbedPane;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import classes.Payment;
@@ -32,7 +22,7 @@ import classes.Payment;
  * GUI class used to display and interact with information from
  *  database graphically.
  */
-public class GUI extends JFrame {
+public class PaymentTab extends JInternalFrame {
 
     // Create buttons, labels, text fields, a new JTable, a Font, and the dates
     private JButton addRecord, removeRecord;
@@ -40,18 +30,15 @@ public class GUI extends JFrame {
     private JTextField tfType, tfValue, tfBeginDate, tfEndDate, tfOwner, tfSubject, tfDocument, tfNotes;
     private JTable table;
     private java.util.Date dateBeginDate, dateEndDate;
-    private Font font;
 
     /**
      * Constructor for the GUI class.
-     * @param db the database object used to manipulate the database.
+     * @param
      */
-    public GUI(Database db) {
+    public PaymentTab() {
         super();
-        table = new JTable(db.defaultTableModel);
+        table = new JTable(Client.db.defaultTableModel);
 
-        //font = new Font("Serif", Font.PLAIN, 18);
-        //table.setFont(font);
         table.setRowHeight(table.getRowHeight() + 8);
         table.setAutoCreateRowSorter(true);
 
@@ -61,13 +48,7 @@ public class GUI extends JFrame {
 
         // Create a JScrollPane and add it to the center of the window
         JScrollPane scrollPane = new JScrollPane(table);
-        //this.add(scrollPane, BorderLayout.CENTER);
-
-        //Create a JTabbedPane
-        JTabbedPane tabular = new JTabbedPane();
-
-        tabular.addTab("Customers", scrollPane);
-
+        this.add(scrollPane, BorderLayout.CENTER);
 
         // Set button values
         addRecord = new JButton("Add Record");
@@ -122,10 +103,7 @@ public class GUI extends JFrame {
         // set the input panel to the bottom and the error panel to the top
         this.add(inputPanel, BorderLayout.SOUTH);
         this.add(errorPanel, BorderLayout.NORTH);
-        //tabular.add(inputPanel, BorderLayout.SOUTH);
-        //tabular.add(errorPanel, BorderLayout.NORTH);
-
-        this.add(tabular);
+        this.add(scrollPane, BorderLayout.CENTER);
 
         // Center the ID column in the table
         DefaultTableCellRenderer centerColumns = new DefaultTableCellRenderer();
@@ -175,11 +153,11 @@ public class GUI extends JFrame {
 
                 // Attempt to insert the information into the database
 
-                Customer.db.rowData.addElement(toinsert);
+                Client.db.rowData.addElement(toinsert);
                 Vector<Payment> tosend = new Vector<>();
                 tosend.addElement(toinsert);
                 try {
-                    Customer.db.sendObject(tosend);
+                    Client.db.sendObject(tosend);
                     //Customer.db.rows.last(); //try to get id from sqlquery
                     //customerID = Customer.db.rows.getInt(1);
                     //Object[] customer = {customerID, firstName, lastName, phoneNumber, emailAddress, city, state, sqlDateRegistered};
@@ -189,13 +167,13 @@ public class GUI extends JFrame {
                     e1.printStackTrace();
                 }
 
-                Customer.db.defaultTableModel.addRow(toinsert.toVector()); // Add the row to the screen
+                Client.db.defaultTableModel.addRow(toinsert.toVector()); // Add the row to the screen
                 errorMessage.setText(""); // Remove the error message if one was displayed
 
             } else if (e.getSource() == removeRecord) {
                 try { // If the user clicked remove record, delete from database and remove from table
-                    Customer.db.defaultTableModel.removeRow(table.getSelectedRow());
-                    Customer.db.rowData.remove(table.getSelectedRow());
+                    Client.db.defaultTableModel.removeRow(table.getSelectedRow());
+                    Client.db.rowData.remove(table.getSelectedRow());
                 } catch(ArrayIndexOutOfBoundsException e1) {
                     System.out.println(e1.getMessage());
                     errorMessage.setText("To delete a customer, you must first select a row.");
@@ -267,18 +245,18 @@ public class GUI extends JFrame {
                     table.setValueAt(value, table.getSelectedRow(), table.getSelectedColumn());
 
                     String updateColumn;
-                    updateColumn = Customer.db.defaultTableModel.getColumnName(table.getSelectedColumn());
+                    updateColumn = Client.db.defaultTableModel.getColumnName(table.getSelectedColumn());
 
                     switch(updateColumn) {
                         // if the column was date_registered, convert date update using a Date
                         case "Date_Registered":
                             dateBeginDate = getADate(value);
-                            //Customer.db.rows.updateDate(updateColumn, (Date) dateBeginDate);
-                            //Customer.db.rows.updateRow();
+                            //Client.db.rows.updateDate(updateColumn, (Date) dateBeginDate);
+                            //Client.db.rows.updateRow();
                             break;
                         default: // otherwise update using a String
-                            //Customer.db.rows.updateString(updateColumn, value);
-                            //Customer.db.rows.updateRow();
+                            //Client.db.rows.updateString(updateColumn, value);
+                            //Client.db.rows.updateRow();
                             //when updating create new record and remove old one
                             break;
                     }
@@ -288,9 +266,9 @@ public class GUI extends JFrame {
     }
 
 
-    public void setColumnWidths(Object[] columns, int...widths) {
+    public void setColumnWidths(int...widths) {
         TableColumn column;
-        for(int i = 0; i < columns.length; i++) {
+        for(int i = 0; i < 8; i++) {
             column = table.getColumnModel().getColumn(i);
             column.setPreferredWidth(widths[i]);
         }

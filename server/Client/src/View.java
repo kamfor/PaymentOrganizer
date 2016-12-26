@@ -27,7 +27,7 @@ public class View extends JFrame{
         tab1 = new PaymentTab();
         jtp = new JTabbedPane();
         jtp.addTab("Payments", tab1);
-        jtp.addTab("Payments", new paymentPanel());
+        jtp.addTab("Customers", new paymentPanel());
         jtp.addTab("Owners", new ownerPanel());
         add(jtp);
         jtp.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -124,14 +124,14 @@ class paymentPanel extends JInternalFrame{ //only view elements, actions in othe
 
 }
 
-class ownerPanel extends JInternalFrame{ //only view elements, actions in other class
+class agentPanel extends JInternalFrame{ //only view elements, actions in other class
 
     private JButton addRecord, removeRecord;
     private JLabel errorMessage;
     private JTextField tfName, tfSurname, tfAdress, tfEmail, tfPhone, tfWebsite, tfNotes;
     private JTable table;
 
-    public ownerPanel() {
+    public agentPanel() {
         super();
         table = new JTable();
 

@@ -1,4 +1,6 @@
+import classes.Agent;
 import classes.Payment;
+import classes.Subject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -68,14 +70,25 @@ public class Database {
     public void sendObject(Object input) throws IOException {
 
         oos.writeObject(input);
+        Vector<Object> temp;
+        temp = (Vector<Object>)input;
+        if(temp.elementAt(0) instanceof Payment){ //tak sprawdzamy co przesylamy i moze zadziala
+            System.out.println("tak");
+        }
+        else if(temp.elementAt(0) instanceof Agent){
+            System.out.println("no nie za bardzo bo to agent");
+        }
+        else if(temp.elementAt(0) instanceof Subject){
+            System.out.println("no nie za bardzo bo to subject:");
+        }
 
     }
 
     public Object getDataFromServer() throws IOException{
 
-        Vector<Payment> temp = null;
+        Object temp = null;
         try {
-            temp = (Vector<Payment>)ios.readObject();
+            temp = ios.readObject();
         } catch (ClassNotFoundException e) {
             e.printStackTrace ();
         }

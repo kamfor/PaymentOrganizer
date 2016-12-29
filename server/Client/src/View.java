@@ -28,7 +28,7 @@ public class View extends JFrame{
         jtp = new JTabbedPane();
         jtp.addTab("Payments", tab1);
         jtp.addTab("Customers", new paymentPanel());
-        jtp.addTab("Owners", new ownerPanel());
+        jtp.addTab("Owners", new agentPanel());
         add(jtp);
         jtp.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 

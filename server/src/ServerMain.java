@@ -66,9 +66,9 @@ public class ServerMain {
 
                 //oos.close();
 
-                // Get data from the client
+                //Get data from the client
                 while (true) {
-                    vectorin = (Vector<Payment>)ois.readObject();
+                    vectorin = (Vector<Payment>)ois.readObject(); //3 klasy tutaj musza dzialac
                     database.writeMysqlData(vectorin);
                 }
 
@@ -87,5 +87,4 @@ public class ServerMain {
         private void log(String message) {System.out.println(message);
         }
     }
-
 }

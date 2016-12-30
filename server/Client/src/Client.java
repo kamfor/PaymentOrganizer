@@ -8,7 +8,8 @@ public class Client {
     /**
      * The GUI object to display data.
      */
-    static View gui;
+    //static View gui;
+    static Model GUI;
 
     /**
      * The database object used to work with the database server.
@@ -17,6 +18,6 @@ public class Client {
 
     public static void main (String[] args) {
         db = new Database();
-        gui = new View();
+        GUI = new Model();
     }
 }

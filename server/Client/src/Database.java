@@ -19,13 +19,19 @@ public class Database {
 
     private ObjectOutputStream oos;
     private ObjectInputStream ios;
-    private Object[][] databaseResults;
+    private Object[][] databaseResultsPayment;
+    private Object[][] databaseResultsSubject;
+    private Object[][] databaseResultsAgent;
     public Object[] paymentColumns = new Object[]{"ID","Accepted","Type","Value","Begin Date","End Date","Owner","Subject","Document","Notes"};
     public Object[] agentColumns = new Object[]{"ID","Name","Phone","Email","Commission"};
-    public Object[] subjectColumns = new Object[]{"ID","Name","Phone","Email","Address","End Date","Bill","Notes"};
+    public Object[] subjectColumns = new Object[]{"ID","Name","Phone","Email","Address","Bill","Notes"};
 
-    public DefaultTableModel defaultTableModel;
-    public Vector<Payment> rowData = new Vector<>();
+    public DefaultTableModel defaultTableModelPayment;
+    public DefaultTableModel defaultTableModelAgent;
+    public DefaultTableModel defaultTableModelSubject;
+    public Vector<Payment> rowDataPayment = new Vector<>();
+    public Vector<Agent> rowDataAgent = new Vector<>();
+    public Vector<Subject> rowDataSubject = new Vector<>();
 
 
 
@@ -38,26 +44,42 @@ public class Database {
         }
 
         try{
-            rowData = (Vector<Payment>)getDataFromServer();
+            Vector<Object> temp;
+
+            for(int i=0;i<3;i++){
+
+                temp = (Vector<Object>)getDataFromServer();
+                if(temp.elementAt(0) instanceof Payment){
+                    System.out.println("Payment");
+                    rowDataPayment = (Vector<Payment>)temp.clone();
+                }
+                else if(temp.elementAt(0) instanceof Agent){
+                    System.out.println("Agent");
+                    rowDataAgent = (Vector<Agent>)temp.clone();
+                }
+                else if(temp.elementAt(0) instanceof Subject){
+                    System.out.println("Subject");
+                    rowDataSubject = (Vector<Subject>)temp.clone();
+                }
+            }
+
         } catch(IOException e){
             e.printStackTrace();
         }
 
-        defaultTableModel = new DefaultTableModel(databaseResults, paymentColumns) {
-            public Class getColumnClass(int column) { // Override the getColumnClass method to get the
-                Class classToReturn;					// class types of the data retrieved from the database
+        defaultTableModelPayment = new DefaultTableModel(databaseResultsPayment, paymentColumns);
+        defaultTableModelAgent = new DefaultTableModel(databaseResultsAgent, agentColumns);
+        defaultTableModelSubject = new DefaultTableModel(databaseResultsSubject, subjectColumns);
 
-                if((column >= 0) && column < getColumnCount()) {
-                    classToReturn = getValueAt(0, column).getClass();
-                } else {
-                    classToReturn = Object.class;
-                }
-                return classToReturn;
-            }
-        };
 
-        for(Payment item: rowData) {
-            defaultTableModel.addRow(item.toVector());
+        for(Payment item: rowDataPayment) {
+            defaultTableModelPayment.addRow(item.toVector());
+        }
+        for(Agent item: rowDataAgent) {
+            defaultTableModelAgent.addRow(item.toVector());
+        }
+        for(Subject item: rowDataSubject) {
+            defaultTableModelSubject.addRow(item.toVector());
         }
     }
 

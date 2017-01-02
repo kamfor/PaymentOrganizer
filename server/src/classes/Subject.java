@@ -6,19 +6,23 @@ import java.util.Vector;
 /**
  * Created by kamil on 27.11.16.
  */
-public class Agent implements Serializable {
+public class Subject implements Serializable {
     public int id;
     public String name;
     public String phone;
     public String email;
-    public String commission;
+    public String address;
+    public String bill;
+    public String notes;
 
-    public Agent(int par_id, String par_name,String par_phone, String par_email, String par_commission){
+    public Subject(int par_id, String par_name,String par_phone, String par_email, String par_address, String par_bill, String par_notes){
         id  = par_id;
         name = par_name;
         phone = par_phone;
         email= par_email;
-        commission = par_commission;
+        address = par_address;
+        bill = par_bill;
+        notes = par_notes;
     }
 
     public void toString(Vector<String> append){
@@ -27,7 +31,9 @@ public class Agent implements Serializable {
         append.addElement(name);
         append.addElement(phone);
         append.addElement(email);
-        append.addElement(commission);
+        append.addElement(address);
+        append.addElement(bill);
+        append.addElement(notes);
     }
 
     public Vector<String> toVector(){
@@ -36,7 +42,9 @@ public class Agent implements Serializable {
         temp.addElement(name);
         temp.addElement(phone);
         temp.addElement(email);
-        temp.addElement(commission);
+        temp.addElement(address);
+        temp.addElement(bill);
+        temp.addElement(notes);
         return temp;
     }
 
@@ -45,6 +53,8 @@ public class Agent implements Serializable {
         System.out.println("Name:"+name);
         System.out.println("Phone:"+phone);
         System.out.println("Email:"+email);
-        System.out.println("Commission:"+commission);
+        System.out.println("Address:"+address);
+        System.out.println("Bill:"+bill);
+        System.out.println("Notes:"+notes);
     }
 }

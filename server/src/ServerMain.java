@@ -61,8 +61,14 @@ public class ServerMain {
                 ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 
                 // Send data to client
-                oos.writeObject(database.data);
-                System.out.println("data written");
+                oos.writeObject(database.dataPayment);
+                System.out.println("payment data written");
+
+                oos.writeObject(database.dataAgent);
+                System.out.println("agent data written");
+
+                oos.writeObject(database.dataSubject);
+                System.out.println("subject data written");
 
                 //oos.close();
 

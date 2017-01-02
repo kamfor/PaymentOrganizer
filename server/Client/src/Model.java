@@ -3,10 +3,6 @@
  * zachowanie się tego co się wyświetla
  */
 
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -85,31 +81,28 @@ public class Model {
                 gui.panel1.dateEndDate = getADate(EndDate);
 
                 int paymentID = 0;
-                Payment toinsert = new Payment(0,paymentID, Type, Value, gui.panel1.dateBeginDate, gui.panel1.dateEndDate, Integer.valueOf(Owner), Integer.valueOf(Subject), Document, Notes);
+                Client.db.rowDataPayment.lastElement(); //try to get id from sqlquery
+                paymentID = Client.db.rowDataPayment.lastElement().id+1;
+                Payment toinsert = new Payment(paymentID,paymentID, Type, Value, gui.panel1.dateBeginDate, gui.panel1.dateEndDate, Integer.valueOf(Owner), Integer.valueOf(Subject), Document, Notes);
 
                 // Attempt to insert the information into the database
 
-                Client.db.rowData.addElement(toinsert);
+                Client.db.rowDataPayment.addElement(toinsert);
                 Vector<Payment> tosend = new Vector<>();
                 tosend.addElement(toinsert);
                 try {
                     Client.db.sendObject(tosend);
-                    //Customer.db.rows.last(); //try to get id from sqlquery
-                    //customerID = Customer.db.rows.getInt(1);
-                    //Object[] customer = {customerID, firstName, lastName, phoneNumber, emailAddress, city, state, sqlDateRegistered};
-                    //Customer.db.defaultTableModel.addRow(customer); // Add the row to the screen
-
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
 
-                Client.db.defaultTableModel.addRow(toinsert.toVector()); // Add the row to the screen
+                Client.db.defaultTableModelPayment.addRow(toinsert.toVector()); // Add the row to the screen
                 gui.panel1.errorMessage.setText(""); // Remove the error message if one was displayed
 
             } else if (e.getSource() == gui.panel1.removeRecord) {
                 try { // If the user clicked remove record, delete from database and remove from table
-                    Client.db.defaultTableModel.removeRow(gui.panel1.table.getSelectedRow());
-                    Client.db.rowData.remove(gui.panel1.table.getSelectedRow());
+                    Client.db.defaultTableModelPayment.removeRow(gui.panel1.table.getSelectedRow());
+                    Client.db.rowDataPayment.remove(gui.panel1.table.getSelectedRow());
                 } catch(ArrayIndexOutOfBoundsException e1) {
                     System.out.println(e1.getMessage());
                     gui.panel1.errorMessage.setText("To delete a customer, you must first select a row.");
@@ -181,7 +174,7 @@ public class Model {
                     gui.panel1.table.setValueAt(value, gui.panel1.table.getSelectedRow(), gui.panel1.table.getSelectedColumn());
 
                     String updateColumn;
-                    updateColumn = Client.db.defaultTableModel.getColumnName(gui.panel1.table.getSelectedColumn());
+                    updateColumn = Client.db.defaultTableModelPayment.getColumnName(gui.panel1.table.getSelectedColumn());
 
                     switch(updateColumn) {
                         // if the column was date_registered, convert date update using a Date

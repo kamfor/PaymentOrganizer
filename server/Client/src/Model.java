@@ -1,6 +1,6 @@
 /**
  * Created by kamil on 30.12.16.
- * zachowanie się trgo co się wyświetla
+ * zachowanie się tego co się wyświetla
  */
 
 
@@ -28,7 +28,7 @@ public class Model {
 
     ListenForMouse mouseListener = new ListenForMouse();
     ListenForFocus focusListener = new ListenForFocus();
-    ListenForAction actionListener  =new ListenForAction();
+    ListenForPaymentAction paymentActionListener  =new ListenForPaymentAction();
 
     static View gui;
 
@@ -49,11 +49,11 @@ public class Model {
         // Create a new mouse listener and assign it to the table
         gui.panel1.table.addMouseListener(mouseListener);
         // Add action listeners to the buttons to listen for clicks
-        gui.panel1.addRecord.addActionListener(actionListener);
-        gui.panel1. removeRecord.addActionListener(actionListener);
+        gui.panel1.addRecord.addActionListener(paymentActionListener);
+        gui.panel1.removeRecord.addActionListener(paymentActionListener);
     }
 
-    private class ListenForAction implements ActionListener {
+    private class ListenForPaymentAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == gui.panel1.addRecord) { // If the user clicks Add Record, add the information into the database
                 // Create variables to hold information to be inserted, and get the info from the text fields
@@ -85,7 +85,7 @@ public class Model {
                 gui.panel1.dateEndDate = getADate(EndDate);
 
                 int paymentID = 0;
-                Payment toinsert = new Payment(paymentID, Type, Value, gui.panel1.dateBeginDate, gui.panel1.dateEndDate, Integer.valueOf(Owner), Integer.valueOf(Subject), Document, Notes);
+                Payment toinsert = new Payment(0,paymentID, Type, Value, gui.panel1.dateBeginDate, gui.panel1.dateEndDate, Integer.valueOf(Owner), Integer.valueOf(Subject), Document, Notes);
 
                 // Attempt to insert the information into the database
 

@@ -20,7 +20,10 @@ public class Database {
     private ObjectOutputStream oos;
     private ObjectInputStream ios;
     private Object[][] databaseResults;
-    public Object[] columns = new Object[]{"ID", "Type", "Value", "Begin Date", "End Date", "Owner", "Subject", "Document", "Notes"};
+    public Object[] paymentColumns = new Object[]{"ID","Accepted","Type","Value","Begin Date","End Date","Owner","Subject","Document","Notes"};
+    public Object[] agentColumns = new Object[]{"ID","Name","Phone","Email","Commission"};
+    public Object[] subjectColumns = new Object[]{"ID","Name","Phone","Email","Address","End Date","Bill","Notes"};
+
     public DefaultTableModel defaultTableModel;
     public Vector<Payment> rowData = new Vector<>();
 
@@ -40,7 +43,7 @@ public class Database {
             e.printStackTrace();
         }
 
-        defaultTableModel = new DefaultTableModel(databaseResults, columns) {
+        defaultTableModel = new DefaultTableModel(databaseResults, paymentColumns) {
             public Class getColumnClass(int column) { // Override the getColumnClass method to get the
                 Class classToReturn;					// class types of the data retrieved from the database
 

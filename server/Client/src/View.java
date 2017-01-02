@@ -44,6 +44,7 @@ class paymentPanel extends JInternalFrame{ //only view elements, actions in othe
 
     protected JButton addRecord, removeRecord;
     protected JLabel errorMessage;
+    //protected JCheckBox acceptedBox;
     protected JTextField tfType, tfValue, tfBeginDate, tfEndDate, tfOwner, tfSubject, tfDocument, tfNotes;
     protected JTable table;
     protected java.util.Date dateBeginDate, dateEndDate;
@@ -67,15 +68,17 @@ class paymentPanel extends JInternalFrame{ //only view elements, actions in othe
         addRecord = new JButton("Add Record");
         removeRecord = new JButton("Remove Record");
 
+        //acceptedBox = new JCheckBox("Accepted");
+
         // Set the text field widths and values
         tfType = new JTextField("Type", 6);
         tfValue = new JTextField("Value", 8);
         tfBeginDate = new JTextField("Begin Date", 9);
         tfEndDate = new JTextField("End Date", 9);
-        tfOwner = new JTextField("Owner", 8);
-        tfSubject = new JTextField("Subject", 8);
-        tfDocument = new JTextField("Document", 8);
-        tfNotes = new JTextField("Notes", 8);
+        tfOwner = new JTextField("Owner", 4);
+        tfSubject = new JTextField("Subject", 4);
+        tfDocument = new JTextField("Document", 10);
+        tfNotes = new JTextField("Notes", 20);
 
         // Create a new panel and add the text fields and add/remove buttons to it
         JPanel inputPanel = new JPanel();
@@ -107,10 +110,10 @@ class paymentPanel extends JInternalFrame{ //only view elements, actions in othe
 
 class agentPanel extends JInternalFrame{ //only view elements, actions in other class
 
-    private JButton addRecord, removeRecord;
-    private JLabel errorMessage;
-    private JTextField tfName, tfSurname, tfAdress, tfEmail, tfPhone, tfWebsite, tfNotes;
-    private JTable table;
+    protected JButton addRecord, removeRecord;
+    protected JLabel errorMessage;
+    protected JTextField tfName, tfSurname, tfAddress, tfEmail, tfPhone, tfWebsite, tfNotes;
+    protected JTable table;
 
     public agentPanel() {
         super();
@@ -139,7 +142,7 @@ class agentPanel extends JInternalFrame{ //only view elements, actions in other 
         // Set the text field widths and values
         tfName = new JTextField("Name", 6);
         tfSurname = new JTextField("Surname", 8);
-        tfAdress = new JTextField("Adress", 9);
+        tfAddress = new JTextField("Address", 9);
         tfEmail = new JTextField("Email", 9);
         tfPhone = new JTextField("Phone", 8);
         tfWebsite = new JTextField("Website", 8);
@@ -160,7 +163,7 @@ class agentPanel extends JInternalFrame{ //only view elements, actions in other 
         JPanel inputPanel = new JPanel();
         inputPanel.add(tfName);
         inputPanel.add(tfSurname);
-        inputPanel.add(tfAdress);
+        inputPanel.add(tfAddress);
         inputPanel.add(tfEmail);
         inputPanel.add(tfPhone);
         inputPanel.add(tfWebsite);
@@ -187,7 +190,7 @@ class subjectPanel extends JInternalFrame{ //only view elements, actions in othe
 
     private JButton addRecord, removeRecord;
     private JLabel errorMessage;
-    private JTextField tfName, tfAdress, tfEmail, tfPhone, tfNotes;
+    private JTextField tfName, tfAddress, tfEmail, tfPhone, tfNotes;
     private JTable table;
 
     public subjectPanel() {
@@ -215,11 +218,11 @@ class subjectPanel extends JInternalFrame{ //only view elements, actions in othe
         //removeRecord.addActionListener(actionListener);
 
         // Set the text field widths and values
-        tfName = new JTextField("Name", 6);
-        tfAdress = new JTextField("Adress", 9);
-        tfEmail = new JTextField("Email", 9);
-        tfPhone = new JTextField("Phone", 8);
-        tfNotes = new JTextField("Notes", 8);
+        tfName = new JTextField("Name", 10);
+        tfAddress = new JTextField("Adress", 20);
+        tfEmail = new JTextField("Email", 10);
+        tfPhone = new JTextField("Phone", 9);
+        tfNotes = new JTextField("Notes", 15);
 
         // Create a focus listener and add it to each text field to remove text when clicked on
         //ListenForFocus focusListener = new ListenForFocus();
@@ -235,7 +238,7 @@ class subjectPanel extends JInternalFrame{ //only view elements, actions in othe
         // Create a new panel and add the text fields and add/remove buttons to it
         JPanel inputPanel = new JPanel();
         inputPanel.add(tfName);
-        inputPanel.add(tfAdress);
+        inputPanel.add(tfAddress);
         inputPanel.add(tfEmail);
         inputPanel.add(tfPhone);
         inputPanel.add(tfNotes);

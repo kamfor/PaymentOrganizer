@@ -11,15 +11,17 @@ public class Subject implements Serializable {
     public String name;
     public String phone;
     public String email;
-    public String adress;
+    public String address;
+    public String bill;
     public String notes;
 
-    public Subject(int par_id, String par_name,String par_phone, String par_email, String par_adress, String par_notes){
+    public Subject(int par_id, String par_name,String par_phone, String par_email, String par_address, String par_bill, String par_notes){
         id  = par_id;
         name = par_name;
         phone = par_phone;
         email= par_email;
-        adress = par_adress;
+        address = par_address;
+        bill = par_bill;
         notes = par_notes;
     }
 
@@ -29,7 +31,8 @@ public class Subject implements Serializable {
         append.addElement(name);
         append.addElement(phone);
         append.addElement(email);
-        append.addElement(adress);
+        append.addElement(address);
+        append.addElement(bill);
         append.addElement(notes);
     }
 
@@ -39,7 +42,8 @@ public class Subject implements Serializable {
         temp.addElement(name);
         temp.addElement(phone);
         temp.addElement(email);
-        temp.addElement(adress);
+        temp.addElement(address);
+        temp.addElement(bill);
         temp.addElement(notes);
         return temp;
     }
@@ -49,7 +53,8 @@ public class Subject implements Serializable {
         System.out.println("Name:"+name);
         System.out.println("Phone:"+phone);
         System.out.println("Email:"+email);
-        System.out.println("Adress:"+adress);
+        System.out.println("Address:"+address);
+        System.out.println("Bill:"+bill);
         System.out.println("Notes:"+notes);
     }
 }

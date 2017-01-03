@@ -18,7 +18,12 @@ import java.util.Vector;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
+
+import classes.Agent;
 import classes.Payment;
+import classes.Subject;
+import com.sun.org.apache.bcel.internal.generic.InstructionConstants;
+import com.sun.org.apache.xerces.internal.util.EncodingMap;
 
 
 public class Model {
@@ -26,6 +31,10 @@ public class Model {
     ListenForMouse mouseListener = new ListenForMouse();
     ListenForFocus focusListener = new ListenForFocus();
     ListenForPaymentAction paymentActionListener  =new ListenForPaymentAction();
+    ListenForAgentAction agentActionListener  =new ListenForAgentAction();
+    ListenForSubjectAction subjectActionListener  =new ListenForSubjectAction();
+
+    //ListenForPaymentAction subjectActionListener  =new ListenForSubjectAction();
 
     static View gui;
 
@@ -34,7 +43,6 @@ public class Model {
 
         gui = new View();
 
-        // Create a focus listener and add it to each text field to remove text when clicked on
         gui.panel1.tfType.addFocusListener(focusListener);
         gui.panel1.tfValue.addFocusListener(focusListener);
         gui.panel1.tfBeginDate.addFocusListener(focusListener);
@@ -43,11 +51,27 @@ public class Model {
         gui.panel1.tfSubject.addFocusListener(focusListener);
         gui.panel1.tfDocument.addFocusListener(focusListener);
         gui.panel1.tfNotes.addFocusListener(focusListener);
-        // Create a new mouse listener and assign it to the table
         gui.panel1.table.addMouseListener(mouseListener);
-        // Add action listeners to the buttons to listen for clicks
         gui.panel1.addRecord.addActionListener(paymentActionListener);
         gui.panel1.removeRecord.addActionListener(paymentActionListener);
+
+
+        gui.panel2.tfName.addFocusListener(focusListener);
+        gui.panel2.tfPhone.addFocusListener(focusListener);
+        gui.panel2.tfEmail.addFocusListener(focusListener);
+        //gui.panel1.table.addMouseListener(mouseListener);
+        gui.panel2.addRecord.addActionListener(agentActionListener);
+        gui.panel2.removeRecord.addActionListener(agentActionListener);
+
+        gui.panel3.tfName.addFocusListener(focusListener);
+        gui.panel3.tfPhone.addFocusListener(focusListener);
+        gui.panel3.tfEmail.addFocusListener(focusListener);
+        gui.panel3.tfAddress.addFocusListener(focusListener);
+        gui.panel3.tfNotes.addFocusListener(focusListener);
+        //gui.panel1.table.addMouseListener(mouseListener);
+        gui.panel3.addRecord.addActionListener(subjectActionListener);
+        gui.panel3.removeRecord.addActionListener(subjectActionListener);
+
     }
 
     private class ListenForPaymentAction implements ActionListener {
@@ -81,12 +105,13 @@ public class Model {
                 gui.panel1.dateBeginDate = getADate(BeginDate);
                 gui.panel1.dateEndDate = getADate(EndDate);
 
-                //check Owner and subject.
+                //check Owner and subject and add waiting message dialog.
 
                 int paymentID = 0;
-                Client.db.rowDataPayment.lastElement(); //try to get ID
-                paymentID = Client.db.rowDataPayment.lastElement().id+1;
-                Payment toinsert = new Payment(paymentID,paymentID, Type, Value, gui.panel1.dateBeginDate, gui.panel1.dateEndDate, Integer.valueOf(Owner), Integer.valueOf(Subject), Document, Notes);
+                for(Payment item: Client.db.rowDataPayment){
+                    if(item.id>paymentID)paymentID = item.id;
+                }
+                Payment toinsert = new Payment(paymentID+1,0, Type, Value, gui.panel1.dateBeginDate, gui.panel1.dateEndDate, Integer.valueOf(Owner), Integer.valueOf(Subject), Document, Notes);
 
                 // Attempt to insert the information into the database
 
@@ -103,13 +128,129 @@ public class Model {
                 gui.panel1.errorMessage.setText(""); // Remove the error message if one was displayed
 
             } else if (e.getSource() == gui.panel1.removeRecord) {
-                try { // If the user clicked remove record, delete from database and remove from table
-                    Client.db.defaultTableModelPayment.removeRow(gui.panel1.table.getSelectedRow());
-                    Client.db.rowDataPayment.remove(gui.panel1.table.getSelectedRow()); // teraz jeszcze z bazy danych trzeba to usunac
 
-                } catch(ArrayIndexOutOfBoundsException e1) {
+                Vector<Payment> tosend = new Vector<>();
+                int removeIndex = gui.panel1.table.getSelectedRow();
+                int removeId = Client.db.rowDataPayment.elementAt(removeIndex).id;
+                tosend.addElement(Client.db.rowDataPayment.elementAt(removeIndex));
+                try{// If the user clicked remove record, delete from database and remove from table
+
+                    Client.db.sendObject(tosend, Boolean.TRUE);
+                    for(int i =0; i<Client.db.rowDataPayment.size(); i++)if(Client.db.rowDataPayment.elementAt(i).id == removeId)Client.db.rowDataPayment.removeElementAt(i);
+
+                    Client.db.defaultTableModelPayment.removeRow(removeIndex);
+                } catch(ArrayIndexOutOfBoundsException | IOException e1) {
+                    e1.printStackTrace();
                     System.out.println(e1.getMessage());
-                    gui.panel1.errorMessage.setText("To delete a customer, you must first select a row.");
+                    gui.panel1.errorMessage.setText("To delete an customer, you must first select a row.");
+                }
+            }
+        }
+    }
+
+    private class ListenForAgentAction implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            if(e.getSource() == gui.panel2.addRecord) { // If the user clicks Add Record, add the information into the database
+
+                String Name, Phone, Email, Commission;
+                Name = gui.panel2.tfName.getText();
+                Phone = gui.panel2.tfPhone.getText();
+                Email = gui.panel2.tfEmail.getText();
+                Commission = "default";
+
+                // Check dependences
+
+                //check Owner and subject and add waiting message dialog.
+                int agentID=0;
+                for(Agent item: Client.db.rowDataAgent){
+                    if(item.id>agentID)agentID = item.id;
+                }
+                Agent toinsert = new Agent(agentID+1,Name,Phone,Email,Commission);
+
+                // Attempt to insert the information into the database
+                Client.db.rowDataAgent.addElement(toinsert);
+                Vector<Agent> tosend = new Vector<>();
+                tosend.addElement(toinsert);
+                try {
+                    Client.db.sendObject(tosend, Boolean.FALSE);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
+                Client.db.defaultTableModelAgent.addRow(toinsert.toVector()); // Add the row to the screen
+                gui.panel2.errorMessage.setText(""); // Remove the error message if one was displayed
+
+            } else if (e.getSource() == gui.panel2.removeRecord) {
+
+                Vector<Agent> tosend = new Vector<>();
+                int removeIndex = gui.panel2.table.getSelectedRow();
+                int removeId = Client.db.rowDataAgent.elementAt(removeIndex).id;
+                tosend.addElement(Client.db.rowDataAgent.elementAt(removeIndex));
+                try{// If the user clicked remove record, delete from database and remove from table
+
+                    Client.db.sendObject(tosend, Boolean.TRUE);
+                    for(int i =0; i<Client.db.rowDataAgent.size(); i++)if(Client.db.rowDataAgent.elementAt(i).id == removeId)Client.db.rowDataAgent.removeElementAt(i);
+
+                    Client.db.defaultTableModelAgent.removeRow(removeIndex);
+                } catch(ArrayIndexOutOfBoundsException | IOException e1) {
+                    e1.printStackTrace();
+                    System.out.println(e1.getMessage());
+                    gui.panel2.errorMessage.setText("To delete an agent, you must first select a row.");
+                }
+            }
+        }
+    }
+
+    private class ListenForSubjectAction implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            if(e.getSource() == gui.panel3.addRecord) { // If the user clicks Add Record, add the information into the database
+
+                String Name, Phone, Email, Address, Bill, Notes;
+                Name = gui.panel3.tfName.getText();
+                Phone = gui.panel3.tfPhone.getText();
+                Email = gui.panel3.tfEmail.getText();
+                Address = gui.panel3.tfAddress.getText();
+                Notes = gui.panel3.tfNotes.getText();
+                Bill = "default";
+
+                // Check dependences
+
+                //check Owner and subject and add waiting message dialog.
+                int subjectID=0;
+                for(Subject item: Client.db.rowDataSubject){
+                    if(item.id>subjectID)subjectID = item.id;
+                }
+                Subject toinsert = new Subject(subjectID+1,Name,Phone,Email,Address,Bill,Notes);
+
+                // Attempt to insert the information into the database
+                Client.db.rowDataSubject.addElement(toinsert);
+                Vector<Subject> tosend = new Vector<>();
+                tosend.addElement(toinsert);
+                try {
+                    Client.db.sendObject(tosend, Boolean.FALSE);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
+                Client.db.defaultTableModelSubject.addRow(toinsert.toVector()); // Add the row to the screen
+                gui.panel3.errorMessage.setText(""); // Remove the error message if one was displayed
+
+            } else if (e.getSource() == gui.panel3.removeRecord) {
+
+                Vector<Subject> tosend = new Vector<>();
+                int removeIndex = gui.panel3.table.getSelectedRow();
+                int removeId = Client.db.rowDataSubject.elementAt(removeIndex).id;
+                tosend.addElement(Client.db.rowDataSubject.elementAt(removeIndex));
+                try{// If the user clicked remove record, delete from database and remove from table
+
+                    Client.db.sendObject(tosend, Boolean.TRUE);
+                    for(int i =0; i<Client.db.rowDataSubject.size(); i++)if(Client.db.rowDataSubject.elementAt(i).id == removeId)Client.db.rowDataSubject.removeElementAt(i);
+
+                    Client.db.defaultTableModelSubject.removeRow(removeIndex);
+                } catch(ArrayIndexOutOfBoundsException | IOException e1) {
+                    e1.printStackTrace();
+                    System.out.println(e1.getMessage());
+                    gui.panel3.errorMessage.setText("To delete a Subject, you must first select a row.");
                 }
             }
         }
@@ -138,6 +279,22 @@ public class Model {
                 gui.panel1.tfDocument.setText("");
             } else if(gui.panel1.tfNotes.getText().equals("Notes") && e.getSource() == gui.panel1.tfNotes) {
                 gui.panel1.tfNotes.setText("");
+            } else if(gui.panel2.tfName.getText().equals("Name") && e.getSource() == gui.panel2.tfName) {
+                gui.panel2.tfName.setText("");
+            } else if(gui.panel2.tfPhone.getText().equals("Phone") && e.getSource() == gui.panel2.tfPhone) {
+                gui.panel2.tfPhone.setText("");
+            } else if(gui.panel2.tfEmail.getText().equals("Email") && e.getSource() == gui.panel2.tfEmail) {
+                gui.panel2.tfEmail.setText("");
+            } else if(gui.panel3.tfName.getText().equals("Name") && e.getSource() == gui.panel3.tfName) {
+                gui.panel3.tfName.setText("");
+            } else if(gui.panel3.tfPhone.getText().equals("Phone") && e.getSource() == gui.panel3.tfPhone) {
+                gui.panel3.tfPhone.setText("");
+            } else if(gui.panel3.tfEmail.getText().equals("Email") && e.getSource() == gui.panel3.tfEmail) {
+                gui.panel3.tfEmail.setText("");
+            } else if(gui.panel3.tfAddress.getText().equals("Address") && e.getSource() == gui.panel3.tfAddress) {
+                gui.panel3.tfAddress.setText("");
+            } else if(gui.panel3.tfNotes.getText().equals("Notes") && e.getSource() == gui.panel3.tfNotes) {
+                gui.panel3.tfNotes.setText("");
             }
         }
 
@@ -156,11 +313,26 @@ public class Model {
                 gui.panel1.tfSubject.setText("Subject");
             } else if(gui.panel1.tfDocument.getText().equals("") && e.getSource() == gui.panel1.tfDocument) {
                 gui.panel1.tfDocument.setText("Document");
-            }else if(gui.panel1.tfNotes.getText().equals("") && e.getSource() == gui.panel1.tfNotes) {
+            } else if(gui.panel1.tfNotes.getText().equals("") && e.getSource() == gui.panel1.tfNotes) {
                 gui.panel1.tfNotes.setText("Notes");
+            } else if(gui.panel2.tfName.getText().equals("") && e.getSource() == gui.panel2.tfName) {
+                gui.panel2.tfName.setText("Name");
+            } else if(gui.panel2.tfPhone.getText().equals("") && e.getSource() == gui.panel2.tfPhone) {
+                gui.panel2.tfPhone.setText("Phone");
+            } else if(gui.panel2.tfEmail.getText().equals("") && e.getSource() == gui.panel2.tfEmail) {
+                gui.panel2.tfEmail.setText("Email");
+            } else if(gui.panel3.tfName.getText().equals("") && e.getSource() == gui.panel3.tfName) {
+                gui.panel3.tfName.setText("Name");
+            } else if(gui.panel3.tfPhone.getText().equals("") && e.getSource() == gui.panel3.tfPhone) {
+                gui.panel3.tfPhone.setText("Phone");
+            } else if(gui.panel3.tfEmail.getText().equals("") && e.getSource() == gui.panel3.tfEmail) {
+                gui.panel3.tfEmail.setText("Email");
+            } else if(gui.panel3.tfAddress.getText().equals("") && e.getSource() == gui.panel3.tfAddress) {
+                gui.panel3.tfAddress.setText("Address");
+            } else if(gui.panel3.tfNotes.getText().equals("") && e.getSource() == gui.panel3.tfNotes) {
+                gui.panel3.tfNotes.setText("Notes");
             }
         }
-
     }
 
     /**

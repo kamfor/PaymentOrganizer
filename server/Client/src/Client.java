@@ -14,7 +14,7 @@ public class Client {
     /**
      * The database object used to work with the database server.
      */
-    static Database db;
+    public static Database db;
 
     public static void main (String[] args) {
         db = new Database();

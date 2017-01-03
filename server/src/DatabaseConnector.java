@@ -28,10 +28,10 @@ public class DatabaseConnector {
     public void readMysqlData() {
        Connection conn = null;
        try{
-           //STEP 2: Register JDBC driver
+           //Register JDBC driver
            Class.forName("com.mysql.jdbc.Driver");
 
-           //STEP 3: Open a connection
+           //Open a connection
            System.out.println("Connecting to database...");
            conn = DriverManager.getConnection(DB_URL,USER,PASS);
 
@@ -74,22 +74,17 @@ public class DatabaseConnector {
        } catch (ClassNotFoundException e) {
            System.out.println(e.getMessage());
        }
-       System.out.println("Goodbye!");
+       System.out.println("Data read!");
    }
 
    public void writeMysqlData(Object data) {
 
-
-       //check if database is opened();
        Vector<Object> temp = (Vector<Object>)data;
 
        if(temp.elementAt(0) instanceof Payment){
-           System.out.println("Payment to write");
            Vector<Payment> incoming = (Vector<Payment>)data;
            for(Payment toinsert: incoming) {
                try { // Attempt to insert the information into the database
-                   rowsPayment.last();
-                   toinsert.id = rowsPayment.getInt(1)+1;
                    rowsPayment.moveToInsertRow();
                    rowsPayment.updateInt("id",toinsert.id);
                    rowsPayment.updateInt("accepted",toinsert.accepted);
@@ -103,37 +98,55 @@ public class DatabaseConnector {
                    rowsPayment.updateString("notes", toinsert.notes);
 
                    rowsPayment.insertRow();
-                   rowsPayment.updateRow();
-                   rowsPayment.last();
+                   rowsPayment.moveToCurrentRow();
+                   dataPayment.addElement(toinsert);
+                   System.out.println("Payment written to mysql");
                } catch (SQLException e2) {
                    e2.printStackTrace();
                }
            }
        }
        else if(temp.elementAt(0) instanceof Agent){
-           System.out.println("Agent to write");
            Vector<Agent> incoming = (Vector<Agent>)data;
            for(Agent toinsert: incoming) {
                try { // Attempt to insert the information into the database
                    rowsAgent.moveToInsertRow();
+                   rowsAgent.updateInt("id",toinsert.id);
+                   rowsAgent.updateString("name",toinsert.name);
+                   rowsAgent.updateString("phone",toinsert.phone);
+                   rowsAgent.updateString("email",toinsert.email);
+                   rowsAgent.updateString("commission",toinsert.commission);
 
+                   rowsAgent.insertRow();
+                   rowsPayment.moveToCurrentRow();
+                   dataAgent.addElement(toinsert);
                } catch (SQLException e2) {
                    e2.printStackTrace();
                }
            }
+           System.out.println("Agent written");
        }
        else if(temp.elementAt(0) instanceof Subject){
-           System.out.println("Subject to write");
            Vector<Subject> incoming = (Vector<Subject>)data;
            for(Subject toinsert: incoming) {
                try { // Attempt to insert the information into the database
-
                    rowsSubject.moveToInsertRow();
+                   rowsSubject.updateInt("id",toinsert.id);
+                   rowsSubject.updateString("name",toinsert.name);
+                   rowsSubject.updateString("phone",toinsert.phone);
+                   rowsSubject.updateString("email",toinsert.email);
+                   rowsSubject.updateString("address",toinsert.address);
+                   rowsSubject.updateString("bill",toinsert.bill);
+                   rowsSubject.updateString("notes",toinsert.notes);
 
+                   rowsSubject.insertRow();
+                   rowsSubject.moveToCurrentRow();
+                   dataSubject.addElement(toinsert);
                } catch (SQLException e2) {
                    e2.printStackTrace();
                }
            }
+           System.out.println("Subject written");
        }
    }
 
@@ -142,46 +155,55 @@ public class DatabaseConnector {
         Vector<Object> temp = (Vector<Object>)data;
 
         if(temp.elementAt(0) instanceof Payment){
-            System.out.println("Payment to remove");
             Vector<Payment> incoming = (Vector<Payment>)data;
-            for(Payment toinsert: incoming) {
+            for(Payment toInsert: incoming) {
                 try { // Attempt to remove the information into the database
-
-                    rowsPayment.absolute(incoming.indexOf(toinsert));
+                    for(int i =0; i<dataPayment.size(); i++) {
+                        if(dataPayment.elementAt(i).id == toInsert.id){
+                            dataPayment.removeElementAt(i);
+                            rowsPayment.absolute(i+1);
+                        }
+                    }
                     rowsPayment.deleteRow();
-
                 } catch (SQLException e2) {
                     e2.printStackTrace();
                 }
             }
+            System.out.println("Payment removed");
         }
         else if(temp.elementAt(0) instanceof Agent){
-            System.out.println("Agent to remove");
             Vector<Agent> incoming = (Vector<Agent>)data;
-            for(Agent toinsert: incoming) {
+            for(Agent toInsert: incoming) {
                 try { // Attempt to remove the information into the database
-
-                    rowsAgent.absolute(incoming.indexOf(toinsert));
+                    for(int i =0; i<dataAgent.size(); i++) {
+                        if(dataAgent.elementAt(i).id == toInsert.id){
+                            dataAgent.removeElementAt(i);
+                            rowsAgent.absolute(i+1);
+                        }
+                    }
                     rowsAgent.deleteRow();
-
                 } catch (SQLException e2) {
                     e2.printStackTrace();
                 }
             }
+            System.out.println("Agent removed");
         }
         else if(temp.elementAt(0) instanceof Subject){
-            System.out.println("Subject to remove");
             Vector<Subject> incoming = (Vector<Subject>)data;
-            for(Subject toinsert: incoming) {
+            for(Subject toInsert: incoming) {
                 try { // Attempt to remove the information into the database
-
-                    rowsSubject.absolute(incoming.indexOf(toinsert));
+                    for(int i =0; i<dataSubject.size(); i++) {
+                        if(dataSubject.elementAt(i).id == toInsert.id){
+                            dataSubject.removeElementAt(i);
+                            rowsSubject.absolute(i+1);
+                        }
+                    }
                     rowsSubject.deleteRow();
-
                 } catch (SQLException e2) {
                     e2.printStackTrace();
                 }
             }
+            System.out.println("Subject removed");
         }
     }
 }

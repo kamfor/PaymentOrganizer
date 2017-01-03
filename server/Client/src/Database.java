@@ -22,7 +22,7 @@ public class Database {
     private Object[][] databaseResultsPayment;
     private Object[][] databaseResultsSubject;
     private Object[][] databaseResultsAgent;
-    public Object[] paymentColumns = new Object[]{"ID","Accepted","Type","Value","Begin Date","End Date","Owner","Subject","Document","Notes"};
+    public Object[] paymentColumns = new Object[]{"Accepted","Type","Value","Begin Date","End Date","Owner","Subject","Document","Notes"};
     public Object[] agentColumns = new Object[]{"ID","Name","Phone","Email","Commission"};
     public Object[] subjectColumns = new Object[]{"ID","Name","Phone","Email","Address","Bill","Notes"};
 
@@ -39,7 +39,9 @@ public class Database {
 
         try{
             this.connectToServer();
+            System.out.println("connecting to server");
         }catch(IOException e){
+            System.out.println("connecting failed");
             e.printStackTrace();
         }
 
@@ -71,7 +73,6 @@ public class Database {
         defaultTableModelAgent = new DefaultTableModel(databaseResultsAgent, agentColumns);
         defaultTableModelSubject = new DefaultTableModel(databaseResultsSubject, subjectColumns);
 
-
         for(Payment item: rowDataPayment) {
             defaultTableModelPayment.addRow(item.toVector());
         }
@@ -84,7 +85,6 @@ public class Database {
     }
 
     public void connectToServer() throws IOException {
-
         // Make connection and initialize streams
         Socket socket = new Socket(InetAddress.getLocalHost(), 9091);
         oos = new ObjectOutputStream(socket.getOutputStream());
@@ -93,20 +93,25 @@ public class Database {
 
 
     public void sendObject(Object input, Boolean remove) throws IOException {
-
         Vector<Object> temp;
         temp = (Vector<Object>)input;
-        if(temp.elementAt(0) instanceof Payment){ //tak sprawdzamy co przesylamy i moze zadziala
+        if(temp.elementAt(0) instanceof Payment){
             System.out.println("tak, Payment");
-            if(remove)System.out.println("Usuwamy");
+            if(remove)System.out.println("Usuwamy Payment");
             oos.writeObject(remove);
             oos.writeObject(input);
         }
         else if(temp.elementAt(0) instanceof Agent){
             System.out.println("no nie za bardzo bo to agent");
+            if(remove)System.out.println("Usuwamy Agent");
+            oos.writeObject(remove);
+            oos.writeObject(input);
         }
         else if(temp.elementAt(0) instanceof Subject){
             System.out.println("no nie za bardzo bo to subject:");
+            if(remove)System.out.println("Usuwamy Subject");
+            oos.writeObject(remove);
+            oos.writeObject(input);
         }
 
     }
@@ -117,9 +122,9 @@ public class Database {
         try {
             temp = ios.readObject();
         } catch (ClassNotFoundException e) {
+            System.out.println("Getting data failad");
             e.printStackTrace ();
         }
-
         return temp;
     }
 }

@@ -34,7 +34,7 @@ public class Payment implements Serializable {
 
     public void toString(Vector<String> append){
         append.clear();
-        append.addElement(String.valueOf(id));
+        //append.addElement(String.valueOf(id));
         append.addElement(String.valueOf(accepted));
         append.addElement(type);
         append.addElement(value);

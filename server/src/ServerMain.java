@@ -6,11 +6,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Vector;
-
-import classes.Payment;
-
-
 
 public class ServerMain {
     /**
@@ -32,7 +27,6 @@ public class ServerMain {
     }
 
     // therad handler
-
     private static class ClientHandler extends Thread {
         private Socket socket;
         private int clientNumber;
@@ -42,30 +36,20 @@ public class ServerMain {
             this.socket = socket;
             this.clientNumber = clientNumber;
             this.database = tosend;
-            log("New connection with client# " + clientNumber + " at " + socket);
+            System.out.println("New connection with client# " + clientNumber + " at " + socket);
         }
 
-        /**
-         * Services this thread's client by first sending the
-         * client a welcome message then repeatedly reading strings
-         * and sending back the capitalized version of the string.
-         */
         public void run() {
             try {
 
-                //Set streams
-
                 ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-
                 ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 
                 // Send data to client
                 oos.writeObject(database.dataPayment);
                 System.out.println("payment data sended");
-
                 oos.writeObject(database.dataAgent);
                 System.out.println("agent data sended");
-
                 oos.writeObject(database.dataSubject);
                 System.out.println("subject data sended");
 
@@ -77,7 +61,7 @@ public class ServerMain {
                     if(incoming instanceof Boolean){
                         Boolean removing = (Boolean)incoming;
                         if(removing){
-                            System.out.println("removing from db");
+                            incoming = ois.readObject();
                             database.removeMysqlData(incoming);
                         }
                         else{
@@ -85,23 +69,20 @@ public class ServerMain {
                             System.out.println("adding to db");
                             database.writeMysqlData(incoming);
                         }
+                        //add messaging with other clients
                     }
-
                 }
 
             } catch (IOException | ClassNotFoundException e) {
-                log("Error handling client# " + clientNumber + ": " + e);
+                System.out.println("Error handling client# " + clientNumber + ": " + e);
             } finally {
                 try {
                     socket.close();
                 } catch (IOException e) {
-                    log("Couldn't close a socket, what's going on?");
+                    System.out.println("Couldn't close a socket, what's going on?");
                 }
-                log("Connection with client# " + clientNumber + " closed");
+                System.out.println("Connection with client# " + clientNumber + " closed");
             }
-        }
-
-        private void log(String message) {System.out.println(message);
         }
     }
 }

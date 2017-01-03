@@ -98,8 +98,7 @@ class paymentPanel extends JInternalFrame{ //only view elements, actions in othe
 
 }
 
-class agentPanel extends JInternalFrame{ //only view elements, actions in other class
-
+class agentPanel extends JInternalFrame{
     protected JButton addRecord, removeRecord;
     protected JLabel errorMessage;
     protected JTextField tfName, tfPhone, tfEmail;
@@ -148,12 +147,11 @@ class agentPanel extends JInternalFrame{ //only view elements, actions in other 
 
 }
 
-class subjectPanel extends JInternalFrame{ //only view elements, actions in other class
-
-    private JButton addRecord, removeRecord;
-    private JLabel errorMessage;
-    private JTextField tfName, tfPhone, tfEmail, tfAddress, tfNotes;
-    private JTable table;
+class subjectPanel extends JInternalFrame{
+    protected JButton addRecord, removeRecord;
+    protected JLabel errorMessage;
+    protected JTextField tfName, tfPhone, tfEmail, tfAddress, tfNotes;
+    protected JTable table;
 
     public subjectPanel() {
         super();

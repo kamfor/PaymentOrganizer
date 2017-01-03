@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Objects;
 import java.util.Vector;
 
 import javax.swing.*;
@@ -52,7 +53,7 @@ public class Model {
     private class ListenForPaymentAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == gui.panel1.addRecord) { // If the user clicks Add Record, add the information into the database
-                // Create variables to hold information to be inserted, and get the info from the text fields
+
                 String Type, Value, BeginDate, EndDate, Owner, Subject, Document, Notes;
                 Value = gui.panel1.tfValue.getText();
                 Type = gui.panel1.tfType.getText();
@@ -80,8 +81,10 @@ public class Model {
                 gui.panel1.dateBeginDate = getADate(BeginDate);
                 gui.panel1.dateEndDate = getADate(EndDate);
 
+                //check Owner and subject.
+
                 int paymentID = 0;
-                Client.db.rowDataPayment.lastElement(); //try to get id from sqlquery
+                Client.db.rowDataPayment.lastElement(); //try to get ID
                 paymentID = Client.db.rowDataPayment.lastElement().id+1;
                 Payment toinsert = new Payment(paymentID,paymentID, Type, Value, gui.panel1.dateBeginDate, gui.panel1.dateEndDate, Integer.valueOf(Owner), Integer.valueOf(Subject), Document, Notes);
 
@@ -91,7 +94,7 @@ public class Model {
                 Vector<Payment> tosend = new Vector<>();
                 tosend.addElement(toinsert);
                 try {
-                    Client.db.sendObject(tosend);
+                    Client.db.sendObject(tosend, Boolean.FALSE);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -102,7 +105,8 @@ public class Model {
             } else if (e.getSource() == gui.panel1.removeRecord) {
                 try { // If the user clicked remove record, delete from database and remove from table
                     Client.db.defaultTableModelPayment.removeRow(gui.panel1.table.getSelectedRow());
-                    Client.db.rowDataPayment.remove(gui.panel1.table.getSelectedRow());
+                    Client.db.rowDataPayment.remove(gui.panel1.table.getSelectedRow()); // teraz jeszcze z bazy danych trzeba to usunac
+
                 } catch(ArrayIndexOutOfBoundsException e1) {
                     System.out.println(e1.getMessage());
                     gui.panel1.errorMessage.setText("To delete a customer, you must first select a row.");

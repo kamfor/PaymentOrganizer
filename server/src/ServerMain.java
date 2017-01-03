@@ -37,7 +37,6 @@ public class ServerMain {
         private Socket socket;
         private int clientNumber;
         private DatabaseConnector database;
-        private Vector<Payment> vectorin;
 
         public ClientHandler(Socket socket, int clientNumber, DatabaseConnector tosend) {
             this.socket = socket;
@@ -62,20 +61,32 @@ public class ServerMain {
 
                 // Send data to client
                 oos.writeObject(database.dataPayment);
-                System.out.println("payment data written");
+                System.out.println("payment data sended");
 
                 oos.writeObject(database.dataAgent);
-                System.out.println("agent data written");
+                System.out.println("agent data sended");
 
                 oos.writeObject(database.dataSubject);
-                System.out.println("subject data written");
+                System.out.println("subject data sended");
 
                 //oos.close();
 
-                //Get data from the client
-                while (true) {
-                    vectorin = (Vector<Payment>)ois.readObject(); //3 klasy tutaj musza dzialac
-                    database.writeMysqlData(vectorin);
+                //Get data from the client improve it add handshake protocol
+                while (true) { //check data about removing
+                    Object incoming = ois.readObject();
+                    if(incoming instanceof Boolean){
+                        Boolean removing = (Boolean)incoming;
+                        if(removing){
+                            System.out.println("removing from db");
+                            database.removeMysqlData(incoming);
+                        }
+                        else{
+                            incoming = ois.readObject();
+                            System.out.println("adding to db");
+                            database.writeMysqlData(incoming);
+                        }
+                    }
+
                 }
 
             } catch (IOException | ClassNotFoundException e) {

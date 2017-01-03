@@ -92,13 +92,15 @@ public class Database {
     }
 
 
-    public void sendObject(Object input) throws IOException {
+    public void sendObject(Object input, Boolean remove) throws IOException {
 
-        oos.writeObject(input);
         Vector<Object> temp;
         temp = (Vector<Object>)input;
         if(temp.elementAt(0) instanceof Payment){ //tak sprawdzamy co przesylamy i moze zadziala
-            System.out.println("tak");
+            System.out.println("tak, Payment");
+            if(remove)System.out.println("Usuwamy");
+            oos.writeObject(remove);
+            oos.writeObject(input);
         }
         else if(temp.elementAt(0) instanceof Agent){
             System.out.println("no nie za bardzo bo to agent");

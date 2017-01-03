@@ -4,8 +4,10 @@
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.StringReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Vector;
 
 public class ServerMain {
     /**
@@ -70,6 +72,10 @@ public class ServerMain {
                             database.writeMysqlData(incoming);
                         }
                         //add messaging with other clients
+                    }else if (incoming instanceof String){
+                        System.out.println("jakaś wiadomość przyszła");
+                        String messag = (String)incoming;
+                        System.out.println(messag);
                     }
                 }
 

@@ -18,7 +18,7 @@ public class View extends JFrame{
 
     public View(){
         super();
-        this.setSize(1920, 1080);
+        this.setSize(1000, 600);
         jtp = new JTabbedPane();
         jtp.addTab("Payments",panel1);
         jtp.addTab("Agents",panel2);
@@ -35,7 +35,7 @@ public class View extends JFrame{
 
 class paymentPanel extends JInternalFrame{ //only view elements, actions in other class
 
-    protected JButton addRecord, removeRecord;
+    protected JButton addRecord, removeRecord, refresh;
     protected JLabel errorMessage;
     protected JTextField tfType, tfValue, tfBeginDate, tfEndDate, tfOwner, tfSubject, tfDocument, tfNotes;
     protected JTable table;
@@ -59,6 +59,8 @@ class paymentPanel extends JInternalFrame{ //only view elements, actions in othe
         // Set button values
         addRecord = new JButton("Add Record");
         removeRecord = new JButton("Remove Record");
+        refresh = new JButton("Refresh Data");
+
 
         // Set the text field widths and values
         tfType = new JTextField("Type", 6);
@@ -83,6 +85,7 @@ class paymentPanel extends JInternalFrame{ //only view elements, actions in othe
 
         inputPanel.add(addRecord);
         inputPanel.add(removeRecord);
+        inputPanel.add(refresh);
 
         // Change settings and add the error message to the error panel
         errorMessage = new JLabel("");
@@ -99,7 +102,7 @@ class paymentPanel extends JInternalFrame{ //only view elements, actions in othe
 }
 
 class agentPanel extends JInternalFrame{
-    protected JButton addRecord, removeRecord;
+    protected JButton addRecord, removeRecord, refresh;
     protected JLabel errorMessage;
     protected JTextField tfName, tfPhone, tfEmail;
     protected JTable table;
@@ -118,6 +121,7 @@ class agentPanel extends JInternalFrame{
         // Set button values
         addRecord = new JButton("Add Record");
         removeRecord = new JButton("Remove Record");
+        refresh = new JButton("Refresh Data");
 
         // Set the text field widths and values
         tfName = new JTextField("Name", 6);
@@ -132,6 +136,7 @@ class agentPanel extends JInternalFrame{
 
         inputPanel.add(addRecord);
         inputPanel.add(removeRecord);
+        inputPanel.add(refresh);
 
         // Change settings and add the error message to the error panel
         errorMessage = new JLabel("");
@@ -148,7 +153,7 @@ class agentPanel extends JInternalFrame{
 }
 
 class subjectPanel extends JInternalFrame{
-    protected JButton addRecord, removeRecord;
+    protected JButton addRecord, removeRecord, refresh;
     protected JLabel errorMessage;
     protected JTextField tfName, tfPhone, tfEmail, tfAddress, tfNotes;
     protected JTable table;
@@ -167,6 +172,7 @@ class subjectPanel extends JInternalFrame{
         // Set button values
         addRecord = new JButton("Add Record");
         removeRecord = new JButton("Remove Record");
+        refresh = new JButton("Refresh Data");
 
         // Set the text field widths and values
         tfName = new JTextField("Name", 10);
@@ -185,6 +191,7 @@ class subjectPanel extends JInternalFrame{
 
         inputPanel.add(addRecord);
         inputPanel.add(removeRecord);
+        inputPanel.add(refresh);
 
         // Change settings and add the error message to the error panel
         errorMessage = new JLabel("");

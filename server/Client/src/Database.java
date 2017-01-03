@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.StringJoiner;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
@@ -51,17 +52,22 @@ public class Database {
             for(int i=0;i<3;i++){
 
                 temp = (Vector<Object>)getDataFromServer();
-                if(temp.elementAt(0) instanceof Payment){
-                    System.out.println("Payment");
-                    rowDataPayment = (Vector<Payment>)temp.clone();
+                if(temp.size()>0){
+                    if(temp.elementAt(0) instanceof Payment){
+                        System.out.println("Payment");
+                        rowDataPayment = (Vector<Payment>)temp.clone();
+                    }
+                    else if(temp.elementAt(0) instanceof Agent){
+                        System.out.println("Agent");
+                        rowDataAgent = (Vector<Agent>)temp.clone();
+                    }
+                    else if(temp.elementAt(0) instanceof Subject) {
+                        System.out.println("Subject");
+                        rowDataSubject = (Vector<Subject>) temp.clone();
+                    }
                 }
-                else if(temp.elementAt(0) instanceof Agent){
-                    System.out.println("Agent");
-                    rowDataAgent = (Vector<Agent>)temp.clone();
-                }
-                else if(temp.elementAt(0) instanceof Subject){
-                    System.out.println("Subject");
-                    rowDataSubject = (Vector<Subject>)temp.clone();
+                else{
+                    System.out.println("empty database");
                 }
             }
 
@@ -112,6 +118,9 @@ public class Database {
             if(remove)System.out.println("Usuwamy Subject");
             oos.writeObject(remove);
             oos.writeObject(input);
+        }else if(temp.elementAt(0) instanceof String){
+            oos.writeObject(((Vector<Object>) input).elementAt(0));
+            System.out.println("wiadomość");
         }
 
     }

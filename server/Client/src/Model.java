@@ -54,6 +54,9 @@ public class Model {
         gui.panel1.table.addMouseListener(mouseListener);
         gui.panel1.addRecord.addActionListener(paymentActionListener);
         gui.panel1.removeRecord.addActionListener(paymentActionListener);
+        gui.panel1.refresh.addActionListener(paymentActionListener);
+        gui.panel2.refresh.addActionListener(paymentActionListener);
+        gui.panel3.refresh.addActionListener(paymentActionListener);
 
 
         gui.panel2.tfName.addFocusListener(focusListener);
@@ -62,6 +65,7 @@ public class Model {
         //gui.panel1.table.addMouseListener(mouseListener);
         gui.panel2.addRecord.addActionListener(agentActionListener);
         gui.panel2.removeRecord.addActionListener(agentActionListener);
+
 
         gui.panel3.tfName.addFocusListener(focusListener);
         gui.panel3.tfPhone.addFocusListener(focusListener);
@@ -144,6 +148,16 @@ public class Model {
                     System.out.println(e1.getMessage());
                     gui.panel1.errorMessage.setText("To delete an customer, you must first select a row.");
                 }
+            } else if (e.getSource() == gui.panel1.refresh||e.getSource() == gui.panel2.refresh||e.getSource() == gui.panel3.refresh) {
+                System.out.println("Refreshed");
+                String messag = "osz ty gnoju dawaj mi tu dane";
+                Vector<String> information = new Vector<>();
+                information.addElement(messag);
+                try{
+                    Client.db.sendObject(information, Boolean.FALSE);
+                }catch (java.io.IOException e1){
+                    e1.printStackTrace();
+                }
             }
         }
     }
@@ -181,6 +195,8 @@ public class Model {
                 gui.panel2.errorMessage.setText(""); // Remove the error message if one was displayed
 
             } else if (e.getSource() == gui.panel2.removeRecord) {
+
+                System.out.println("Refreshed");
 
                 Vector<Agent> tosend = new Vector<>();
                 int removeIndex = gui.panel2.table.getSelectedRow();

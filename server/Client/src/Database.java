@@ -7,7 +7,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.StringJoiner;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
@@ -18,8 +17,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Database {
 
-    private ObjectOutputStream oos;
-    private ObjectInputStream ios;
+    private static ObjectOutputStream oos;
+    private static ObjectInputStream ios;
     private Object[][] databaseResultsPayment;
     private Object[][] databaseResultsSubject;
     private Object[][] databaseResultsAgent;
@@ -33,6 +32,37 @@ public class Database {
     public Vector<Payment> rowDataPayment = new Vector<>();
     public Vector<Agent> rowDataAgent = new Vector<>();
     public Vector<Subject> rowDataSubject = new Vector<>();
+
+    private static class IncomingHandler extends Thread {
+
+        public void run() {
+            try {
+
+                //Get data from the server
+                while (true) { //check data about removing
+                    Object incoming = ios.readObject();
+                    if(incoming instanceof Boolean){
+                        Boolean removing = (Boolean)incoming;
+                        if(removing){
+                            incoming = ios.readObject();
+                            //remove object
+                        }
+                        else{
+                            incoming = ios.readObject();
+                            //add object
+                        }
+                    }else if (incoming instanceof String){
+                        System.out.println("jakaś wiadomość przyszła");
+                        String messag = (String)incoming;
+                        System.out.println(messag);
+                    }
+                }
+
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println("Error handling data" + e);
+            }
+        }
+    }
 
 
 
@@ -98,7 +128,7 @@ public class Database {
     }
 
 
-    public void sendObject(Object input, Boolean remove) throws IOException {
+    public void sendObject(Object input, Boolean remove) throws IOException { //to jest trochę bez sensu możńa by poprawić
         Vector<Object> temp;
         temp = (Vector<Object>)input;
         if(temp.elementAt(0) instanceof Payment){

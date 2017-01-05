@@ -30,55 +30,45 @@ public class DatabaseConnector {
         dataSubject = new Vector<>();
     }
 
-
-
     public void readMysqlData() {
-        Connection conn = null;
         try {
-            //Register JDBC driver
             Class.forName("com.mysql.jdbc.Driver");
 
-            //Open a connection
             System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             Statement sqlPaymentStatement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             String selectPayment = "SELECT id, accepted, type, value, begin_date, end_date, owner_id, subject_id, document_name, notes FROM payments";
-            rowsPayment = sqlPaymentStatement.executeQuery(selectPayment); // Execute Payment query
+            rowsPayment = sqlPaymentStatement.executeQuery(selectPayment);
 
             Statement sqlAgentStatement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             String selectAgent = "SELECT id, name, phone, email, commission FROM agents";
-            rowsAgent = sqlAgentStatement.executeQuery(selectAgent); // Execute Agent query
+            rowsAgent = sqlAgentStatement.executeQuery(selectAgent);
 
             Statement sqlSubjectStatement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             String selectSubject = "SELECT id, name, phone, email, address, bill, notes FROM subjects";
-            rowsSubject = sqlSubjectStatement.executeQuery(selectSubject); // Execute Subject query
+            rowsSubject = sqlSubjectStatement.executeQuery(selectSubject);
 
-            while (rowsPayment.next()) { // Read Payment information
+            while (rowsPayment.next()) {
                 Payment sample = new Payment(rowsPayment.getInt(1), rowsPayment.getInt(2), rowsPayment.getString(3),
                         rowsPayment.getString(4), rowsPayment.getDate(5), rowsPayment.getDate(6),
                         rowsPayment.getInt(7), rowsPayment.getInt(8), rowsPayment.getString(9),
                         rowsPayment.getString(10));
-                //sample.printPaymentObject();
                 dataPayment.addElement(sample);
             }
 
-            while (rowsAgent.next()) { // Read Agent information
+            while (rowsAgent.next()) {
                 Agent sample = new Agent(rowsAgent.getInt(1), rowsAgent.getString(2), rowsAgent.getString(3), rowsAgent.getString(4), rowsAgent.getString(5));
-                //sample.printObject();
                 dataAgent.addElement(sample);
             }
 
-            while (rowsSubject.next()) { // Read Subject information
+            while (rowsSubject.next()) {
                 Subject sample = new Subject(rowsSubject.getInt(1), rowsSubject.getString(2), rowsSubject.getString(3),
                         rowsSubject.getString(4), rowsSubject.getString(5), rowsSubject.getString(6),
                         rowsSubject.getString(7));
-                //sample.printObject();
                 dataSubject.addElement(sample);
             }
-        } catch (SQLException e) { // Print errors if exceptions occur
-            System.out.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
         System.out.println("Data read!");
@@ -91,7 +81,7 @@ public class DatabaseConnector {
         if (temp.elementAt(0) instanceof Payment) {
             Vector<Payment> incoming = (Vector<Payment>) data;
             for (Payment toinsert : incoming) {
-                try { // Attempt to insert the information into the database
+                try {
                     rowsPayment.moveToInsertRow();
                     rowsPayment.updateInt("id", toinsert.id);
                     rowsPayment.updateInt("accepted", toinsert.accepted);
@@ -103,7 +93,6 @@ public class DatabaseConnector {
                     rowsPayment.updateInt("subject_id", toinsert.subject_id);
                     rowsPayment.updateString("document_name", toinsert.document_name);
                     rowsPayment.updateString("notes", toinsert.notes);
-
                     rowsPayment.insertRow();
                     rowsPayment.moveToCurrentRow();
                     dataPayment.addElement(toinsert);
@@ -115,14 +104,13 @@ public class DatabaseConnector {
         } else if (temp.elementAt(0) instanceof Agent) {
             Vector<Agent> incoming = (Vector<Agent>) data;
             for (Agent toinsert : incoming) {
-                try { // Attempt to insert the information into the database
+                try {
                     rowsAgent.moveToInsertRow();
                     rowsAgent.updateInt("id", toinsert.id);
                     rowsAgent.updateString("name", toinsert.name);
                     rowsAgent.updateString("phone", toinsert.phone);
                     rowsAgent.updateString("email", toinsert.email);
                     rowsAgent.updateString("commission", toinsert.commission);
-
                     rowsAgent.insertRow();
                     rowsPayment.moveToCurrentRow();
                     dataAgent.addElement(toinsert);
@@ -134,7 +122,7 @@ public class DatabaseConnector {
         } else if (temp.elementAt(0) instanceof Subject) {
             Vector<Subject> incoming = (Vector<Subject>) data;
             for (Subject toinsert : incoming) {
-                try { // Attempt to insert the information into the database
+                try {
                     rowsSubject.moveToInsertRow();
                     rowsSubject.updateInt("id", toinsert.id);
                     rowsSubject.updateString("name", toinsert.name);
@@ -143,7 +131,6 @@ public class DatabaseConnector {
                     rowsSubject.updateString("address", toinsert.address);
                     rowsSubject.updateString("bill", toinsert.bill);
                     rowsSubject.updateString("notes", toinsert.notes);
-
                     rowsSubject.insertRow();
                     rowsSubject.moveToCurrentRow();
                     dataSubject.addElement(toinsert);
@@ -162,7 +149,7 @@ public class DatabaseConnector {
         if (temp.elementAt(0) instanceof Payment) {
             Vector<Payment> incoming = (Vector<Payment>) data;
             for (Payment toInsert : incoming) {
-                try { // Attempt to remove the information into the database
+                try {
                     for (int i = 0; i < dataPayment.size(); i++) {
                         if (dataPayment.elementAt(i).id == toInsert.id) {
                             dataPayment.removeElementAt(i);
@@ -178,7 +165,7 @@ public class DatabaseConnector {
         } else if (temp.elementAt(0) instanceof Agent) {
             Vector<Agent> incoming = (Vector<Agent>) data;
             for (Agent toInsert : incoming) {
-                try { // Attempt to remove the information into the database
+                try {
                     for (int i = 0; i < dataAgent.size(); i++) {
                         if (dataAgent.elementAt(i).id == toInsert.id) {
                             dataAgent.removeElementAt(i);
@@ -194,7 +181,7 @@ public class DatabaseConnector {
         } else if (temp.elementAt(0) instanceof Subject) {
             Vector<Subject> incoming = (Vector<Subject>) data;
             for (Subject toInsert : incoming) {
-                try { // Attempt to remove the information into the database
+                try {
                     for (int i = 0; i < dataSubject.size(); i++) {
                         if (dataSubject.elementAt(i).id == toInsert.id) {
                             dataSubject.removeElementAt(i);
@@ -207,56 +194,6 @@ public class DatabaseConnector {
                 }
             }
             System.out.println("Subject removed");
-        }
-    }
-
-    public void writeLocallData(Object data) {
-
-        Vector<Object> temp = (Vector<Object>) data;
-
-        if (temp.elementAt(0) instanceof Payment) {
-            Vector<Payment> incoming = (Vector<Payment>) data;
-            for (Payment toinsert : incoming){
-
-            }
-            System.out.println("Payment written to local");
-        } else if (temp.elementAt(0) instanceof Agent) {
-            Vector<Agent> incoming = (Vector<Agent>) data;
-            for (Agent toinsert : incoming){
-
-            }
-            System.out.println("Agent written to local");
-        } else if (temp.elementAt(0) instanceof Subject) {
-            Vector<Subject> incoming = (Vector<Subject>) data;
-            for (Subject toinsert : incoming){
-
-            }
-            System.out.println("Subject written");
-        }
-    }
-
-    public void removeLocalData(Object data) {
-
-        Vector<Object> temp = (Vector<Object>) data;
-
-        if (temp.elementAt(0) instanceof Payment) {
-            Vector<Payment> incoming = (Vector<Payment>) data;
-            for (Payment toInsert : incoming) {
-
-            }
-            System.out.println("Payment removed from local");
-        } else if (temp.elementAt(0) instanceof Agent) {
-            Vector<Agent> incoming = (Vector<Agent>) data;
-            for (Agent toInsert : incoming) {
-
-            }
-            System.out.println("Agent removed from local");
-        } else if (temp.elementAt(0) instanceof Subject) {
-            Vector<Subject> incoming = (Vector<Subject>) data;
-            for (Subject toInsert : incoming) {
-
-            }
-            System.out.println("Subject removed from local");
         }
     }
 }

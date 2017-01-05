@@ -19,52 +19,108 @@ public class Database {
 
     private static ObjectOutputStream oos;
     private static ObjectInputStream ios;
-    private Object[][] databaseResultsPayment;
-    private Object[][] databaseResultsSubject;
-    private Object[][] databaseResultsAgent;
-    public Object[] paymentColumns = new Object[]{"Accepted","Type","Value","Begin Date","End Date","Owner","Subject","Document","Notes"};
-    public Object[] agentColumns = new Object[]{"ID","Name","Phone","Email","Commission"};
-    public Object[] subjectColumns = new Object[]{"ID","Name","Phone","Email","Address","Bill","Notes"};
+    private static Object[][] databaseResultsPayment;
+    private static Object[][] databaseResultsSubject;
+    private static Object[][] databaseResultsAgent;
+    public static Object[] paymentColumns = new Object[]{"Accepted","Type","Value","Begin Date","End Date","Owner","Subject","Document","Notes"};
+    public static Object[] agentColumns = new Object[]{"ID","Name","Phone","Email","Commission"};
+    public static Object[] subjectColumns = new Object[]{"ID","Name","Phone","Email","Address","Bill","Notes"};
 
-    public DefaultTableModel defaultTableModelPayment;
-    public DefaultTableModel defaultTableModelAgent;
-    public DefaultTableModel defaultTableModelSubject;
-    public Vector<Payment> rowDataPayment = new Vector<>();
-    public Vector<Agent> rowDataAgent = new Vector<>();
-    public Vector<Subject> rowDataSubject = new Vector<>();
+    public static DefaultTableModel defaultTableModelPayment;
+    public static DefaultTableModel defaultTableModelAgent;
+    public static DefaultTableModel defaultTableModelSubject;
+    public static Vector<Payment> rowDataPayment = new Vector<>();
+    public static Vector<Agent> rowDataAgent = new Vector<>();
+    public static Vector<Subject> rowDataSubject = new Vector<>();
+    public IncomingHandler recriver = new IncomingHandler();
 
-    private static class IncomingHandler extends Thread {
+    public static class IncomingHandler extends Thread {
 
         public void run() {
             try {
 
-                //Get data from the server
-                while (true) { //check data about removing
+                Vector<Object> temp;
+                while (true) {
                     Object incoming = ios.readObject();
                     if(incoming instanceof Boolean){
                         Boolean removing = (Boolean)incoming;
                         if(removing){
-                            incoming = ios.readObject();
-                            //remove object
+                            temp= (Vector<Object>)ios.readObject();
+                            if (temp.elementAt(0) instanceof Payment) {
+                                System.out.println("Payment removed");
+                                for (Object item : temp) {
+                                    for (int i = 0; i < rowDataPayment.size(); i++) {
+                                        if (rowDataPayment.elementAt(i).id == ((Payment)item).id) {
+                                            rowDataPayment.removeElementAt(i);
+                                            defaultTableModelPayment.removeRow(i); // popraw to jakos
+                                        }
+                                    }
+                                }
+                            } else if (temp.elementAt(0) instanceof Agent) {
+                                System.out.println("Agent removed");
+                                for (Object item : temp) {
+                                    for (int i = 0; i < rowDataAgent.size(); i++) {
+                                        if (rowDataAgent.elementAt(i).id == ((Agent)item).id) {
+                                            rowDataAgent.removeElementAt(i);
+                                            defaultTableModelAgent.removeRow(i); //to też popraw
+                                        }
+                                    }
+                                }
+                            } else if (temp.elementAt(0) instanceof Subject) {
+                                System.out.println("Subject removed");
+                                for (Object item : temp) {
+                                    for (int i = 0; i < rowDataSubject.size(); i++) {
+                                        if (rowDataSubject.elementAt(i).id == ((Subject)item).id) {
+                                            rowDataSubject.removeElementAt(i);
+                                            defaultTableModelSubject.removeRow(i);
+                                        }
+                                    }
+                                }
+                            }
                         }
                         else{
-                            incoming = ios.readObject();
-                            //add object
+                            temp= (Vector<Object>)ios.readObject();
+                            if(temp.size()>0){
+                                if(temp.elementAt(0) instanceof Payment){
+                                    System.out.println("Payment added");
+                                    for(Object item: temp){
+                                        rowDataPayment.addElement((Payment)item);
+                                        defaultTableModelPayment.addRow(((Payment)item).toVector());
+                                    }
+                                }
+                                else if(temp.elementAt(0) instanceof Agent){
+                                    System.out.println("Agent added");
+                                    for(Object item: temp){
+                                        rowDataAgent.addElement((Agent)item);
+                                        defaultTableModelAgent.addRow(((Agent)item).toVector());
+                                    }
+                                }
+                                else if(temp.elementAt(0) instanceof Subject) {
+                                    System.out.println("Subject added");
+                                    for(Object item: temp){
+                                        rowDataSubject.addElement((Subject)item);
+                                        defaultTableModelSubject.addRow(((Subject)item).toVector());
+                                    }
+                                }
+                            }
+                            else{
+                                System.out.println("empty database");
+                            }
                         }
                     }else if (incoming instanceof String){
-                        System.out.println("jakaś wiadomość przyszła");
+                        System.out.println("incoming message");
                         String messag = (String)incoming;
                         System.out.println(messag);
                     }
+                    else{
+                        System.out.println("Unsupported data");
+                    }
                 }
-
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("Error handling data" + e);
             }
         }
     }
-
-
 
     public Database() {
 
@@ -76,48 +132,9 @@ public class Database {
             e.printStackTrace();
         }
 
-        try{
-            Vector<Object> temp;
-
-            for(int i=0;i<3;i++){
-
-                temp = (Vector<Object>)getDataFromServer();
-                if(temp.size()>0){
-                    if(temp.elementAt(0) instanceof Payment){
-                        System.out.println("Payment");
-                        rowDataPayment = (Vector<Payment>)temp.clone();
-                    }
-                    else if(temp.elementAt(0) instanceof Agent){
-                        System.out.println("Agent");
-                        rowDataAgent = (Vector<Agent>)temp.clone();
-                    }
-                    else if(temp.elementAt(0) instanceof Subject) {
-                        System.out.println("Subject");
-                        rowDataSubject = (Vector<Subject>) temp.clone();
-                    }
-                }
-                else{
-                    System.out.println("empty database");
-                }
-            }
-
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-
         defaultTableModelPayment = new DefaultTableModel(databaseResultsPayment, paymentColumns);
         defaultTableModelAgent = new DefaultTableModel(databaseResultsAgent, agentColumns);
         defaultTableModelSubject = new DefaultTableModel(databaseResultsSubject, subjectColumns);
-
-        for(Payment item: rowDataPayment) {
-            defaultTableModelPayment.addRow(item.toVector());
-        }
-        for(Agent item: rowDataAgent) {
-            defaultTableModelAgent.addRow(item.toVector());
-        }
-        for(Subject item: rowDataSubject) {
-            defaultTableModelSubject.addRow(item.toVector());
-        }
     }
 
     public void connectToServer() throws IOException {
@@ -127,43 +144,8 @@ public class Database {
         ios = new ObjectInputStream(socket.getInputStream());
     }
 
-
-    public void sendObject(Object input, Boolean remove) throws IOException { //to jest trochę bez sensu możńa by poprawić
-        Vector<Object> temp;
-        temp = (Vector<Object>)input;
-        if(temp.elementAt(0) instanceof Payment){
-            System.out.println("tak, Payment");
-            if(remove)System.out.println("Usuwamy Payment");
-            oos.writeObject(remove);
-            oos.writeObject(input);
-        }
-        else if(temp.elementAt(0) instanceof Agent){
-            System.out.println("no nie za bardzo bo to agent");
-            if(remove)System.out.println("Usuwamy Agent");
-            oos.writeObject(remove);
-            oos.writeObject(input);
-        }
-        else if(temp.elementAt(0) instanceof Subject){
-            System.out.println("no nie za bardzo bo to subject:");
-            if(remove)System.out.println("Usuwamy Subject");
-            oos.writeObject(remove);
-            oos.writeObject(input);
-        }else if(temp.elementAt(0) instanceof String){
-            oos.writeObject(((Vector<Object>) input).elementAt(0));
-            System.out.println("wiadomość");
-        }
-
-    }
-
-    public Object getDataFromServer() throws IOException{
-
-        Object temp = null;
-        try {
-            temp = ios.readObject();
-        } catch (ClassNotFoundException e) {
-            System.out.println("Getting data failad");
-            e.printStackTrace ();
-        }
-        return temp;
+    public void sendObject(Object input, Boolean remove) throws IOException {
+        oos.writeObject(remove);
+        oos.writeObject(input);
     }
 }

@@ -119,7 +119,7 @@ public class Model {
 
                 // Attempt to insert the information into the database
 
-                Client.db.rowDataPayment.addElement(toinsert);
+                //Client.db.rowDataPayment.addElement(toinsert);
                 Vector<Payment> tosend = new Vector<>();
                 tosend.addElement(toinsert);
                 try {
@@ -128,21 +128,21 @@ public class Model {
                     e1.printStackTrace();
                 }
 
-                Client.db.defaultTableModelPayment.addRow(toinsert.toVector()); // Add the row to the screen
+                //Client.db.defaultTableModelPayment.addRow(toinsert.toVector()); // Add the row to the screen
                 gui.panel1.errorMessage.setText(""); // Remove the error message if one was displayed
 
             } else if (e.getSource() == gui.panel1.removeRecord) {
 
                 Vector<Payment> tosend = new Vector<>();
                 int removeIndex = gui.panel1.table.getSelectedRow();
-                int removeId = Client.db.rowDataPayment.elementAt(removeIndex).id;
+                //int removeId = Client.db.rowDataPayment.elementAt(removeIndex).id;
                 tosend.addElement(Client.db.rowDataPayment.elementAt(removeIndex));
                 try{// If the user clicked remove record, delete from database and remove from table
 
                     Client.db.sendObject(tosend, Boolean.TRUE);
-                    for(int i =0; i<Client.db.rowDataPayment.size(); i++)if(Client.db.rowDataPayment.elementAt(i).id == removeId)Client.db.rowDataPayment.removeElementAt(i);
+                    //for(int i =0; i<Client.db.rowDataPayment.size(); i++)if(Client.db.rowDataPayment.elementAt(i).id == removeId)Client.db.rowDataPayment.removeElementAt(i);
 
-                    Client.db.defaultTableModelPayment.removeRow(removeIndex);
+                    //Client.db.defaultTableModelPayment.removeRow(removeIndex);
                 } catch(ArrayIndexOutOfBoundsException | IOException e1) {
                     e1.printStackTrace();
                     System.out.println(e1.getMessage());
@@ -182,7 +182,7 @@ public class Model {
                 Agent toinsert = new Agent(agentID+1,Name,Phone,Email,Commission);
 
                 // Attempt to insert the information into the database
-                Client.db.rowDataAgent.addElement(toinsert);
+                //Client.db.rowDataAgent.addElement(toinsert);
                 Vector<Agent> tosend = new Vector<>();
                 tosend.addElement(toinsert);
                 try {
@@ -191,7 +191,7 @@ public class Model {
                     e1.printStackTrace();
                 }
 
-                Client.db.defaultTableModelAgent.addRow(toinsert.toVector()); // Add the row to the screen
+                //Client.db.defaultTableModelAgent.addRow(toinsert.toVector()); // Add the row to the screen
                 gui.panel2.errorMessage.setText(""); // Remove the error message if one was displayed
 
             } else if (e.getSource() == gui.panel2.removeRecord) {
@@ -200,14 +200,14 @@ public class Model {
 
                 Vector<Agent> tosend = new Vector<>();
                 int removeIndex = gui.panel2.table.getSelectedRow();
-                int removeId = Client.db.rowDataAgent.elementAt(removeIndex).id;
+                //int removeId = Client.db.rowDataAgent.elementAt(removeIndex).id;
                 tosend.addElement(Client.db.rowDataAgent.elementAt(removeIndex));
                 try{// If the user clicked remove record, delete from database and remove from table
 
                     Client.db.sendObject(tosend, Boolean.TRUE);
-                    for(int i =0; i<Client.db.rowDataAgent.size(); i++)if(Client.db.rowDataAgent.elementAt(i).id == removeId)Client.db.rowDataAgent.removeElementAt(i);
+                    //for(int i =0; i<Client.db.rowDataAgent.size(); i++)if(Client.db.rowDataAgent.elementAt(i).id == removeId)Client.db.rowDataAgent.removeElementAt(i);
 
-                    Client.db.defaultTableModelAgent.removeRow(removeIndex);
+                   // Client.db.defaultTableModelAgent.removeRow(removeIndex);
                 } catch(ArrayIndexOutOfBoundsException | IOException e1) {
                     e1.printStackTrace();
                     System.out.println(e1.getMessage());
@@ -239,7 +239,7 @@ public class Model {
                 Subject toinsert = new Subject(subjectID+1,Name,Phone,Email,Address,Bill,Notes);
 
                 // Attempt to insert the information into the database
-                Client.db.rowDataSubject.addElement(toinsert);
+                //Client.db.rowDataSubject.addElement(toinsert);
                 Vector<Subject> tosend = new Vector<>();
                 tosend.addElement(toinsert);
                 try {
@@ -248,21 +248,21 @@ public class Model {
                     e1.printStackTrace();
                 }
 
-                Client.db.defaultTableModelSubject.addRow(toinsert.toVector()); // Add the row to the screen
+                //Client.db.defaultTableModelSubject.addRow(toinsert.toVector()); // Add the row to the screen
                 gui.panel3.errorMessage.setText(""); // Remove the error message if one was displayed
 
             } else if (e.getSource() == gui.panel3.removeRecord) {
 
                 Vector<Subject> tosend = new Vector<>();
                 int removeIndex = gui.panel3.table.getSelectedRow();
-                int removeId = Client.db.rowDataSubject.elementAt(removeIndex).id;
+                //int removeId = Client.db.rowDataSubject.elementAt(removeIndex).id;
                 tosend.addElement(Client.db.rowDataSubject.elementAt(removeIndex));
                 try{// If the user clicked remove record, delete from database and remove from table
 
                     Client.db.sendObject(tosend, Boolean.TRUE);
-                    for(int i =0; i<Client.db.rowDataSubject.size(); i++)if(Client.db.rowDataSubject.elementAt(i).id == removeId)Client.db.rowDataSubject.removeElementAt(i);
+                 //   for(int i =0; i<Client.db.rowDataSubject.size(); i++)if(Client.db.rowDataSubject.elementAt(i).id == removeId)Client.db.rowDataSubject.removeElementAt(i);
 
-                    Client.db.defaultTableModelSubject.removeRow(removeIndex);
+                   // Client.db.defaultTableModelSubject.removeRow(removeIndex);
                 } catch(ArrayIndexOutOfBoundsException | IOException e1) {
                     e1.printStackTrace();
                     System.out.println(e1.getMessage());
@@ -394,11 +394,9 @@ public class Model {
         }
     }
 
-
     public void setErrorMessage(String message) {
         gui.panel1.errorMessage.setText(message);
     }
-
 
     public java.util.Date getADate(String dateRegistered) {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");

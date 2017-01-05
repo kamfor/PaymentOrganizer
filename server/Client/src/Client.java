@@ -19,5 +19,6 @@ public class Client {
     public static void main (String[] args) {
         db = new Database();
         GUI = new Model();
+        db.recriver.run();
     }
 }

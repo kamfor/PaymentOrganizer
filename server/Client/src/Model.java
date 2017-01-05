@@ -9,6 +9,10 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,6 +37,7 @@ public class Model {
     ListenForPaymentAction paymentActionListener  =new ListenForPaymentAction();
     ListenForAgentAction agentActionListener  =new ListenForAgentAction();
     ListenForSubjectAction subjectActionListener  =new ListenForSubjectAction();
+    ListenForClick paymentClickListener = new ListenForClick();
 
     //ListenForPaymentAction subjectActionListener  =new ListenForSubjectAction();
 
@@ -62,7 +67,7 @@ public class Model {
         gui.panel2.tfName.addFocusListener(focusListener);
         gui.panel2.tfPhone.addFocusListener(focusListener);
         gui.panel2.tfEmail.addFocusListener(focusListener);
-        //gui.panel1.table.addMouseListener(mouseListener);
+        gui.panel2.table.addMouseListener(mouseListener);
         gui.panel2.addRecord.addActionListener(agentActionListener);
         gui.panel2.removeRecord.addActionListener(agentActionListener);
 
@@ -72,9 +77,11 @@ public class Model {
         gui.panel3.tfEmail.addFocusListener(focusListener);
         gui.panel3.tfAddress.addFocusListener(focusListener);
         gui.panel3.tfNotes.addFocusListener(focusListener);
-        //gui.panel1.table.addMouseListener(mouseListener);
+        gui.panel3.table.addMouseListener(mouseListener);
         gui.panel3.addRecord.addActionListener(subjectActionListener);
         gui.panel3.removeRecord.addActionListener(subjectActionListener);
+
+        gui.panel1.table.getModel().addTableModelListener(paymentClickListener);
 
     }
 
@@ -354,7 +361,6 @@ public class Model {
     /**
      * ListenForMouse class that listens for mouse events on cells so that
      * they can be updated.
-     *
      */
     private class ListenForMouse extends MouseAdapter {
         public void mouseReleased(MouseEvent mouseEvent) {
@@ -371,17 +377,30 @@ public class Model {
                     switch(updateColumn) {
                         // if the column was date_registered, convert date update using a Date
                         case "Date_Registered":
-                            gui.panel1.dateBeginDate = getADate(value);
+                            //gui.panel1.dateBeginDate = getADate(value);
                             //Client.db.rows.updateDate(updateColumn, (Date) dateBeginDate);
                             //Client.db.rows.updateRow();
                             break;
+                        case "ID":
+                            setErrorMessage("ID is unupdatale");
+                            break;
                         default: // otherwise update using a String
+                            //dodajemy zmianę na serwerze i przydało by się zrobić jakiś obiekt do przesyłania zmian
                             //Client.db.rows.updateString(updateColumn, value);
                             //Client.db.rows.updateRow();
                             //when updating create new record and remove old one
                             break;
                     }
                 }
+            }
+        }
+    }
+
+    private class ListenForClick implements TableModelListener{ // o to chodziło
+        public void tableChanged(TableModelEvent e) {
+
+            if(e.getType()==TableModelEvent.UPDATE){
+                System.out.println(gui.panel1.table.getValueAt(e.getLastRow(),e.getColumn()));
             }
         }
     }

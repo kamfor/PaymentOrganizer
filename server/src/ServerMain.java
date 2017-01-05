@@ -32,7 +32,6 @@ public class ServerMain {
         }
     }
 
-    // therad handler
     private static class ClientHandler extends Thread {
         private Socket socket;
         private int clientNumber;
@@ -57,50 +56,59 @@ public class ServerMain {
         public void run() {
             try {
 
-                oos.writeObject(Boolean.FALSE);
+                oos.writeObject(new Integer(1));
                 oos.writeObject(database.dataPayment);
                 System.out.println("payment data sended");
-                oos.writeObject(Boolean.FALSE);
+                oos.writeObject(new Integer(1));
                 oos.writeObject(database.dataAgent);
                 System.out.println("agent data sended");
-                oos.writeObject(Boolean.FALSE);
+                oos.writeObject(new Integer(1));
                 oos.writeObject(database.dataSubject);
                 System.out.println("subject data sended");
 
                 while (true) {
                     Object incoming = ois.readObject();
-                    if(incoming instanceof Boolean){
-                        Boolean removing = (Boolean)incoming;
-                        if(removing){
+                    if(incoming instanceof Integer){
+                        Integer qualifier = (Integer) incoming;
+                        if(qualifier==0){
                             incoming = ois.readObject();
                             database.removeMysqlData(incoming);
                             for(ClientHandler item :clients){
-                                item.oos.writeObject(removing);
-                                item.oos.writeObject(incoming);
-                                System.out.println("removed from client"+item.clientNumber);
+                                if(item.isAlive()) {
+                                    item.oos.writeObject(qualifier);
+                                    item.oos.writeObject(incoming);
+                                    System.out.println("removed from client: " + item.clientNumber);
+                                }
                             }
                         }
-                        else{
+                        else if(qualifier==1){
                             incoming = ois.readObject();
                             database.writeMysqlData(incoming);
                             for(ClientHandler item :clients){
-                                if(item.isAlive())
-                                item.oos.writeObject(removing);
-                                item.oos.writeObject(incoming);
-                                System.out.println("added to client"+item.clientNumber);
+                                if(item.isAlive()) {
+                                    item.oos.writeObject(qualifier);
+                                    item.oos.writeObject(incoming);
+                                    System.out.println("added to client: " + item.clientNumber);
+                                }
                             }
                         }
-                    }else if (incoming instanceof String){
-                        System.out.println("Incoming massage");
-                        String messag = (String)incoming;
-                        System.out.println(messag);
+                        else if(qualifier==2){
+                            incoming = ois.readObject();
+                            database.updateMysqlData(incoming); //change to update
+                            for(ClientHandler item :clients){
+                                if(item.isAlive()) {
+                                    item.oos.writeObject(qualifier);
+                                    item.oos.writeObject(incoming);
+                                    System.out.println("Update send to client: " + item.clientNumber);
+                                }
+                            }
+                        }
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("Error handling client# " + clientNumber + ": " + e);
             } finally {
                 try {
-                    clients.removeElementAt(clientNumber);
                     ois.close();
                     oos.close();
                     socket.close();

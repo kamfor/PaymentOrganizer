@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/Client/src/Model.java" line="537" mnemonic="9" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="b4d04a8f-a4f7-441c-bf8d-a1b4fa4c6942" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Client/src/Client.java" afterPath="$PROJECT_DIR$/Client/src/Client.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Client/src/Database.java" afterPath="$PROJECT_DIR$/Client/src/Database.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Client/src/Model.java" afterPath="$PROJECT_DIR$/Client/src/Model.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Client/src/View.java" afterPath="$PROJECT_DIR$/Client/src/View.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Client/src/classes/Payment.java" afterPath="$PROJECT_DIR$/Client/src/classes/Payment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DatabaseConnector.java" afterPath="$PROJECT_DIR$/src/DatabaseConnector.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ServerMain.java" afterPath="$PROJECT_DIR$/src/ServerMain.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/classes/Payment.java" afterPath="$PROJECT_DIR$/src/classes/Payment.java" />
     </list>
     <ignored path="server.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,10 +36,11 @@
       <file leaf-file-name="ServerMain.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ServerMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="427">
-              <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
+            <state relative-caret-position="558">
+              <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="class#ClientHandler#0;class#ServerMain#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -38,10 +49,13 @@
       <file leaf-file-name="DatabaseConnector.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/DatabaseConnector.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3456">
-              <caret line="198" column="1" selection-start-line="198" selection-start-column="1" selection-end-line="198" selection-end-column="1" />
+            <state relative-caret-position="612">
+              <caret line="271" column="0" selection-start-line="271" selection-start-column="0" selection-end-line="271" selection-end-column="0" />
               <folding>
-                <element signature="n#!!doc" expanded="false" />
+                <element signature="method#readMysqlData#0;class#DatabaseConnector#0" expanded="false" />
+                <element signature="method#writeMysqlData#0;class#DatabaseConnector#0" expanded="false" />
+                <element signature="method#removeMysqlData#0;class#DatabaseConnector#0" expanded="false" />
+                <element signature="method#updateMysqlData#0;class#DatabaseConnector#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -50,10 +64,14 @@
       <file leaf-file-name="Database.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/src/Database.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2682">
-              <caret line="149" column="5" selection-start-line="149" selection-start-column="5" selection-end-line="149" selection-end-column="5" />
+            <state relative-caret-position="481">
+              <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="method#run#0;class#IncomingHandler#0;class#Database#0" expanded="false" />
+                <element signature="method#Database#0;class#Database#0" expanded="false" />
+                <element signature="method#connectToServer#0;class#Database#0" expanded="false" />
+                <element signature="method#sendObject#0;class#Database#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -62,37 +80,48 @@
       <file leaf-file-name="View.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/src/View.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2646">
-              <caret line="175" column="0" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="31">
+              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+              <folding>
+                <element signature="class#paymentPanel#0" expanded="false" />
+                <element signature="class#agentPanel#0" expanded="false" />
+                <element signature="e#3887#3888#0" expanded="true" />
+                <element signature="e#3967#3968#0" expanded="true" />
+                <element signature="class#subjectPanel#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Client.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Client.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/src/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="18" column="45" selection-start-line="18" selection-start-column="45" selection-end-line="18" selection-end-column="45" />
+            <state relative-caret-position="360">
+              <caret line="20" column="26" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Model.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Model.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Client/src/Model.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="895">
-              <caret line="400" column="0" selection-start-line="400" selection-start-column="0" selection-end-line="400" selection-end-column="0" />
+            <state relative-caret-position="31">
+              <caret line="232" column="0" selection-start-line="232" selection-start-column="0" selection-end-line="232" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="imports" expanded="true" />
+                <element signature="method#Model#0;class#Model#0" expanded="false" />
                 <element signature="method#actionPerformed#0;class#ListenForPaymentAction#0;class#Model#0" expanded="false" />
                 <element signature="method#actionPerformed#0;class#ListenForAgentAction#0;class#Model#0" expanded="false" />
                 <element signature="method#actionPerformed#0;class#ListenForSubjectAction#0;class#Model#0" expanded="false" />
+                <element signature="class#ListenForFocus#0;class#Model#0" expanded="false" />
                 <element signature="method#focusGained#0;class#ListenForFocus#0;class#Model#0" expanded="false" />
                 <element signature="method#focusLost#0;class#ListenForFocus#0;class#Model#0" expanded="false" />
                 <element signature="method#mouseReleased#0;class#ListenForMouse#0;class#Model#0" expanded="false" />
+                <element signature="method#tableChanged#0;class#ListenForClickPayment#0;class#Model#0" expanded="false" />
+                <element signature="method#tableChanged#0;class#ListenForClickAgent#0;class#Model#0" expanded="false" />
+                <element signature="method#tableChanged#0;class#ListenForClickSubject#0;class#Model#0" expanded="false" />
                 <element signature="method#setColumnWidths#0;class#Model#0" expanded="false" />
                 <element signature="method#getADate#0;class#Model#0" expanded="false" />
               </folding>
@@ -145,10 +174,10 @@
         <option value="$PROJECT_DIR$/Client/src/classes/Payment.java" />
         <option value="$PROJECT_DIR$/src/classes/Payment.java" />
         <option value="$PROJECT_DIR$/Client/src/View.java" />
-        <option value="$PROJECT_DIR$/Client/src/Client.java" />
-        <option value="$PROJECT_DIR$/src/ServerMain.java" />
-        <option value="$PROJECT_DIR$/src/DatabaseConnector.java" />
         <option value="$PROJECT_DIR$/Client/src/Database.java" />
+        <option value="$PROJECT_DIR$/Client/src/Client.java" />
+        <option value="$PROJECT_DIR$/src/DatabaseConnector.java" />
+        <option value="$PROJECT_DIR$/src/ServerMain.java" />
         <option value="$PROJECT_DIR$/Client/src/Model.java" />
       </list>
     </option>
@@ -554,7 +583,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -598,7 +627,7 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="10" />
+      <option name="time" value="17" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -621,6 +650,10 @@
           <caret line="97" column="27" selection-start-line="97" selection-start-column="27" selection-end-line="97" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#run#0;class#IncomingHandler#0;class#Database#0" expanded="false" />
+            <element signature="method#Database#0;class#Database#0" expanded="false" />
+            <element signature="method#connectToServer#0;class#Database#0" expanded="false" />
+            <element signature="method#sendObject#0;class#Database#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -640,6 +673,10 @@
           <caret line="42" column="31" selection-start-line="42" selection-start-column="31" selection-end-line="42" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="method#run#0;class#IncomingHandler#0;class#Database#0" expanded="false" />
+            <element signature="method#Database#0;class#Database#0" expanded="false" />
+            <element signature="method#connectToServer#0;class#Database#0" expanded="false" />
+            <element signature="method#sendObject#0;class#Database#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -766,94 +803,117 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/classes/Payment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="36" column="10" selection-start-line="36" selection-start-column="10" selection-end-line="36" selection-end-column="10" />
+        <state relative-caret-position="715">
+          <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/classes/Payment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="50" column="10" selection-start-line="50" selection-start-column="10" selection-end-line="50" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Client/src/classes/Agent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
+        <state relative-caret-position="-306">
           <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/classes/Subject.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+        <state relative-caret-position="126">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/classes/Agent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ServerMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="558">
+          <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="class#ClientHandler#0;class#ServerMain#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DatabaseConnector.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3456">
-          <caret line="198" column="1" selection-start-line="198" selection-start-column="1" selection-end-line="198" selection-end-column="1" />
+        <state relative-caret-position="612">
+          <caret line="271" column="0" selection-start-line="271" selection-start-column="0" selection-end-line="271" selection-end-column="0" />
           <folding>
-            <element signature="n#!!doc" expanded="false" />
+            <element signature="method#readMysqlData#0;class#DatabaseConnector#0" expanded="false" />
+            <element signature="method#writeMysqlData#0;class#DatabaseConnector#0" expanded="false" />
+            <element signature="method#removeMysqlData#0;class#DatabaseConnector#0" expanded="false" />
+            <element signature="method#updateMysqlData#0;class#DatabaseConnector#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/Database.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2682">
-          <caret line="149" column="5" selection-start-line="149" selection-start-column="5" selection-end-line="149" selection-end-column="5" />
+        <state relative-caret-position="481">
+          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ServerMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="427">
-          <caret line="102" column="0" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="method#run#0;class#IncomingHandler#0;class#Database#0" expanded="false" />
+            <element signature="method#Database#0;class#Database#0" expanded="false" />
+            <element signature="method#connectToServer#0;class#Database#0" expanded="false" />
+            <element signature="method#sendObject#0;class#Database#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/View.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2646">
-          <caret line="175" column="0" selection-start-line="175" selection-start-column="0" selection-end-line="175" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Client/src/Model.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="895">
-          <caret line="400" column="0" selection-start-line="400" selection-start-column="0" selection-end-line="400" selection-end-column="0" />
+        <state relative-caret-position="31">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
           <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="imports" expanded="true" />
-            <element signature="method#actionPerformed#0;class#ListenForPaymentAction#0;class#Model#0" expanded="false" />
-            <element signature="method#actionPerformed#0;class#ListenForAgentAction#0;class#Model#0" expanded="false" />
-            <element signature="method#actionPerformed#0;class#ListenForSubjectAction#0;class#Model#0" expanded="false" />
-            <element signature="method#focusGained#0;class#ListenForFocus#0;class#Model#0" expanded="false" />
-            <element signature="method#focusLost#0;class#ListenForFocus#0;class#Model#0" expanded="false" />
-            <element signature="method#mouseReleased#0;class#ListenForMouse#0;class#Model#0" expanded="false" />
-            <element signature="method#setColumnWidths#0;class#Model#0" expanded="false" />
-            <element signature="method#getADate#0;class#Model#0" expanded="false" />
+            <element signature="class#paymentPanel#0" expanded="false" />
+            <element signature="class#agentPanel#0" expanded="false" />
+            <element signature="e#3887#3888#0" expanded="true" />
+            <element signature="e#3967#3968#0" expanded="true" />
+            <element signature="class#subjectPanel#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="18" column="45" selection-start-line="18" selection-start-column="45" selection-end-line="18" selection-end-column="45" />
+        <state relative-caret-position="360">
+          <caret line="20" column="26" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/Model.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="31">
+          <caret line="232" column="0" selection-start-line="232" selection-start-column="0" selection-end-line="232" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="method#Model#0;class#Model#0" expanded="false" />
+            <element signature="method#actionPerformed#0;class#ListenForPaymentAction#0;class#Model#0" expanded="false" />
+            <element signature="method#actionPerformed#0;class#ListenForAgentAction#0;class#Model#0" expanded="false" />
+            <element signature="method#actionPerformed#0;class#ListenForSubjectAction#0;class#Model#0" expanded="false" />
+            <element signature="class#ListenForFocus#0;class#Model#0" expanded="false" />
+            <element signature="method#focusGained#0;class#ListenForFocus#0;class#Model#0" expanded="false" />
+            <element signature="method#focusLost#0;class#ListenForFocus#0;class#Model#0" expanded="false" />
+            <element signature="method#mouseReleased#0;class#ListenForMouse#0;class#Model#0" expanded="false" />
+            <element signature="method#tableChanged#0;class#ListenForClickPayment#0;class#Model#0" expanded="false" />
+            <element signature="method#tableChanged#0;class#ListenForClickAgent#0;class#Model#0" expanded="false" />
+            <element signature="method#tableChanged#0;class#ListenForClickSubject#0;class#Model#0" expanded="false" />
+            <element signature="method#setColumnWidths#0;class#Model#0" expanded="false" />
+            <element signature="method#getADate#0;class#Model#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>

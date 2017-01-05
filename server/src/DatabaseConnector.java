@@ -50,7 +50,7 @@ public class DatabaseConnector {
             rowsSubject = sqlSubjectStatement.executeQuery(selectSubject);
 
             while (rowsPayment.next()) {
-                Payment sample = new Payment(rowsPayment.getInt(1), rowsPayment.getInt(2), rowsPayment.getString(3),
+                Payment sample = new Payment(rowsPayment.getInt(1), rowsPayment.getBoolean(2), rowsPayment.getString(3),
                         rowsPayment.getString(4), rowsPayment.getDate(5), rowsPayment.getDate(6),
                         rowsPayment.getInt(7), rowsPayment.getInt(8), rowsPayment.getString(9),
                         rowsPayment.getString(10));
@@ -84,7 +84,7 @@ public class DatabaseConnector {
                 try {
                     rowsPayment.moveToInsertRow();
                     rowsPayment.updateInt("id", toinsert.id);
-                    rowsPayment.updateInt("accepted", toinsert.accepted);
+                    rowsPayment.updateBoolean("accepted", toinsert.accepted);
                     rowsPayment.updateString("type", toinsert.type);
                     rowsPayment.updateString("value", toinsert.value);
                     rowsPayment.updateDate("begin_date", (Date) toinsert.begin_date);
@@ -194,6 +194,78 @@ public class DatabaseConnector {
                 }
             }
             System.out.println("Subject removed");
+        }
+    }
+
+    public void updateMysqlData(Object data) {
+
+        Vector<Object> temp = (Vector<Object>) data;
+
+        if (temp.elementAt(0) instanceof Payment) {
+            Vector<Payment> incoming = (Vector<Payment>) data;
+            for (Payment toInsert : incoming) {
+                try {
+                    for (int i = 0; i < dataPayment.size(); i++) {
+                        if (dataPayment.elementAt(i).id == toInsert.id) {
+                            dataPayment.setElementAt(toInsert,i);
+                            rowsPayment.absolute(i + 1);
+                            rowsPayment.updateInt("id", toInsert.id);
+                            rowsPayment.updateBoolean("accepted", toInsert.accepted);
+                            rowsPayment.updateString("type", toInsert.type);
+                            rowsPayment.updateString("value", toInsert.value);
+                            rowsPayment.updateDate("begin_date", (Date) toInsert.begin_date);
+                            rowsPayment.updateDate("end_date", (Date) toInsert.end_date);
+                            rowsPayment.updateInt("owner_id", toInsert.owner_id);
+                            rowsPayment.updateInt("subject_id", toInsert.subject_id);
+                            rowsPayment.updateString("document_name", toInsert.document_name);
+                            rowsPayment.updateString("notes", toInsert.notes);
+                            System.out.println("Payment updated at mysql");
+                        }
+                    }
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
+            }
+        } else if (temp.elementAt(0) instanceof Agent) {
+            Vector<Agent> incoming = (Vector<Agent>) data;
+            for (Agent toInsert : incoming) {
+                try {
+                    for (int i = 0; i < dataAgent.size(); i++) {
+                        if (dataAgent.elementAt(i).id == toInsert.id) {
+                            dataAgent.setElementAt(toInsert,i);
+                            rowsAgent.absolute(i + 1);
+                            rowsAgent.updateInt("id", toInsert.id);
+                            rowsAgent.updateString("name", toInsert.name);
+                            rowsAgent.updateString("phone", toInsert.phone);
+                            rowsAgent.updateString("email", toInsert.email);
+                            rowsAgent.updateString("commission", toInsert.commission);
+                        }
+                    }
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
+            }
+        } else if (temp.elementAt(0) instanceof Subject) {
+            Vector<Subject> incoming = (Vector<Subject>) data;
+            for (Subject toInsert : incoming) {
+                try {
+                    for (int i = 0; i < dataSubject.size(); i++) {
+                        if (dataSubject.elementAt(i).id == toInsert.id) {
+                            dataSubject.setElementAt(toInsert,i);
+                            rowsSubject.absolute(i + 1);
+                            rowsSubject.updateInt("id", toInsert.id);
+                            rowsSubject.updateString("name", toInsert.name);
+                            rowsSubject.updateString("phone", toInsert.phone);
+                            rowsSubject.updateString("email", toInsert.email);
+                            rowsSubject.updateString("address", toInsert.address);
+                            rowsSubject.updateString("bill", toInsert.bill);
+                            rowsSubject.updateString("notes", toInsert.notes);
+                        }
+                    }
+                } catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
+            }
         }
     }
 }

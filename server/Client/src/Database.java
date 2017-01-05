@@ -1,6 +1,7 @@
 import classes.Agent;
 import classes.Payment;
 import classes.Subject;
+import org.omg.CORBA.INTERNAL;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -32,7 +33,7 @@ public class Database {
     public static Vector<Payment> rowDataPayment = new Vector<>();
     public static Vector<Agent> rowDataAgent = new Vector<>();
     public static Vector<Subject> rowDataSubject = new Vector<>();
-    public IncomingHandler recriver = new IncomingHandler();
+    public IncomingHandler receiver = new IncomingHandler();
 
     public static class IncomingHandler extends Thread {
 
@@ -42,9 +43,9 @@ public class Database {
                 Vector<Object> temp;
                 while (true) {
                     Object incoming = ios.readObject();
-                    if(incoming instanceof Boolean){
-                        Boolean removing = (Boolean)incoming;
-                        if(removing){
+                    if(incoming instanceof Integer){
+                        Integer qualifier = (Integer)incoming;
+                        if(qualifier==0){
                             temp= (Vector<Object>)ios.readObject();
                             if (temp.elementAt(0) instanceof Payment) {
                                 System.out.println("Payment removed");
@@ -78,7 +79,7 @@ public class Database {
                                 }
                             }
                         }
-                        else{
+                        else if(qualifier ==1){
                             temp= (Vector<Object>)ios.readObject();
                             if(temp.size()>0){
                                 if(temp.elementAt(0) instanceof Payment){
@@ -106,13 +107,48 @@ public class Database {
                             else{
                                 System.out.println("empty database");
                             }
+                        }else if(qualifier==2){
+                            temp= (Vector<Object>)ios.readObject();
+                            if(temp.size()>0){
+                                if(temp.elementAt(0) instanceof Payment){
+                                    System.out.println("Payment updated");
+                                    for(Object item: temp){
+                                        for (int i = 0; i < rowDataPayment.size(); i++) {
+                                            if (rowDataPayment.elementAt(i).id == ((Payment)item).id) {
+                                                rowDataPayment.setElementAt((Payment)item,i);
+                                                defaultTableModelPayment.removeRow(i);
+                                                defaultTableModelPayment.insertRow(i,((Payment)item).toVector());
+                                            }
+                                        }
+                                    }
+                                }
+                                else if(temp.elementAt(0) instanceof Agent){
+                                    System.out.println("Agent updated");
+                                    for(Object item: temp){
+                                        for (int i = 0; i < rowDataAgent.size(); i++) {
+                                            if (rowDataAgent.elementAt(i).id == ((Agent)item).id) {
+                                                rowDataAgent.setElementAt((Agent) item,i);
+                                                defaultTableModelAgent.removeRow(i);
+                                                defaultTableModelAgent.insertRow(i,((Agent)item).toVector());
+                                            }
+                                        }
+                                    }
+                                }
+                                else if(temp.elementAt(0) instanceof Subject) {
+                                    System.out.println("Subject updated");
+                                    for(Object item: temp){
+                                        for (int i = 0; i < rowDataSubject.size(); i++) {
+                                            if (rowDataSubject.elementAt(i).id == ((Subject)item).id) {
+                                                rowDataSubject.setElementAt((Subject) item,i);
+                                                defaultTableModelSubject.removeRow(i);
+                                                defaultTableModelSubject.insertRow(i,((Subject)item).toVector());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
-                    }else if (incoming instanceof String){
-                        System.out.println("incoming message");
-                        String messag = (String)incoming;
-                        System.out.println(messag);
-                    }
-                    else{
+                    }else{
                         System.out.println("Unsupported data");
                     }
                 }
@@ -144,7 +180,7 @@ public class Database {
         ios = new ObjectInputStream(socket.getInputStream());
     }
 
-    public void sendObject(Object input, Boolean remove) throws IOException {
+    public void sendObject(Object input, Integer remove) throws IOException {
         oos.writeObject(remove);
         oos.writeObject(input);
     }

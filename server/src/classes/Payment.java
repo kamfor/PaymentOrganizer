@@ -8,7 +8,7 @@ import java.util.Vector;
  */
 public class Payment implements Serializable {
     public int id;
-    public int accepted;
+    public Boolean accepted;
     public String type;
     public String value;
     public java.util.Date begin_date;
@@ -18,7 +18,7 @@ public class Payment implements Serializable {
     public String document_name;
     public String notes;
 
-    public Payment(int par_id, int par_accepted, String par_type, String par_value,java.util.Date par_begin_date, java.util.Date par_end_date,
+    public Payment(int par_id, Boolean par_accepted, String par_type, String par_value,java.util.Date par_begin_date, java.util.Date par_end_date,
                    int par_owner_id, int par_subject_id, String par_document_name, String par_notes){
         id  = par_id;
         accepted  = par_accepted;
@@ -34,7 +34,7 @@ public class Payment implements Serializable {
 
     public void toString(Vector<String> append){
         append.clear();
-        //append.addElement(String.valueOf(id));
+        append.addElement(String.valueOf(id));
         append.addElement(String.valueOf(accepted));
         append.addElement(type);
         append.addElement(value);
@@ -46,10 +46,10 @@ public class Payment implements Serializable {
         append.addElement(notes);
     }
 
-    public Vector<String> toVector(){
-        Vector<String> temp = new Vector<String>();
-        temp.addElement(String.valueOf(id));
-        temp.addElement(String.valueOf(accepted));
+    public Vector<Object> toVector(){
+        Vector<Object> temp = new Vector<>();
+        //temp.addElement(String.valueOf(id));
+        temp.addElement(accepted);
         temp.addElement(type);
         temp.addElement(value);
         temp.addElement(begin_date.toString());

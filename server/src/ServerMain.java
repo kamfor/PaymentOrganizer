@@ -17,14 +17,14 @@ public class ServerMain {
     public static void main(String[] args) throws IOException {
         ServerSocket listener = new ServerSocket(9091);
         DatabaseConnector data = new DatabaseConnector();
-
-        int clientNumber = 0;
-        data.readMysqlData();
+        int clientNumber;
+        //data.readMysqlData();
 
         try {
             while (true) {
                 clientNumber = clients.size();
                 clients.addElement(new ClientHandler(listener.accept(), clientNumber, data));
+                data.readMysqlData();
                 clients.lastElement().start();
             }
         }finally {

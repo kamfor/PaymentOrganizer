@@ -32,6 +32,10 @@ public class DatabaseConnector {
 
     public void readMysqlData() {
         try {
+
+            dataPayment = new Vector<>();
+            dataAgent = new Vector<>();
+            dataSubject = new Vector<>();
             Class.forName("com.mysql.jdbc.Driver");
 
             System.out.println("Connecting to database...");
@@ -219,6 +223,7 @@ public class DatabaseConnector {
                             rowsPayment.updateInt("subject_id", toInsert.subject_id);
                             rowsPayment.updateString("document_name", toInsert.document_name);
                             rowsPayment.updateString("notes", toInsert.notes);
+                            rowsPayment.updateRow();
                             System.out.println("Payment updated at mysql");
                         }
                     }
@@ -239,6 +244,8 @@ public class DatabaseConnector {
                             rowsAgent.updateString("phone", toInsert.phone);
                             rowsAgent.updateString("email", toInsert.email);
                             rowsAgent.updateFloat("commission", toInsert.commission);
+                            rowsAgent.updateRow();
+                            System.out.println("Agent updated at mysql");
                         }
                     }
                 } catch (SQLException e2) {
@@ -260,6 +267,8 @@ public class DatabaseConnector {
                             rowsSubject.updateString("address", toInsert.address);
                             rowsSubject.updateFloat("bill", toInsert.bill);
                             rowsSubject.updateString("notes", toInsert.notes);
+                            rowsSubject.updateRow();
+                            System.out.println("Subject updated at mysql");
                         }
                     }
                 } catch (SQLException e2) {

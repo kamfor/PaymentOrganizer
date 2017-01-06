@@ -16,8 +16,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 import javax.swing.*;
-import javax.swing.plaf.synth.SynthButtonUI;
-import javax.swing.table.TableColumn;
 import classes.Agent;
 import classes.Payment;
 import classes.Subject;
@@ -69,6 +67,8 @@ public class Model {
         gui.panel1.table.getModel().addTableModelListener(paymentClickListener);
         gui.panel2.table.getModel().addTableModelListener(agentClickListener);
         gui.panel3.table.getModel().addTableModelListener(subjectClickListener);
+
+        gui.panel1.errorMessage.setText("");
     }
 
     private class ListenForPaymentAction implements ActionListener {
@@ -95,7 +95,6 @@ public class Model {
                     numberValue = Float.valueOf(Value);
                 }
                 catch(NumberFormatException e1){
-                    e1.printStackTrace();
                     gui.panel1.errorMessage.setText("Incorrect Value");
                     return;
                 }
@@ -115,7 +114,7 @@ public class Model {
                     gui.panel1.dateEndDate = getADate(EndDate);
                 }
                 catch(ParseException e1){
-
+                    gui.panel1.errorMessage.setText("Incorrect Date");
                 }
 
                 for(Agent item: Client.db.rowDataAgent){
@@ -154,7 +153,7 @@ public class Model {
                     if(foundAgent)Client.db.sendObject(agentToUpdate, new Integer(2));
                     if(foundSubject)Client.db.sendObject(subjectToUpdate, new Integer(2));
                 } catch (IOException e1) {
-                    e1.printStackTrace();
+                    gui.panel1.errorMessage.setText("Error while sending data to server");
                 }
                 gui.panel1.errorMessage.setText("");
 
@@ -183,8 +182,6 @@ public class Model {
                     Client.db.sendObject(agentToUpdate, new Integer(2));
                     Client.db.sendObject(subjectToUpdate, new Integer(2));
                 } catch(ArrayIndexOutOfBoundsException | IOException e1) {
-                    e1.printStackTrace();
-                    System.out.println(e1.getMessage());
                     gui.panel1.errorMessage.setText("To delete an customer, you must first select a row.");
                 }
             }
@@ -214,7 +211,7 @@ public class Model {
                 try {
                     Client.db.sendObject(tosend, new Integer(1));
                 } catch (IOException e1) {
-                    e1.printStackTrace();
+                    gui.panel1.errorMessage.setText("Error while sending to server");
                 }
 
                 gui.panel2.errorMessage.setText(""); // Remove the error message if one was displayed
@@ -234,8 +231,6 @@ public class Model {
                 try{
                     Client.db.sendObject(tosend, new Integer(0));
                 } catch(ArrayIndexOutOfBoundsException | IOException e1) {
-                    e1.printStackTrace();
-                    System.out.println(e1.getMessage());
                     gui.panel2.errorMessage.setText("To delete an agent, you must first select a row.");
                     return;
                 }
@@ -286,7 +281,6 @@ public class Model {
                     Client.db.sendObject(tosend, new Integer(0));
                 } catch(ArrayIndexOutOfBoundsException | IOException e1) {
                     e1.printStackTrace();
-                    System.out.println(e1.getMessage());
                     gui.panel3.errorMessage.setText("To delete a Subject, you must first select a row.");
                 }
             }
@@ -388,7 +382,6 @@ public class Model {
                 Vector<Agent> agentToUpdate = new Vector<>();
                 Vector<Subject> subjectToUpdate = new Vector<>();
                 Float numberValue;
-                System.out.println(gui.panel1.table.getValueAt(e.getLastRow(),e.getColumn()));
                 Object field = gui.panel1.table.getValueAt(e.getLastRow(),e.getColumn());
 
 
@@ -403,6 +396,10 @@ public class Model {
                 updateColumn = Client.db.defaultTableModelPayment.getColumnName(gui.panel1.table.getSelectedColumn());
 
                 switch(updateColumn) {
+                    case "Type":
+                        tosend.elementAt(0).type = (String)field;
+                        isUpdated = Boolean.TRUE;
+                        break;
                     case "Accepted":
                         tosend.elementAt(0).accepted = (Boolean)field;
                         isUpdated = Boolean.TRUE;
@@ -412,23 +409,24 @@ public class Model {
                             numberValue = Float.valueOf((String)field);
                         }
                         catch(NumberFormatException e1){
-                            e1.printStackTrace();
                             gui.panel1.errorMessage.setText("Incorrect Value");
                             return;
                         }
                         for(Agent item: Client.db.rowDataAgent){
                             if(item.id==tosend.elementAt(0).owner_id){
-                                item.commission +=(tosend.elementAt(0).value-numberValue);
+                                item.commission +=(numberValue-tosend.elementAt(0).value);
                                 agentToUpdate.addElement(item);
                             }
                         }
                         for(Subject item: Client.db.rowDataSubject){
                             if(item.id==tosend.elementAt(0).subject_id){
-                                item.bill +=(tosend.elementAt(0).value-numberValue);
+                                item.bill +=(numberValue-tosend.elementAt(0).value);
                                 subjectToUpdate.addElement(item);
                             }
                         }
+                        tosend.elementAt(0).value = numberValue;
                         isUpdated = Boolean.TRUE;
+                        valueChanged = Boolean.TRUE;
                         break;
                     case "Begin Date":
                         try{
@@ -437,7 +435,6 @@ public class Model {
                         }catch(ParseException e2){
                             gui.panel1.table.setValueAt(tosend.elementAt(0).begin_date,e.getLastRow(),e.getColumn());
                             gui.panel1.errorMessage.setText("Unparseable Date");
-                            e2.printStackTrace();
                         }
                         break;
                     case "End Date":
@@ -447,7 +444,6 @@ public class Model {
                         }catch(ParseException e2){
                             gui.panel1.table.setValueAt(tosend.elementAt(0).end_date,e.getLastRow(),e.getColumn());
                             gui.panel1.errorMessage.setText("Unparseable Date");
-                            e2.printStackTrace();
                         }
                         break;
                     case "Owner":
@@ -463,6 +459,7 @@ public class Model {
                         if(!found){
                             gui.panel1.errorMessage.setText("Owner doesn't exist");
                             gui.panel1.table.setValueAt(tosend.elementAt(0).owner_id,e.getLastRow(),e.getColumn());
+                            return;
                         }
                         break;
                     case "Subject":
@@ -478,6 +475,7 @@ public class Model {
                         if(!found){
                             gui.panel1.errorMessage.setText("Subject doesn't exist");
                             gui.panel1.table.setValueAt(tosend.elementAt(0).subject_id,e.getLastRow(),e.getColumn());
+                            return;
                         }
                         break;
                     case "Document":
@@ -489,7 +487,8 @@ public class Model {
                         isUpdated = Boolean.TRUE;
                         break;
                 }
-                if(isUpdated==Boolean.TRUE){
+                gui.panel1.errorMessage.setText("");
+                if(isUpdated){
                     try{
                         Client.db.sendObject(tosend, new Integer(2));
                         if(valueChanged){
@@ -497,7 +496,7 @@ public class Model {
                             Client.db.sendObject(subjectToUpdate, new Integer(2));
                         }
                     }catch(IOException e1){
-                        e1.printStackTrace();
+                        gui.panel1.errorMessage.setText("Error while sending to server");
                     }
                 }
             }
@@ -538,7 +537,7 @@ public class Model {
                     try{
                         Client.db.sendObject(tosend, new Integer(2));
                     }catch(IOException e1){
-                        e1.printStackTrace();
+                        gui.panel1.errorMessage.setText("Error while sending to server");
                     }
                 }
             }
@@ -549,7 +548,6 @@ public class Model {
         public void tableChanged(TableModelEvent e) {
 
             if(e.getType()==TableModelEvent.UPDATE){
-                System.out.println(gui.panel3.table.getValueAt(e.getLastRow(),e.getColumn()));
                 Object field = gui.panel3.table.getValueAt(e.getLastRow(),e.getColumn());
 
 
@@ -587,22 +585,11 @@ public class Model {
                     try{
                         Client.db.sendObject(tosend, new Integer(2));
                     }catch(IOException e1){
-                        e1.printStackTrace();
+                        gui.panel1.errorMessage.setText("Error while sending to server");
                     }
                 }
             }
         }
-    }
-
-    public void setColumnWidths(int...widths) {
-        TableColumn column;
-        for(int i = 0; i < 8; i++) {
-            column = gui.panel1.table.getColumnModel().getColumn(i);
-            column.setPreferredWidth(widths[i]);
-        }
-    }
-
-    public void setErrorMessage(String message) {gui.panel1.errorMessage.setText(message);
     }
 
     public java.util.Date getADate(String dateRegistered) throws ParseException{
@@ -612,9 +599,8 @@ public class Model {
             gui.panel1.dateBeginDate = dateFormatter.parse(dateRegistered);
             gui.panel1.dateBeginDate = new java.sql.Date(gui.panel1.dateBeginDate.getTime());
         } catch (ParseException e1) {
-            System.out.println(e1.getMessage());
             if(e1.getMessage().toString().startsWith("Unparseable date:")) {
-                this.setErrorMessage("The date should be in the following format: YYYY-MM-DD");
+                gui.panel1.errorMessage.setText("The date should be in the following format: YYYY-MM-DD");
             }
             throw new ParseException("Error",0);
         }

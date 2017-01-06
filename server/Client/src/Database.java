@@ -10,6 +10,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Vector;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -105,7 +106,7 @@ public class Database {
                                 }
                             }
                             else{
-                                System.out.println("empty database");
+                                JOptionPane.showMessageDialog(Client.GUI.gui, "Empty Database");
                             }
                         }else if(qualifier==2){
                             temp= (Vector<Object>)ios.readObject();
@@ -154,18 +155,20 @@ public class Database {
                 }
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("Error handling data" + e);
+                JOptionPane.showMessageDialog(Client.GUI.gui, "Read Data error", "Inane error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
-    public Database() {
+    public Database() throws IOException{
 
         try{
             this.connectToServer();
             System.out.println("connecting to server");
         }catch(IOException e){
             System.out.println("connecting failed");
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(Client.GUI.gui, "Server connection error", "Connection Error", JOptionPane.ERROR_MESSAGE);
+            throw new IOException();
         }
 
         defaultTableModelPayment = new DefaultTableModel(databaseResultsPayment, paymentColumns);
@@ -174,7 +177,6 @@ public class Database {
     }
 
     public void connectToServer() throws IOException {
-        // Make connection and initialize streams
         Socket socket = new Socket(InetAddress.getLocalHost(), 9091);
         oos = new ObjectOutputStream(socket.getOutputStream());
         ios = new ObjectInputStream(socket.getInputStream());

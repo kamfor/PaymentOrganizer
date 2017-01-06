@@ -1,4 +1,4 @@
-import javax.swing.JFrame;
+import java.io.IOException;
 
 /**
  * The main driver class for the application working with JTables and
@@ -17,7 +17,15 @@ public class Client {
     public static Database db;
 
     public static void main (String[] args) {
-        db = new Database();
+
+        while(true){
+            try{
+                db = new Database();
+                break;
+            }catch(IOException e1){
+                continue;
+            }
+        }
         GUI = new Model();
         db.receiver.run();
     }

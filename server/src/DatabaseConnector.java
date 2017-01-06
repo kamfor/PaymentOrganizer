@@ -51,20 +51,20 @@ public class DatabaseConnector {
 
             while (rowsPayment.next()) {
                 Payment sample = new Payment(rowsPayment.getInt(1), rowsPayment.getBoolean(2), rowsPayment.getString(3),
-                        rowsPayment.getString(4), rowsPayment.getDate(5), rowsPayment.getDate(6),
+                        rowsPayment.getFloat(4), rowsPayment.getDate(5), rowsPayment.getDate(6),
                         rowsPayment.getInt(7), rowsPayment.getInt(8), rowsPayment.getString(9),
                         rowsPayment.getString(10));
                 dataPayment.addElement(sample);
             }
 
             while (rowsAgent.next()) {
-                Agent sample = new Agent(rowsAgent.getInt(1), rowsAgent.getString(2), rowsAgent.getString(3), rowsAgent.getString(4), rowsAgent.getString(5));
+                Agent sample = new Agent(rowsAgent.getInt(1), rowsAgent.getString(2), rowsAgent.getString(3), rowsAgent.getString(4), rowsAgent.getFloat(5));
                 dataAgent.addElement(sample);
             }
 
             while (rowsSubject.next()) {
                 Subject sample = new Subject(rowsSubject.getInt(1), rowsSubject.getString(2), rowsSubject.getString(3),
-                        rowsSubject.getString(4), rowsSubject.getString(5), rowsSubject.getString(6),
+                        rowsSubject.getString(4), rowsSubject.getString(5), rowsSubject.getFloat(6),
                         rowsSubject.getString(7));
                 dataSubject.addElement(sample);
             }
@@ -86,7 +86,7 @@ public class DatabaseConnector {
                     rowsPayment.updateInt("id", toinsert.id);
                     rowsPayment.updateBoolean("accepted", toinsert.accepted);
                     rowsPayment.updateString("type", toinsert.type);
-                    rowsPayment.updateString("value", toinsert.value);
+                    rowsPayment.updateFloat("value", toinsert.value);
                     rowsPayment.updateDate("begin_date", (Date) toinsert.begin_date);
                     rowsPayment.updateDate("end_date", (Date) toinsert.end_date);
                     rowsPayment.updateInt("owner_id", toinsert.owner_id);
@@ -110,7 +110,7 @@ public class DatabaseConnector {
                     rowsAgent.updateString("name", toinsert.name);
                     rowsAgent.updateString("phone", toinsert.phone);
                     rowsAgent.updateString("email", toinsert.email);
-                    rowsAgent.updateString("commission", toinsert.commission);
+                    rowsAgent.updateFloat("commission", toinsert.commission);
                     rowsAgent.insertRow();
                     rowsPayment.moveToCurrentRow();
                     dataAgent.addElement(toinsert);
@@ -129,7 +129,7 @@ public class DatabaseConnector {
                     rowsSubject.updateString("phone", toinsert.phone);
                     rowsSubject.updateString("email", toinsert.email);
                     rowsSubject.updateString("address", toinsert.address);
-                    rowsSubject.updateString("bill", toinsert.bill);
+                    rowsSubject.updateFloat("bill", toinsert.bill);
                     rowsSubject.updateString("notes", toinsert.notes);
                     rowsSubject.insertRow();
                     rowsSubject.moveToCurrentRow();
@@ -212,7 +212,7 @@ public class DatabaseConnector {
                             rowsPayment.updateInt("id", toInsert.id);
                             rowsPayment.updateBoolean("accepted", toInsert.accepted);
                             rowsPayment.updateString("type", toInsert.type);
-                            rowsPayment.updateString("value", toInsert.value);
+                            rowsPayment.updateFloat("value", toInsert.value);
                             rowsPayment.updateDate("begin_date", (Date) toInsert.begin_date);
                             rowsPayment.updateDate("end_date", (Date) toInsert.end_date);
                             rowsPayment.updateInt("owner_id", toInsert.owner_id);
@@ -238,7 +238,7 @@ public class DatabaseConnector {
                             rowsAgent.updateString("name", toInsert.name);
                             rowsAgent.updateString("phone", toInsert.phone);
                             rowsAgent.updateString("email", toInsert.email);
-                            rowsAgent.updateString("commission", toInsert.commission);
+                            rowsAgent.updateFloat("commission", toInsert.commission);
                         }
                     }
                 } catch (SQLException e2) {
@@ -258,7 +258,7 @@ public class DatabaseConnector {
                             rowsSubject.updateString("phone", toInsert.phone);
                             rowsSubject.updateString("email", toInsert.email);
                             rowsSubject.updateString("address", toInsert.address);
-                            rowsSubject.updateString("bill", toInsert.bill);
+                            rowsSubject.updateFloat("bill", toInsert.bill);
                             rowsSubject.updateString("notes", toInsert.notes);
                         }
                     }

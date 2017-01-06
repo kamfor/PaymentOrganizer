@@ -11,9 +11,9 @@ public class Agent implements Serializable {
     public String name;
     public String phone;
     public String email;
-    public String commission;
+    public Float commission;
 
-    public Agent(int par_id, String par_name,String par_phone, String par_email, String par_commission){
+    public Agent(int par_id, String par_name,String par_phone, String par_email, Float par_commission){
         id  = par_id;
         name = par_name;
         phone = par_phone;
@@ -27,7 +27,7 @@ public class Agent implements Serializable {
         append.addElement(name);
         append.addElement(phone);
         append.addElement(email);
-        append.addElement(commission);
+        append.addElement(String.valueOf(commission));
     }
 
     public Vector<String> toVector(){
@@ -36,7 +36,7 @@ public class Agent implements Serializable {
         temp.addElement(name);
         temp.addElement(phone);
         temp.addElement(email);
-        temp.addElement(commission);
+        temp.addElement(String.valueOf(commission));
         return temp;
     }
 

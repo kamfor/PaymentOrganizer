@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 import javax.swing.*;
+import javax.swing.plaf.synth.SynthButtonUI;
 import javax.swing.table.TableColumn;
 import classes.Agent;
 import classes.Payment;
@@ -74,6 +75,8 @@ public class Model {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == gui.panel1.addRecord) { // If the user clicks Add Record, add the information into the database
 
+                Boolean foundAgent = Boolean.FALSE;
+                Boolean foundSubject = Boolean.FALSE;
                 String Type, Value, BeginDate, EndDate, Owner, Subject, Document, Notes;
                 Value = gui.panel1.tfValue.getText();
                 Type = gui.panel1.tfType.getText();
@@ -83,21 +86,30 @@ public class Model {
                 Subject = gui.panel1.tfSubject.getText();
                 Document = gui.panel1.tfDocument.getText();
                 Notes = gui.panel1.tfNotes.getText();
+                Vector<Agent> agentToUpdate = new Vector<>();
+                Vector<Subject> subjectToUpdate = new Vector<>();
+                Float numberValue;
 
 
-                // Check that the date matches the required format, if not display an error and return
+                try{
+                    numberValue = Float.valueOf(Value);
+                }
+                catch(NumberFormatException e1){
+                    e1.printStackTrace();
+                    gui.panel1.errorMessage.setText("Incorrect Value");
+                    return;
+                }
+
                 if(!BeginDate.matches("[0-2][0-9]{3}-[0-1][0-2]-[0-3][0-9]")) {
                     gui.panel1.errorMessage.setText("The date should be in the following format: YYYY-MM-DD");
                     return;
                 }
 
-                // Check that the date matches the required format, if not display an error and return
                 if(!EndDate.matches("[0-2][0-9]{3}-[0-1][0-2]-[0-3][0-9]")) {
                     gui.panel1.errorMessage.setText("The date should be in the following format: YYYY-MM-DD");
                     return;
                 }
 
-                // Convert the date
                 try{
                     gui.panel1.dateBeginDate = getADate(BeginDate);
                     gui.panel1.dateEndDate = getADate(EndDate);
@@ -106,35 +118,70 @@ public class Model {
 
                 }
 
-                //check Owner and subject and add waiting message dialog.
+                for(Agent item: Client.db.rowDataAgent){
+                    if(item.id==Integer.valueOf(Owner)){
+                        foundAgent = Boolean.TRUE;
+                        item.commission +=numberValue;
+                        agentToUpdate.addElement(item);
+                    }
+                }
+                if(!foundAgent){
+                    gui.panel1.errorMessage.setText("Owner doesn't exist");
+                    return;
+                }
+                for(Subject item: Client.db.rowDataSubject){
+                    if(item.id==Integer.valueOf(Subject)){
+                        foundSubject = Boolean.TRUE;
+                        item.bill +=numberValue;
+                        subjectToUpdate.addElement(item);
+                    }
+                }
+                if(!foundSubject){
+                    gui.panel1.errorMessage.setText("Subject doesn't exist");
+                    return;
+                }
 
                 int paymentID = 0;
                 for(Payment item: Client.db.rowDataPayment){
                     if(item.id>paymentID)paymentID = item.id;
                 }
-                Payment toinsert = new Payment(paymentID+1,Boolean.FALSE, Type, Value, gui.panel1.dateBeginDate, gui.panel1.dateEndDate, Integer.valueOf(Owner), Integer.valueOf(Subject), Document, Notes);
+                Payment toinsert = new Payment(paymentID+1,Boolean.FALSE, Type, numberValue, gui.panel1.dateBeginDate, gui.panel1.dateEndDate, Integer.valueOf(Owner), Integer.valueOf(Subject), Document, Notes);
 
-                // Attempt to insert the information into the database
-
-                //Client.db.rowDataPayment.addElement(toinsert);
                 Vector<Payment> tosend = new Vector<>();
                 tosend.addElement(toinsert);
                 try {
                     Client.db.sendObject(tosend, new Integer(1));
+                    if(foundAgent)Client.db.sendObject(agentToUpdate, new Integer(2));
+                    if(foundSubject)Client.db.sendObject(subjectToUpdate, new Integer(2));
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
-
-                //Client.db.defaultTableModelPayment.addRow(toinsert.toVector()); // Add the row to the screen
-                gui.panel1.errorMessage.setText(""); // Remove the error message if one was displayed
+                gui.panel1.errorMessage.setText("");
 
             } else if (e.getSource() == gui.panel1.removeRecord) {
 
+                Vector<Agent> agentToUpdate = new Vector<>();
+                Vector<Subject> subjectToUpdate = new Vector<>();
                 Vector<Payment> tosend = new Vector<>();
                 int removeIndex = gui.panel1.table.getSelectedRow();
                 tosend.addElement(Client.db.rowDataPayment.elementAt(removeIndex));
+                for(Agent item: Client.db.rowDataAgent){
+                    if(item.id==tosend.elementAt(0).owner_id){
+                        item.commission -=tosend.elementAt(0).value;
+                        agentToUpdate.addElement(item);
+                    }
+                }
+                for(Subject item: Client.db.rowDataSubject){
+                    if(item.id==tosend.elementAt(0).subject_id){
+                        item.bill -=tosend.elementAt(0).value;
+                        subjectToUpdate.addElement(item);
+                    }
+                }
+
                 try{
                     Client.db.sendObject(tosend, new Integer(0));
+                    Client.db.sendObject(agentToUpdate, new Integer(2));
+                    Client.db.sendObject(subjectToUpdate, new Integer(2));
                 } catch(ArrayIndexOutOfBoundsException | IOException e1) {
                     e1.printStackTrace();
                     System.out.println(e1.getMessage());
@@ -148,11 +195,12 @@ public class Model {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == gui.panel2.addRecord) { // If the user clicks Add Record, add the information into the database
 
-                String Name, Phone, Email, Commission;
+                String Name, Phone, Email;
+                Float Commission;
                 Name = gui.panel2.tfName.getText();
                 Phone = gui.panel2.tfPhone.getText();
                 Email = gui.panel2.tfEmail.getText();
-                Commission = "default";
+                Commission = new Float(0.0);
 
                 // Check dependences
 
@@ -172,15 +220,24 @@ public class Model {
                 gui.panel2.errorMessage.setText(""); // Remove the error message if one was displayed
 
             } else if (e.getSource() == gui.panel2.removeRecord) {
+
+
                 Vector<Agent> tosend = new Vector<>();
                 int removeIndex = gui.panel2.table.getSelectedRow();
                 tosend.addElement(Client.db.rowDataAgent.elementAt(removeIndex));
+                for(Payment item: Client.db.rowDataPayment){
+                    if(item.owner_id == tosend.elementAt(0).id){
+                        gui.panel2.errorMessage.setText("Agent exist in Payment table");
+                        return;
+                    }
+                }
                 try{
                     Client.db.sendObject(tosend, new Integer(0));
                 } catch(ArrayIndexOutOfBoundsException | IOException e1) {
                     e1.printStackTrace();
                     System.out.println(e1.getMessage());
                     gui.panel2.errorMessage.setText("To delete an agent, you must first select a row.");
+                    return;
                 }
             }
         }
@@ -190,15 +247,14 @@ public class Model {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == gui.panel3.addRecord) { // If the user clicks Add Record, add the information into the database
 
-                String Name, Phone, Email, Address, Bill, Notes;
+                String Name, Phone, Email, Address, Notes;
+                Float Bill;
                 Name = gui.panel3.tfName.getText();
                 Phone = gui.panel3.tfPhone.getText();
                 Email = gui.panel3.tfEmail.getText();
                 Address = gui.panel3.tfAddress.getText();
                 Notes = gui.panel3.tfNotes.getText();
-                Bill = "default";
-
-                // Check dependences
+                Bill = new Float(0.0);
 
                 int subjectID=0;
                 for(Subject item: Client.db.rowDataSubject){
@@ -220,6 +276,12 @@ public class Model {
                 Vector<Subject> tosend = new Vector<>();
                 int removeIndex = gui.panel3.table.getSelectedRow();
                 tosend.addElement(Client.db.rowDataSubject.elementAt(removeIndex));
+                for(Payment item: Client.db.rowDataPayment){
+                    if(item.subject_id == tosend.elementAt(0).id){
+                        gui.panel3.errorMessage.setText("Subject exist in Payment table");
+                        return;
+                    }
+                }
                 try{
                     Client.db.sendObject(tosend, new Integer(0));
                 } catch(ArrayIndexOutOfBoundsException | IOException e1) {
@@ -231,10 +293,6 @@ public class Model {
         }
     }
 
-    /**
-     * FocusListener implementation used to listen for JTextFields
-     * being focused on.
-     */
     private class ListenForFocus implements FocusListener {
         public void focusGained(FocusEvent e) { // If a text field gains focus and has the default text, remove the text
             if(gui.panel1.tfType.getText().equals("Type") && e.getSource() == gui.panel1.tfType) {
@@ -309,10 +367,6 @@ public class Model {
         }
     }
 
-    /**
-     * ListenForMouse class that listens for mouse events on cells so that
-     * they can be updated.
-     */
     private class ListenForMouse extends MouseAdapter {
         public void mouseReleased(MouseEvent mouseEvent) {
             // If the mouse is released and the click was a right click
@@ -330,6 +384,10 @@ public class Model {
         public void tableChanged(TableModelEvent e) {
 
             if(e.getType()==TableModelEvent.UPDATE){
+
+                Vector<Agent> agentToUpdate = new Vector<>();
+                Vector<Subject> subjectToUpdate = new Vector<>();
+                Float numberValue;
                 System.out.println(gui.panel1.table.getValueAt(e.getLastRow(),e.getColumn()));
                 Object field = gui.panel1.table.getValueAt(e.getLastRow(),e.getColumn());
 
@@ -338,7 +396,8 @@ public class Model {
                 tosend.addElement(Client.db.rowDataPayment.elementAt(gui.panel1.table.getSelectedRow()));
 
                 Boolean found;
-                Boolean isupdated = null;
+                Boolean valueChanged = Boolean.FALSE;
+                Boolean isUpdated = Boolean.FALSE;
 
                 String updateColumn;
                 updateColumn = Client.db.defaultTableModelPayment.getColumnName(gui.panel1.table.getSelectedColumn());
@@ -346,16 +405,35 @@ public class Model {
                 switch(updateColumn) {
                     case "Accepted":
                         tosend.elementAt(0).accepted = (Boolean)field;
-                        isupdated = Boolean.TRUE;
+                        isUpdated = Boolean.TRUE;
                         break;
                     case "Value":
-                        tosend.elementAt(0).value = (String)field;
-                        isupdated = Boolean.TRUE;
+                        try{
+                            numberValue = Float.valueOf((String)field);
+                        }
+                        catch(NumberFormatException e1){
+                            e1.printStackTrace();
+                            gui.panel1.errorMessage.setText("Incorrect Value");
+                            return;
+                        }
+                        for(Agent item: Client.db.rowDataAgent){
+                            if(item.id==tosend.elementAt(0).owner_id){
+                                item.commission +=(tosend.elementAt(0).value-numberValue);
+                                agentToUpdate.addElement(item);
+                            }
+                        }
+                        for(Subject item: Client.db.rowDataSubject){
+                            if(item.id==tosend.elementAt(0).subject_id){
+                                item.bill +=(tosend.elementAt(0).value-numberValue);
+                                subjectToUpdate.addElement(item);
+                            }
+                        }
+                        isUpdated = Boolean.TRUE;
                         break;
                     case "Begin Date":
                         try{
                             tosend.elementAt(0).begin_date = getADate((String)field);
-                            isupdated = Boolean.TRUE;
+                            isUpdated = Boolean.TRUE;
                         }catch(ParseException e2){
                             gui.panel1.table.setValueAt(tosend.elementAt(0).begin_date,e.getLastRow(),e.getColumn());
                             gui.panel1.errorMessage.setText("Unparseable Date");
@@ -365,7 +443,7 @@ public class Model {
                     case "End Date":
                         try{
                             tosend.elementAt(0).end_date = getADate((String)field);
-                            isupdated = Boolean.TRUE;
+                            isUpdated = Boolean.TRUE;
                         }catch(ParseException e2){
                             gui.panel1.table.setValueAt(tosend.elementAt(0).end_date,e.getLastRow(),e.getColumn());
                             gui.panel1.errorMessage.setText("Unparseable Date");
@@ -379,7 +457,7 @@ public class Model {
                                 tosend.elementAt(0).owner_id = Integer.valueOf((String)field);
                                 found = Boolean.TRUE;
                                 gui.panel1.errorMessage.setText("");
-                                isupdated = Boolean.TRUE;
+                                isUpdated = Boolean.TRUE;
                             }
                         }
                         if(!found){
@@ -394,7 +472,7 @@ public class Model {
                                 tosend.elementAt(0).subject_id = Integer.valueOf((String)field);
                                 found = Boolean.TRUE;
                                 gui.panel1.errorMessage.setText("");
-                                isupdated = Boolean.TRUE;
+                                isUpdated = Boolean.TRUE;
                             }
                         }
                         if(!found){
@@ -404,16 +482,20 @@ public class Model {
                         break;
                     case "Document":
                         tosend.elementAt(0).document_name = (String)field;
-                        isupdated = Boolean.TRUE;
+                        isUpdated = Boolean.TRUE;
                         break;
                     case "Notes":
                         tosend.elementAt(0).notes = (String)field;
-                        isupdated = Boolean.TRUE;
+                        isUpdated = Boolean.TRUE;
                         break;
                 }
-                if(isupdated==Boolean.TRUE){
+                if(isUpdated==Boolean.TRUE){
                     try{
                         Client.db.sendObject(tosend, new Integer(2));
+                        if(valueChanged){
+                            Client.db.sendObject(agentToUpdate, new Integer(2));
+                            Client.db.sendObject(subjectToUpdate, new Integer(2));
+                        }
                     }catch(IOException e1){
                         e1.printStackTrace();
                     }

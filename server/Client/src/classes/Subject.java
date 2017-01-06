@@ -12,10 +12,10 @@ public class Subject implements Serializable {
     public String phone;
     public String email;
     public String address;
-    public String bill;
+    public Float bill;
     public String notes;
 
-    public Subject(int par_id, String par_name,String par_phone, String par_email, String par_address, String par_bill, String par_notes){
+    public Subject(int par_id, String par_name,String par_phone, String par_email, String par_address, Float par_bill, String par_notes){
         id  = par_id;
         name = par_name;
         phone = par_phone;
@@ -32,7 +32,7 @@ public class Subject implements Serializable {
         append.addElement(phone);
         append.addElement(email);
         append.addElement(address);
-        append.addElement(bill);
+        append.addElement(String.valueOf(bill));
         append.addElement(notes);
     }
 
@@ -43,7 +43,7 @@ public class Subject implements Serializable {
         temp.addElement(phone);
         temp.addElement(email);
         temp.addElement(address);
-        temp.addElement(bill);
+        temp.addElement(String.valueOf(bill));
         temp.addElement(notes);
         return temp;
     }

@@ -10,7 +10,7 @@ public class Payment implements Serializable {
     public int id;
     public Boolean accepted;
     public String type;
-    public String value;
+    public Float value;
     public java.util.Date begin_date;
     public java.util.Date end_date;
     public int owner_id;
@@ -18,7 +18,7 @@ public class Payment implements Serializable {
     public String document_name;
     public String notes;
 
-    public Payment(int par_id, Boolean par_accepted, String par_type, String par_value,java.util.Date par_begin_date, java.util.Date par_end_date,
+    public Payment(int par_id, Boolean par_accepted, String par_type, Float par_value,java.util.Date par_begin_date, java.util.Date par_end_date,
                    int par_owner_id, int par_subject_id, String par_document_name, String par_notes){
         id  = par_id;
         accepted  = par_accepted;
@@ -37,7 +37,7 @@ public class Payment implements Serializable {
         append.addElement(String.valueOf(id));
         append.addElement(String.valueOf(accepted));
         append.addElement(type);
-        append.addElement(value);
+        append.addElement(String.valueOf(value));
         append.addElement(begin_date.toString());
         append.addElement(end_date.toString());
         append.addElement(String.valueOf(owner_id));
@@ -51,7 +51,7 @@ public class Payment implements Serializable {
         //temp.addElement(String.valueOf(id));
         temp.addElement(accepted);
         temp.addElement(type);
-        temp.addElement(value);
+        temp.addElement(value.toString());
         temp.addElement(begin_date.toString());
         temp.addElement(end_date.toString());
         temp.addElement(String.valueOf(owner_id));

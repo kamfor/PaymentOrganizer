@@ -4,20 +4,24 @@ import javax.swing.*;
 import java.io.IOException;
 
 /**
- * The main driver class for the application working with JTables and
- * MySQL to read, edit, create, and delete customer records.
+ * <h1>Klient</h1>
+ * Aplikacja klient unożliwia wyświetlanie i edycje danych pobranych z serwera
+ * <p>
+ * <b>Note:</b> Może zostać uruchomionych wiele aplikacji klienckich
+ * @author  Kamil Foryszewski
+ * @version 1.1
+ * @since   2017-01-02
  */
 public class Client {
-    /**
-     * The GUI object to display data.
-     */
+
     static Model GUI;
 
-    /**
-     * The database object used to work with the database server.
-     */
     public static Database db;
 
+    /**
+     * Funkcja główna klasy Klient powołująca interfejs graficzny, jego model oraz obsługę daanych z serwera
+     * @param args
+     */
     public static void main (String[] args) {
 
         while(true){

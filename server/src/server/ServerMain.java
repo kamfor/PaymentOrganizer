@@ -1,9 +1,16 @@
 package server;
 /**
  * Created by kamil on 21.11.16.
+ * * <h1>Serwer</h1>
+ * Aplikacja serwer umożliwia obsługę żądań od aplikacji klienckich
+ * pozwala na zapis i odczyt danych z serwera bazy danych MySQL
+ * <p>
+ * <b>Note:</b> Aplikacja serwera nie posiada interfejsu graficznego. 
+ *
+ * @author  Kamil Foryszewski
+ * @version 1.1
+ * @since   2017.01.02
  */
-import server.DatabaseConnector;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,11 +19,13 @@ import java.net.Socket;
 import java.util.Vector;
 
 public class ServerMain {
-    /**
-     * Runs the server.
-     */
     public static Vector<ClientHandler> clients = new Vector<>();
 
+    /**
+     * Funkcja główna programu
+     * Odpowiada za utworzenie Serwera soketów
+     * oraz rozdział połączeń od klientów na wątki
+     */
     public static void main(String[] args) throws IOException {
         ServerSocket listener = new ServerSocket(9091);
         DatabaseConnector data = new DatabaseConnector();
@@ -35,6 +44,10 @@ public class ServerMain {
         }
     }
 
+    /**
+     * Klasa wewnętrzna dziedzicząca po theread
+     * Instancja tej klasy powoływana jest dla każdego połączenia od klienta
+     */
     private static class ClientHandler extends Thread {
         private Socket socket;
         private int clientNumber;

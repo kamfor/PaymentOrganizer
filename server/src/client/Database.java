@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 
 
 /**
- * Class for handling interaction with the server database
+ * Klasa odpowiadająca za obsługę danych z serwera i przystosowanie do postaci tabeli
  */
 public class Database {
 
@@ -38,6 +38,9 @@ public class Database {
     public static Vector<Subject> rowDataSubject = new Vector<>();
     public IncomingHandler receiver = new IncomingHandler();
 
+    /**
+     * Klasa typu runable obsługująca pętlę zdarzań wymiany informacji z serwerem
+     */
     public static class IncomingHandler extends Thread {
 
         public void run() {
@@ -162,6 +165,10 @@ public class Database {
         }
     }
 
+    /**
+     * Konstruktor klasy inicujący połączenie z serwerem
+     * @throws IOException
+     */
     public Database() throws IOException{
 
         try{
@@ -177,17 +184,30 @@ public class Database {
         defaultTableModelSubject = new DefaultTableModel(databaseResultsSubject, subjectColumns);
     }
 
+    /**
+     * Metoda otwierająca Socket
+     * @throws IOException
+     */
     public void connectToServer() throws IOException {
         socket = new Socket(InetAddress.getLocalHost(), 9091);
         oos = new ObjectOutputStream(socket.getOutputStream());
         ios = new ObjectInputStream(socket.getInputStream());
     }
 
+    /**
+     * Metoda umożliwiająca wysłanie danych do serwera
+     * @param input Obiekt do modyfikacji w bazie
+     * @param remove kwalifikator 0 - dodanie do bazy, 1 - usunięcie z bazy. 2 - aktualizacja rekordu
+     * @throws IOException
+     */
     public void sendObject(Object input, Integer remove) throws IOException {
         oos.writeObject(remove);
         oos.writeObject(input);
     }
 
+    /**
+     * Metoda umożiwiająca zakończenie połączenia z serwerem
+     */
     public void disconnect(){
         try{
             socket.close();

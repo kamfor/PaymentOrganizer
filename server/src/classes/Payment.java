@@ -5,6 +5,7 @@ import java.util.Vector;
 
 /**
  * Created by kamil on 27.11.16.
+ * Klasa reprezentująca strukturę rekordu bazy danych
  */
 public class Payment implements Serializable {
     public int id;
@@ -31,7 +32,10 @@ public class Payment implements Serializable {
         document_name = par_document_name;
         notes = par_notes;
     }
-
+    /**
+     * Funkcja umożiwiająca zapisanie danych z pól klasy do wektora podanego w argumencie
+     * @param append wektor typu string do którego mają zostać dopisane elementy klasy
+     */
     public void toString(Vector<String> append){
         append.clear();
         append.addElement(String.valueOf(id));
@@ -45,7 +49,9 @@ public class Payment implements Serializable {
         append.addElement(document_name);
         append.addElement(notes);
     }
-
+    /**
+     * Wypisuje na standardowe wyjście wartości pól klasy
+     */
     public Vector<Object> toVector(){
         Vector<Object> temp = new Vector<>();
         //temp.addElement(String.valueOf(id));
@@ -60,7 +66,9 @@ public class Payment implements Serializable {
         temp.addElement(notes);
         return temp;
     }
-
+    /**
+     * @return Zwraca wektor typu string zawierający wartości pól klasy
+     */
     public void printPaymentObject(){
         System.out.println("ID:"+id);
         System.out.println("Accepted:"+accepted);

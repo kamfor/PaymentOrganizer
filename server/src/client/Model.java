@@ -21,6 +21,9 @@ import classes.Payment;
 import classes.Subject;
 import client.Client;
 
+/**
+ * Klasa Model we wzorcu MVC odpowiadjąca za obsługę zdarzeń w GUI
+ */
 public class Model {
 
     ListenForMouse mouseListener = new ListenForMouse();
@@ -34,6 +37,9 @@ public class Model {
 
     static View gui;
 
+    /**
+     * Konstruktor klasy
+     */
     public Model(){
         gui = new View();
 
@@ -72,6 +78,9 @@ public class Model {
         gui.panel1.errorMessage.setText("");
     }
 
+    /**
+     * Klasa Listener obsługująca zdarzenia przycisków w panelu Payments
+     */
     private class ListenForPaymentAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == gui.panel1.addRecord) { // If the user clicks Add Record, add the information into the database
@@ -189,6 +198,9 @@ public class Model {
         }
     }
 
+    /**
+     * Klasa Listener obsługująca zdarzenia przycisków w panelu Agents
+     */
     private class ListenForAgentAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == gui.panel2.addRecord) { // If the user clicks Add Record, add the information into the database
@@ -239,6 +251,9 @@ public class Model {
         }
     }
 
+    /**
+     * Klasa Listener obsługująca zdarzenia przycisków w panelu Subjects
+     */
     private class ListenForSubjectAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == gui.panel3.addRecord) { // If the user clicks Add Record, add the information into the database
@@ -288,6 +303,9 @@ public class Model {
         }
     }
 
+    /**
+     * Klasa Listener obsługująca zdarzenia pól tekstowych na wszystkich panelach
+     */
     private class ListenForFocus implements FocusListener {
         public void focusGained(FocusEvent e) { // If a text field gains focus and has the default text, remove the text
             if(gui.panel1.tfType.getText().equals("Type") && e.getSource() == gui.panel1.tfType) {
@@ -362,6 +380,10 @@ public class Model {
         }
     }
 
+    /**
+     * Klasa Listener obsługująca zdarzenia myszki
+     * @deprecated
+     */
     private class ListenForMouse extends MouseAdapter {
         public void mouseReleased(MouseEvent mouseEvent) {
             // If the mouse is released and the click was a right click
@@ -375,6 +397,9 @@ public class Model {
         }
     }
 
+    /**
+     * Klasa Listener obsługująca zdarzenia edycji pól tabeli w panelu Payments
+     */
     private class ListenForClickPayment implements TableModelListener{
         public void tableChanged(TableModelEvent e) {
 
@@ -503,7 +528,9 @@ public class Model {
             }
         }
     }
-
+    /**
+     * Klasa Listener obsługująca zdarzenia edycji pól tabeli w panelu Agents
+     */
     private class ListenForClickAgent implements TableModelListener{
         public void tableChanged(TableModelEvent e) {
 
@@ -545,6 +572,9 @@ public class Model {
         }
     }
 
+    /**
+     * Klasa Listener obsługująca zdarzenia edycji pól tabeli w panelu Subjects
+     */
     private class ListenForClickSubject implements TableModelListener{
         public void tableChanged(TableModelEvent e) {
 
@@ -593,6 +623,12 @@ public class Model {
         }
     }
 
+    /**
+     * Metoda konwertująca Datę
+     * @param dateRegistered
+     * @return Zwraca datę w formacie java.sql.Date
+     * @throws ParseException
+     */
     public java.util.Date getADate(String dateRegistered) throws ParseException{
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 

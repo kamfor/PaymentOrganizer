@@ -10,8 +10,9 @@ import classes.Subject;
 import java.sql.*;
 import java.util.Vector;
 
+
 /**
- *
+ * Klasa pośrednia zawierająca pola i metody umożliwiająca odczyt i zapis danych do serwera MySQL
  */
 public class DatabaseConnector {
 
@@ -32,12 +33,18 @@ public class DatabaseConnector {
     public Vector<Agent> dataAgent;
     public Vector<Subject> dataSubject;
 
+    /**
+     * Konstruktor klasy
+     */
     public DatabaseConnector(){
         dataPayment = new Vector<>();
         dataAgent = new Vector<>();
         dataSubject = new Vector<>();
     }
 
+    /**
+     * Metoda inicjująca połączenie z bazą MySQL
+     */
     public void connectMysql(){
         try{
             Class.forName("com.mysql.jdbc.Driver");
@@ -50,6 +57,9 @@ public class DatabaseConnector {
 
     }
 
+    /**
+     * Metoda odczytująca dane z bazy do lokalnych wektorów
+     */
     public void readMysqlData() {
         try {
             Statement sqlPaymentStatement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -93,6 +103,10 @@ public class DatabaseConnector {
         System.out.println("Data read!");
     }
 
+    /**
+     * Metoda zapisująca Obiekt podany jako argument do odpowiedniej tabeli w bazie
+     * @param data obiekt zawierający wektor z daymi do zapisania w bazie
+     */
     public void writeMysqlData(Object data) {
 
         Vector<Object> temp = (Vector<Object>) data;
@@ -161,6 +175,10 @@ public class DatabaseConnector {
         }
     }
 
+    /**
+     * Metoda usuwająca z bazy danych elementy podane w argumencie
+     * @param data obiekt zawierający wektor z danymi do usunięcia
+     */
     public void removeMysqlData(Object data) {
 
         Vector<Object> temp = (Vector<Object>) data;
@@ -216,6 +234,10 @@ public class DatabaseConnector {
         }
     }
 
+    /**
+     * Metoda aktualizująca obiekty w bazie
+     * @param data obiekt zawierający wektor z danymi do aktualizacji
+     */
     public void updateMysqlData(Object data) {
 
         Vector<Object> temp = (Vector<Object>) data;

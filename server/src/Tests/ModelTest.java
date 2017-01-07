@@ -1,4 +1,4 @@
-package client;
+package Tests;
 
 import org.junit.Test;
 
@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Created by kamil on 07.01.17.
  */
-public class ModelTest {
+public class ModelTest { //divade functions for smaller units able to create tests
 
     @Test
     public void ListenForPaymentActionTest() throws Exception{

@@ -1,4 +1,4 @@
-/**
+package client; /**
  * Created by kamil on 30.12.16.
  * zachowanie się tego co się wyświetla
  */
@@ -19,6 +19,7 @@ import javax.swing.*;
 import classes.Agent;
 import classes.Payment;
 import classes.Subject;
+import client.Client;
 
 public class Model {
 

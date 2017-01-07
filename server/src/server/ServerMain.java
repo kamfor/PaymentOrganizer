@@ -1,6 +1,9 @@
+package server;
 /**
  * Created by kamil on 21.11.16.
  */
+import server.DatabaseConnector;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -18,7 +21,7 @@ public class ServerMain {
         ServerSocket listener = new ServerSocket(9091);
         DatabaseConnector data = new DatabaseConnector();
         int clientNumber;
-        //data.readMysqlData();
+        data.connectMysql();
 
         try {
             while (true) {

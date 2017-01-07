@@ -1,3 +1,4 @@
+package client;
 /**
  * Created by kamil on 18.12.16.
  *
@@ -18,7 +19,7 @@ public class View extends JFrame{
 
     public View(){
         super();
-        setTitle("Payment Database");
+        setTitle("Payment client.Database");
         this.setSize(1200, 600);
         jtp = new JTabbedPane();
         jtp.addTab("Payments",panel1);

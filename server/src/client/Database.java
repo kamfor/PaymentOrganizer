@@ -1,7 +1,8 @@
+package client;
+
 import classes.Agent;
 import classes.Payment;
 import classes.Subject;
-import org.omg.CORBA.INTERNAL;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -19,8 +20,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Database {
 
-    private static ObjectOutputStream oos;
-    private static ObjectInputStream ios;
+    private static Socket socket;
+    protected static ObjectOutputStream oos;
+    protected static ObjectInputStream ios;
     private static Object[][] databaseResultsPayment;
     private static Object[][] databaseResultsSubject;
     private static Object[][] databaseResultsAgent;
@@ -106,7 +108,7 @@ public class Database {
                                 }
                             }
                             else{
-                                JOptionPane.showMessageDialog(Client.GUI.gui, "Empty Database");
+                                JOptionPane.showMessageDialog(Client.GUI.gui, "Empty client.Database");
                             }
                         }else if(qualifier==2){
                             temp= (Vector<Object>)ios.readObject();
@@ -167,7 +169,6 @@ public class Database {
             System.out.println("connecting to server");
         }catch(IOException e){
             System.out.println("connecting failed");
-            JOptionPane.showMessageDialog(Client.GUI.gui, "Server connection error", "Connection Error", JOptionPane.ERROR_MESSAGE);
             throw new IOException();
         }
 
@@ -177,7 +178,7 @@ public class Database {
     }
 
     public void connectToServer() throws IOException {
-        Socket socket = new Socket(InetAddress.getLocalHost(), 9091);
+        socket = new Socket(InetAddress.getLocalHost(), 9091);
         oos = new ObjectOutputStream(socket.getOutputStream());
         ios = new ObjectInputStream(socket.getInputStream());
     }
@@ -185,5 +186,15 @@ public class Database {
     public void sendObject(Object input, Integer remove) throws IOException {
         oos.writeObject(remove);
         oos.writeObject(input);
+    }
+
+    public void disconnect(){
+        try{
+            socket.close();
+            oos.close();
+            oos.close();
+        }catch(IOException e1){
+            System.out.println(e1.getMessage());
+        }
     }
 }

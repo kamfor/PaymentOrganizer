@@ -1,12 +1,18 @@
+package server;
 /**
  * Created by kamil on 23.11.16.
  */
+
+
 import classes.Payment;
 import classes.Agent;
 import classes.Subject;
 import java.sql.*;
 import java.util.Vector;
 
+/**
+ *
+ */
 public class DatabaseConnector {
 
     // JDBC driver name and database URL
@@ -16,6 +22,8 @@ public class DatabaseConnector {
     //  Database credentials
     static final String USER = "kfforex_java";
     static final String PASS = "fasada";
+
+    private Connection conn;
 
     private ResultSet rowsPayment;
     private ResultSet rowsAgent;
@@ -30,17 +38,20 @@ public class DatabaseConnector {
         dataSubject = new Vector<>();
     }
 
-    public void readMysqlData() {
-        try {
-
-            dataPayment = new Vector<>();
-            dataAgent = new Vector<>();
-            dataSubject = new Vector<>();
+    public void connectMysql(){
+        try{
             Class.forName("com.mysql.jdbc.Driver");
 
             System.out.println("Connecting to database...");
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+        }catch(SQLException | ClassNotFoundException e1){
+            System.out.println("Database connection error" + e1.getMessage());
+        }
 
+    }
+
+    public void readMysqlData() {
+        try {
             Statement sqlPaymentStatement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             String selectPayment = "SELECT id, accepted, type, value, begin_date, end_date, owner_id, subject_id, document_name, notes FROM payments";
             rowsPayment = sqlPaymentStatement.executeQuery(selectPayment);
@@ -52,6 +63,10 @@ public class DatabaseConnector {
             Statement sqlSubjectStatement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             String selectSubject = "SELECT id, name, phone, email, address, bill, notes FROM subjects";
             rowsSubject = sqlSubjectStatement.executeQuery(selectSubject);
+
+            dataPayment = new Vector<>();
+            dataAgent = new Vector<>();
+            dataSubject = new Vector<>();
 
             while (rowsPayment.next()) {
                 Payment sample = new Payment(rowsPayment.getInt(1), rowsPayment.getBoolean(2), rowsPayment.getString(3),
@@ -72,8 +87,8 @@ public class DatabaseConnector {
                         rowsSubject.getString(7));
                 dataSubject.addElement(sample);
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Data read error" + e.getMessage());
         }
         System.out.println("Data read!");
     }
@@ -84,62 +99,62 @@ public class DatabaseConnector {
 
         if (temp.elementAt(0) instanceof Payment) {
             Vector<Payment> incoming = (Vector<Payment>) data;
-            for (Payment toinsert : incoming) {
+            for (Payment toInsert : incoming) {
                 try {
                     rowsPayment.moveToInsertRow();
-                    rowsPayment.updateInt("id", toinsert.id);
-                    rowsPayment.updateBoolean("accepted", toinsert.accepted);
-                    rowsPayment.updateString("type", toinsert.type);
-                    rowsPayment.updateFloat("value", toinsert.value);
-                    rowsPayment.updateDate("begin_date", (Date) toinsert.begin_date);
-                    rowsPayment.updateDate("end_date", (Date) toinsert.end_date);
-                    rowsPayment.updateInt("owner_id", toinsert.owner_id);
-                    rowsPayment.updateInt("subject_id", toinsert.subject_id);
-                    rowsPayment.updateString("document_name", toinsert.document_name);
-                    rowsPayment.updateString("notes", toinsert.notes);
+                    rowsPayment.updateInt("id", toInsert.id);
+                    rowsPayment.updateBoolean("accepted", toInsert.accepted);
+                    rowsPayment.updateString("type", toInsert.type);
+                    rowsPayment.updateFloat("value", toInsert.value);
+                    rowsPayment.updateDate("begin_date", (Date) toInsert.begin_date);
+                    rowsPayment.updateDate("end_date", (Date) toInsert.end_date);
+                    rowsPayment.updateInt("owner_id", toInsert.owner_id);
+                    rowsPayment.updateInt("subject_id", toInsert.subject_id);
+                    rowsPayment.updateString("document_name", toInsert.document_name);
+                    rowsPayment.updateString("notes", toInsert.notes);
                     rowsPayment.insertRow();
                     rowsPayment.moveToCurrentRow();
-                    dataPayment.addElement(toinsert);
+                    dataPayment.addElement(toInsert);
                     System.out.println("Payment written to mysql");
                 } catch (SQLException e2) {
-                    e2.printStackTrace();
+                    System.out.println("Payment add error"+ e2.getMessage());
                 }
             }
         } else if (temp.elementAt(0) instanceof Agent) {
             Vector<Agent> incoming = (Vector<Agent>) data;
-            for (Agent toinsert : incoming) {
+            for (Agent toInsert : incoming) {
                 try {
                     rowsAgent.moveToInsertRow();
-                    rowsAgent.updateInt("id", toinsert.id);
-                    rowsAgent.updateString("name", toinsert.name);
-                    rowsAgent.updateString("phone", toinsert.phone);
-                    rowsAgent.updateString("email", toinsert.email);
-                    rowsAgent.updateFloat("commission", toinsert.commission);
+                    rowsAgent.updateInt("id", toInsert.id);
+                    rowsAgent.updateString("name", toInsert.name);
+                    rowsAgent.updateString("phone", toInsert.phone);
+                    rowsAgent.updateString("email", toInsert.email);
+                    rowsAgent.updateFloat("commission", toInsert.commission);
                     rowsAgent.insertRow();
                     rowsPayment.moveToCurrentRow();
-                    dataAgent.addElement(toinsert);
+                    dataAgent.addElement(toInsert);
                 } catch (SQLException e2) {
-                    e2.printStackTrace();
+                    System.out.println("Agent add error"+ e2.getMessage());
                 }
             }
             System.out.println("Agent written");
         } else if (temp.elementAt(0) instanceof Subject) {
             Vector<Subject> incoming = (Vector<Subject>) data;
-            for (Subject toinsert : incoming) {
+            for (Subject toInsert : incoming) {
                 try {
                     rowsSubject.moveToInsertRow();
-                    rowsSubject.updateInt("id", toinsert.id);
-                    rowsSubject.updateString("name", toinsert.name);
-                    rowsSubject.updateString("phone", toinsert.phone);
-                    rowsSubject.updateString("email", toinsert.email);
-                    rowsSubject.updateString("address", toinsert.address);
-                    rowsSubject.updateFloat("bill", toinsert.bill);
-                    rowsSubject.updateString("notes", toinsert.notes);
+                    rowsSubject.updateInt("id", toInsert.id);
+                    rowsSubject.updateString("name", toInsert.name);
+                    rowsSubject.updateString("phone", toInsert.phone);
+                    rowsSubject.updateString("email", toInsert.email);
+                    rowsSubject.updateString("address", toInsert.address);
+                    rowsSubject.updateFloat("bill", toInsert.bill);
+                    rowsSubject.updateString("notes", toInsert.notes);
                     rowsSubject.insertRow();
                     rowsSubject.moveToCurrentRow();
-                    dataSubject.addElement(toinsert);
+                    dataSubject.addElement(toInsert);
                 } catch (SQLException e2) {
-                    e2.printStackTrace();
+                    System.out.println("Subject add error"+ e2.getMessage());
                 }
             }
             System.out.println("Subject written");
@@ -277,4 +292,5 @@ public class DatabaseConnector {
             }
         }
     }
+
 }

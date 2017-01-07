@@ -1,3 +1,6 @@
+package client;
+
+import javax.swing.*;
 import java.io.IOException;
 
 /**
@@ -8,7 +11,6 @@ public class Client {
     /**
      * The GUI object to display data.
      */
-    //static View gui;
     static Model GUI;
 
     /**
@@ -23,6 +25,7 @@ public class Client {
                 db = new Database();
                 break;
             }catch(IOException e1){
+                JOptionPane.showMessageDialog(Client.GUI.gui, "Server connection error", "Connection Error", JOptionPane.ERROR_MESSAGE);
                 continue;
             }
         }

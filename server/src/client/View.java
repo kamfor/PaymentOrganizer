@@ -1,7 +1,7 @@
 package client;
 /**
  * Created by kamil on 18.12.16.
- * Klasa Widok we wzorcu MVC
+ * MVC view class
  */
 
 import javax.swing.*;
@@ -34,8 +34,8 @@ public class View extends JFrame{
 }
 
 /**
- * Klasa typu ramka stanowiąca zakładkę panelu głóœnego z tabelą Płatności
- */
+ * Payment frame panel
+ * */
 class paymentPanel extends JInternalFrame{
 
     protected JButton addRecord, removeRecord;
@@ -100,7 +100,7 @@ class paymentPanel extends JInternalFrame{
 
 }
 /**
- * Klasa typu ramka stanowiąca zakładkę panelu głóœnego z tabelą Agentów
+ * Agent frame panel
  */
 class agentPanel extends JInternalFrame{
     protected JButton addRecord, removeRecord;
@@ -148,7 +148,7 @@ class agentPanel extends JInternalFrame{
 
 }
 /**
- * Klasa typu ramka stanowiąca zakładkę panelu głóœnego z tabelą Podmiotów
+ * Subject frame panel
  */
 class subjectPanel extends JInternalFrame{
     protected JButton addRecord, removeRecord;

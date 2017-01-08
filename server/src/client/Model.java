@@ -1,6 +1,6 @@
-package client; /**
+package client;
+/**
  * Created by kamil on 30.12.16.
- * zachowanie się tego co się wyświetla
  */
 
 import java.awt.event.ActionEvent;
@@ -22,7 +22,7 @@ import classes.Subject;
 import client.Client;
 
 /**
- * Klasa Model we wzorcu MVC odpowiadjąca za obsługę zdarzeń w GUI
+ * MVC model class, event loop controller
  */
 public class Model {
 
@@ -38,7 +38,7 @@ public class Model {
     static View gui;
 
     /**
-     * Konstruktor klasy
+     * Class constructor
      */
     public Model(){
         gui = new View();
@@ -79,7 +79,7 @@ public class Model {
     }
 
     /**
-     * Klasa Listener obsługująca zdarzenia przycisków w panelu Payments
+     * Payments panel button events listener
      */
     private class ListenForPaymentAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
@@ -199,7 +199,7 @@ public class Model {
     }
 
     /**
-     * Klasa Listener obsługująca zdarzenia przycisków w panelu Agents
+     * Agents panel button events listener
      */
     private class ListenForAgentAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
@@ -252,7 +252,7 @@ public class Model {
     }
 
     /**
-     * Klasa Listener obsługująca zdarzenia przycisków w panelu Subjects
+     * Subjects panel button events listener
      */
     private class ListenForSubjectAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
@@ -304,7 +304,7 @@ public class Model {
     }
 
     /**
-     * Klasa Listener obsługująca zdarzenia pól tekstowych na wszystkich panelach
+     * Text field focused/unfocused listener
      */
     private class ListenForFocus implements FocusListener {
         public void focusGained(FocusEvent e) { // If a text field gains focus and has the default text, remove the text
@@ -381,7 +381,7 @@ public class Model {
     }
 
     /**
-     * Klasa Listener obsługująca zdarzenia myszki
+     * Mouse event listener
      * @deprecated
      */
     private class ListenForMouse extends MouseAdapter {
@@ -398,7 +398,7 @@ public class Model {
     }
 
     /**
-     * Klasa Listener obsługująca zdarzenia edycji pól tabeli w panelu Payments
+     * Payment panel field edited listener
      */
     private class ListenForClickPayment implements TableModelListener{
         public void tableChanged(TableModelEvent e) {
@@ -529,7 +529,7 @@ public class Model {
         }
     }
     /**
-     * Klasa Listener obsługująca zdarzenia edycji pól tabeli w panelu Agents
+     * Agent panel field edited listener
      */
     private class ListenForClickAgent implements TableModelListener{
         public void tableChanged(TableModelEvent e) {
@@ -573,7 +573,7 @@ public class Model {
     }
 
     /**
-     * Klasa Listener obsługująca zdarzenia edycji pól tabeli w panelu Subjects
+     * Subject panel field edited listener
      */
     private class ListenForClickSubject implements TableModelListener{
         public void tableChanged(TableModelEvent e) {
@@ -624,9 +624,9 @@ public class Model {
     }
 
     /**
-     * Metoda konwertująca Datę
+     * Date parsing method
      * @param dateRegistered
-     * @return Zwraca datę w formacie java.sql.Date
+     * @return  java.sql.Date format
      * @throws ParseException
      */
     public java.util.Date getADate(String dateRegistered) throws ParseException{

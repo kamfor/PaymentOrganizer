@@ -1,11 +1,10 @@
 package server;
 /**
  * Created by kamil on 21.11.16.
- * * <h1>Serwer</h1>
- * Aplikacja serwer umożliwia obsługę żądań od aplikacji klienckich
- * pozwala na zapis i odczyt danych z serwera bazy danych MySQL
+ * * <h1>Server</h1>
+ * Client handling application
  * <p>
- * <b>Note:</b> Aplikacja serwera nie posiada interfejsu graficznego. 
+ * <b>Note:</b> There is no GUI interface 
  *
  * @author  Kamil Foryszewski
  * @version 1.1
@@ -22,9 +21,8 @@ public class ServerMain {
     public static Vector<ClientHandler> clients = new Vector<>();
 
     /**
-     * Funkcja główna programu
-     * Odpowiada za utworzenie Serwera soketów
-     * oraz rozdział połączeń od klientów na wątki
+     * Main function
+     * Creating socket server and handling incoming connections in new threads
      */
     public static void main(String[] args) throws IOException {
         ServerSocket listener = new ServerSocket(9091);
@@ -45,8 +43,8 @@ public class ServerMain {
     }
 
     /**
-     * Klasa wewnętrzna dziedzicząca po theread
-     * Instancja tej klasy powoływana jest dla każdego połączenia od klienta
+     * Thread extension to create new runnable
+     * New one for every incoming client connection
      */
     private static class ClientHandler extends Thread {
         private Socket socket;

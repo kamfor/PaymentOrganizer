@@ -5,7 +5,7 @@ import java.util.Vector;
 
 /**
  * Created by kamil on 27.11.16.
- * Klasa reprezentująca strukturę rekordu bazy danych
+ * Data structure class
  */
 public class Agent implements Serializable {
     public int id;
@@ -23,20 +23,7 @@ public class Agent implements Serializable {
     }
 
     /**
-     * Funkcja umożiwiająca zapisanie danych z pól klasy do wektora podanego w argumencie
-     * @param append wektor typu string do którego mają zostać dopisane elementy klasy
-     */
-    public void toString(Vector<String> append){
-        append.clear();
-        append.addElement(String.valueOf(id));
-        append.addElement(name);
-        append.addElement(phone);
-        append.addElement(email);
-        append.addElement(String.valueOf(commission));
-    }
-
-    /**
-     * @return Zwraca wektor typu string zawierający wartości pól klasy
+     * @return String vector
      */
     public Vector<String> toVector(){
         Vector<String> temp = new Vector<String>();
@@ -49,7 +36,7 @@ public class Agent implements Serializable {
     }
 
     /**
-     * Wypisuje na standardowe wyjście wartości pól klasy
+     * Prints data fields
      */
     public void printObject(){
         System.out.println("ID:"+id);

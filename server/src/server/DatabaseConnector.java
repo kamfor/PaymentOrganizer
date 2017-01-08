@@ -12,7 +12,7 @@ import java.util.Vector;
 
 
 /**
- * Klasa pośrednia zawierająca pola i metody umożliwiająca odczyt i zapis danych do serwera MySQL
+ * MySQL database communication class
  */
 public class DatabaseConnector {
 
@@ -34,7 +34,7 @@ public class DatabaseConnector {
     public Vector<Subject> dataSubject;
 
     /**
-     * Konstruktor klasy
+     * Class constructor
      */
     public DatabaseConnector(){
         dataPayment = new Vector<>();
@@ -43,7 +43,7 @@ public class DatabaseConnector {
     }
 
     /**
-     * Metoda inicjująca połączenie z bazą MySQL
+     * MYSQL connection initializer
      */
     public void connectMysql(){
         try{
@@ -58,7 +58,7 @@ public class DatabaseConnector {
     }
 
     /**
-     * Metoda odczytująca dane z bazy do lokalnych wektorów
+     * MySQL data reader to local vectors
      */
     public void readMysqlData() {
         try {
@@ -104,8 +104,8 @@ public class DatabaseConnector {
     }
 
     /**
-     * Metoda zapisująca Obiekt podany jako argument do odpowiedniej tabeli w bazie
-     * @param data obiekt zawierający wektor z daymi do zapisania w bazie
+     * Writing object to database method
+     * @param data object to write
      */
     public void writeMysqlData(Object data) {
 
@@ -176,8 +176,8 @@ public class DatabaseConnector {
     }
 
     /**
-     * Metoda usuwająca z bazy danych elementy podane w argumencie
-     * @param data obiekt zawierający wektor z danymi do usunięcia
+     * Removing object from database method
+     * @param data object to remove
      */
     public void removeMysqlData(Object data) {
 
@@ -235,8 +235,8 @@ public class DatabaseConnector {
     }
 
     /**
-     * Metoda aktualizująca obiekty w bazie
-     * @param data obiekt zawierający wektor z danymi do aktualizacji
+     * Updating object in database method
+     * @param data updated object to write
      */
     public void updateMysqlData(Object data) {
 

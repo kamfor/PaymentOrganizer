@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 
 
 /**
- * Klasa odpowiadająca za obsługę danych z serwera i przystosowanie do postaci tabeli
+ * Server redirecting class, able to sending data through socket
  */
 public class Database {
 
@@ -39,7 +39,7 @@ public class Database {
     public IncomingHandler receiver = new IncomingHandler();
 
     /**
-     * Klasa typu runable obsługująca pętlę zdarzań wymiany informacji z serwerem
+     * Runnable class, event loop service
      */
     public static class IncomingHandler extends Thread {
 
@@ -166,7 +166,7 @@ public class Database {
     }
 
     /**
-     * Konstruktor klasy inicujący połączenie z serwerem
+     * Class constructor, initialize server connection
      * @throws IOException
      */
     public Database() throws IOException{
@@ -185,7 +185,7 @@ public class Database {
     }
 
     /**
-     * Metoda otwierająca Socket
+     * Socket opening method
      * @throws IOException
      */
     public void connectToServer() throws IOException {
@@ -195,9 +195,9 @@ public class Database {
     }
 
     /**
-     * Metoda umożliwiająca wysłanie danych do serwera
-     * @param input Obiekt do modyfikacji w bazie
-     * @param remove kwalifikator 0 - dodanie do bazy, 1 - usunięcie z bazy. 2 - aktualizacja rekordu
+     * Sending data through socket method
+     * @param input object to change in database
+     * @param remove qualifier 0 - add to database, 1 - remove from database. 2 - record actualization
      * @throws IOException
      */
     public void sendObject(Object input, Integer remove) throws IOException {
@@ -206,7 +206,7 @@ public class Database {
     }
 
     /**
-     * Metoda umożiwiająca zakończenie połączenia z serwerem
+     * Closing socket method
      */
     public void disconnect(){
         try{

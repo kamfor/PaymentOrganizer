@@ -83,7 +83,7 @@ public class Controller {
     private class ListenForPaymentAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == gui.panel1.addRecord) {
-                gui.panel1.errorMessage.setText(ClientMain.db.updatePayment(gui.panel1.tfType.getText(),
+                gui.panel1.errorMessage.setText(ClientMain.db.addPayment(gui.panel1.tfType.getText(),
                                                                             gui.panel1.tfValue.getText(),
                                                                             gui.panel1.tfBeginDate.getText(),
                                                                             gui.panel1.tfEndDate.getText(),
@@ -103,50 +103,12 @@ public class Controller {
      */
     private class ListenForAgentAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            if(e.getSource() == gui.panel2.addRecord) { // If the user clicks Add Record, add the information into the database
-
-                String Name, Phone, Email;
-                Float Commission;
-                Name = gui.panel2.tfName.getText();
-                Phone = gui.panel2.tfPhone.getText();
-                Email = gui.panel2.tfEmail.getText();
-                Commission = new Float(0.0);
-
-                // Check dependences
-
-                int agentID=0;
-                for(Agent item: ClientMain.db.rowDataAgent){
-                    if(item.id>agentID)agentID = item.id;
-                }
-                Agent toinsert = new Agent(agentID+1,Name,Phone,Email,Commission);
-                Vector<Agent> tosend = new Vector<>();
-                tosend.addElement(toinsert);
-                try {
-                    ClientMain.db.sendObject(tosend, new Integer(1));
-                } catch (IOException e1) {
-                    gui.panel1.errorMessage.setText("Error while sending to server");
-                }
-
-                gui.panel2.errorMessage.setText(""); // Remove the error message if one was displayed
-
+            if(e.getSource() == gui.panel2.addRecord) {
+                gui.panel2.errorMessage.setText(ClientMain.db.addAgent(gui.panel2.tfName.getText(),
+                                                                    gui.panel2.tfPhone.getText(),
+                                                                    gui.panel2.tfEmail.getText()));
             } else if (e.getSource() == gui.panel2.removeRecord) {
-
-
-                Vector<Agent> tosend = new Vector<>();
-                int removeIndex = gui.panel2.table.getSelectedRow();
-                tosend.addElement(ClientMain.db.rowDataAgent.elementAt(removeIndex));
-                for(Payment item: ClientMain.db.rowDataPayment){
-                    if(item.owner_id == tosend.elementAt(0).id){
-                        gui.panel2.errorMessage.setText("Agent exist in Payment table");
-                        return;
-                    }
-                }
-                try{
-                    ClientMain.db.sendObject(tosend, new Integer(0));
-                } catch(ArrayIndexOutOfBoundsException | IOException e1) {
-                    gui.panel2.errorMessage.setText("To delete an agent, you must first select a row.");
-                    return;
-                }
+                gui.panel2.errorMessage.setText(ClientMain.db.removeAgent(gui.panel2.table.getSelectedRow()));
             }
         }
     }
@@ -156,49 +118,14 @@ public class Controller {
      */
     private class ListenForSubjectAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            if(e.getSource() == gui.panel3.addRecord) { // If the user clicks Add Record, add the information into the database
-
-                String Name, Phone, Email, Address, Notes;
-                Float Bill;
-                Name = gui.panel3.tfName.getText();
-                Phone = gui.panel3.tfPhone.getText();
-                Email = gui.panel3.tfEmail.getText();
-                Address = gui.panel3.tfAddress.getText();
-                Notes = gui.panel3.tfNotes.getText();
-                Bill = new Float(0.0);
-
-                int subjectID=0;
-                for(Subject item: ClientMain.db.rowDataSubject){
-                    if(item.id>subjectID)subjectID = item.id;
-                }
-                Subject toinsert = new Subject(subjectID+1,Name,Phone,Email,Address,Bill,Notes);
-                Vector<Subject> tosend = new Vector<>();
-                tosend.addElement(toinsert);
-                try {
-                    ClientMain.db.sendObject(tosend, new Integer(1));
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-
-                gui.panel3.errorMessage.setText(""); // Remove the error message if one was displayed
-
+            if(e.getSource() == gui.panel3.addRecord) {
+                gui.panel3.errorMessage.setText(ClientMain.db.addSubject(gui.panel3.tfName.getText(),
+                                                                        gui.panel3.tfPhone.getText(),
+                                                                        gui.panel3.tfEmail.getText(),
+                                                                        gui.panel3.tfAddress.getText(),
+                                                                        gui.panel3.tfNotes.getText()));
             } else if (e.getSource() == gui.panel3.removeRecord) {
-
-                Vector<Subject> tosend = new Vector<>();
-                int removeIndex = gui.panel3.table.getSelectedRow();
-                tosend.addElement(ClientMain.db.rowDataSubject.elementAt(removeIndex));
-                for(Payment item: ClientMain.db.rowDataPayment){
-                    if(item.subject_id == tosend.elementAt(0).id){
-                        gui.panel3.errorMessage.setText("Subject exist in Payment table");
-                        return;
-                    }
-                }
-                try{
-                    ClientMain.db.sendObject(tosend, new Integer(0));
-                } catch(ArrayIndexOutOfBoundsException | IOException e1) {
-                    e1.printStackTrace();
-                    gui.panel3.errorMessage.setText("To delete a Subject, you must first select a row.");
-                }
+                gui.panel3.errorMessage.setText(ClientMain.db.removeSubject(gui.panel3.table.getSelectedRow()));
             }
         }
     }
@@ -302,129 +229,11 @@ public class Controller {
      */
     private class ListenForClickPayment implements TableModelListener{
         public void tableChanged(TableModelEvent e) {
-
             if(e.getType()==TableModelEvent.UPDATE){
-
-                Vector<Agent> agentToUpdate = new Vector<>();
-                Vector<Subject> subjectToUpdate = new Vector<>();
-                Float numberValue;
-                Object field = gui.panel1.table.getValueAt(e.getLastRow(),e.getColumn());
-
-
-                Vector<Payment> tosend = new Vector<>();
-                tosend.addElement(ClientMain.db.rowDataPayment.elementAt(gui.panel1.table.getSelectedRow()));
-
-                Boolean found;
-                Boolean valueChanged = Boolean.FALSE;
-                Boolean isUpdated = Boolean.FALSE;
-
-                String updateColumn;
-                updateColumn = ClientMain.db.defaultTableModelPayment.getColumnName(gui.panel1.table.getSelectedColumn());
-
-                switch(updateColumn) {
-                    case "Type":
-                        tosend.elementAt(0).type = (String)field;
-                        isUpdated = Boolean.TRUE;
-                        break;
-                    case "Accepted":
-                        tosend.elementAt(0).accepted = (Boolean)field;
-                        isUpdated = Boolean.TRUE;
-                        break;
-                    case "Value":
-                        try{
-                            numberValue = Float.valueOf((String)field);
-                        }
-                        catch(NumberFormatException e1){
-                            gui.panel1.errorMessage.setText("Incorrect Value");
-                            return;
-                        }
-                        for(Agent item: ClientMain.db.rowDataAgent){
-                            if(item.id==tosend.elementAt(0).owner_id){
-                                item.commission +=(numberValue-tosend.elementAt(0).value);
-                                agentToUpdate.addElement(item);
-                            }
-                        }
-                        for(Subject item: ClientMain.db.rowDataSubject){
-                            if(item.id==tosend.elementAt(0).subject_id){
-                                item.bill +=(numberValue-tosend.elementAt(0).value);
-                                subjectToUpdate.addElement(item);
-                            }
-                        }
-                        tosend.elementAt(0).value = numberValue;
-                        isUpdated = Boolean.TRUE;
-                        valueChanged = Boolean.TRUE;
-                        break;
-                    case "Begin Date":
-                        try{
-                            tosend.elementAt(0).begin_date = ClientMain.db.getADate((String)field);
-                            isUpdated = Boolean.TRUE;
-                        }catch(ParseException e2){
-                            gui.panel1.table.setValueAt(tosend.elementAt(0).begin_date,e.getLastRow(),e.getColumn());
-                            gui.panel1.errorMessage.setText("Unparseable Date");
-                        }
-                        break;
-                    case "End Date":
-                        try{
-                            tosend.elementAt(0).end_date = ClientMain.db.getADate((String)field);
-                            isUpdated = Boolean.TRUE;
-                        }catch(ParseException e2){
-                            gui.panel1.table.setValueAt(tosend.elementAt(0).end_date,e.getLastRow(),e.getColumn());
-                            gui.panel1.errorMessage.setText("Unparseable Date");
-                        }
-                        break;
-                    case "Owner":
-                        found = Boolean.FALSE;
-                        for(Agent item: ClientMain.db.rowDataAgent){
-                            if(item.id==Integer.valueOf((String)field)){
-                                tosend.elementAt(0).owner_id = Integer.valueOf((String)field);
-                                found = Boolean.TRUE;
-                                gui.panel1.errorMessage.setText("");
-                                isUpdated = Boolean.TRUE;
-                            }
-                        }
-                        if(!found){
-                            gui.panel1.errorMessage.setText("Owner doesn't exist");
-                            gui.panel1.table.setValueAt(tosend.elementAt(0).owner_id,e.getLastRow(),e.getColumn());
-                            return;
-                        }
-                        break;
-                    case "Subject":
-                        found = Boolean.FALSE;
-                        for(Subject item: ClientMain.db.rowDataSubject){
-                            if(item.id==Integer.valueOf((String)field)){
-                                tosend.elementAt(0).subject_id = Integer.valueOf((String)field);
-                                found = Boolean.TRUE;
-                                gui.panel1.errorMessage.setText("");
-                                isUpdated = Boolean.TRUE;
-                            }
-                        }
-                        if(!found){
-                            gui.panel1.errorMessage.setText("Subject doesn't exist");
-                            gui.panel1.table.setValueAt(tosend.elementAt(0).subject_id,e.getLastRow(),e.getColumn());
-                            return;
-                        }
-                        break;
-                    case "Document":
-                        tosend.elementAt(0).document_name = (String)field;
-                        isUpdated = Boolean.TRUE;
-                        break;
-                    case "Notes":
-                        tosend.elementAt(0).notes = (String)field;
-                        isUpdated = Boolean.TRUE;
-                        break;
-                }
-                gui.panel1.errorMessage.setText("");
-                if(isUpdated){
-                    try{
-                        ClientMain.db.sendObject(tosend, new Integer(2));
-                        if(valueChanged){
-                            ClientMain.db.sendObject(agentToUpdate, new Integer(2));
-                            ClientMain.db.sendObject(subjectToUpdate, new Integer(2));
-                        }
-                    }catch(IOException e1){
-                        gui.panel1.errorMessage.setText("Error while sending to server");
-                    }
-                }
+                gui.panel1.errorMessage.setText(
+                        ClientMain.db.updatePayment(gui.panel1.table.getSelectedRow(),
+                        gui.panel1.table.getValueAt(e.getLastRow(),e.getColumn()),
+                        ClientMain.db.defaultTableModelPayment.getColumnName(gui.panel1.table.getSelectedColumn())));
             }
         }
     }
@@ -433,41 +242,10 @@ public class Controller {
      */
     private class ListenForClickAgent implements TableModelListener{
         public void tableChanged(TableModelEvent e) {
-
             if(e.getType()==TableModelEvent.UPDATE){
-                System.out.println(gui.panel2.table.getValueAt(e.getLastRow(),e.getColumn()));
-                Object field = gui.panel2.table.getValueAt(e.getLastRow(),e.getColumn());
-
-
-                Vector<Agent> tosend = new Vector<>();
-                tosend.addElement(ClientMain.db.rowDataAgent.elementAt(gui.panel2.table.getSelectedRow()));
-
-                String updateColumn;
-                updateColumn = ClientMain.db.defaultTableModelAgent.getColumnName(gui.panel2.table.getSelectedColumn());
-
-                Boolean isupdated = false;
-
-                switch(updateColumn) {
-                    case "Name":
-                        tosend.elementAt(0).name = (String)field;
-                        isupdated = Boolean.TRUE;
-                        break;
-                    case "Phone":
-                        tosend.elementAt(0).phone = (String)field;
-                        isupdated = Boolean.TRUE;
-                        break;
-                    case "Email":
-                        tosend.elementAt(0).email = (String)field;
-                        isupdated = Boolean.TRUE;
-                        break;
-                }
-                if(isupdated==Boolean.TRUE){
-                    try{
-                        ClientMain.db.sendObject(tosend, new Integer(2));
-                    }catch(IOException e1){
-                        gui.panel1.errorMessage.setText("Error while sending to server");
-                    }
-                }
+                gui.panel2.errorMessage.setText(ClientMain.db.updateAgent(gui.panel2.table.getSelectedRow(),
+                        gui.panel2.table.getValueAt(e.getLastRow(),e.getColumn()),
+                        ClientMain.db.defaultTableModelAgent.getColumnName(gui.panel2.table.getSelectedColumn())));
             }
         }
     }
@@ -477,48 +255,10 @@ public class Controller {
      */
     private class ListenForClickSubject implements TableModelListener{
         public void tableChanged(TableModelEvent e) {
-
             if(e.getType()==TableModelEvent.UPDATE){
-                Object field = gui.panel3.table.getValueAt(e.getLastRow(),e.getColumn());
-
-
-                Vector<Subject> tosend = new Vector<>();
-                tosend.addElement(ClientMain.db.rowDataSubject.elementAt(gui.panel3.table.getSelectedRow()));
-
-                String updateColumn;
-                updateColumn = ClientMain.db.defaultTableModelAgent.getColumnName(gui.panel3.table.getSelectedColumn());
-
-                Boolean isupdated = false;
-
-                switch(updateColumn) {
-                    case "Name":
-                        tosend.elementAt(0).name = (String)field;
-                        isupdated = Boolean.TRUE;
-                        break;
-                    case "Phone":
-                        tosend.elementAt(0).phone = (String)field;
-                        isupdated = Boolean.TRUE;
-                        break;
-                    case "Email":
-                        tosend.elementAt(0).email = (String)field;
-                        isupdated = Boolean.TRUE;
-                        break;
-                    case "Address":
-                        tosend.elementAt(0).address = (String)field;
-                        isupdated = Boolean.TRUE;
-                        break;
-                    case "Notes":
-                        tosend.elementAt(0).notes = (String)field;
-                        isupdated = Boolean.TRUE;
-                        break;
-                }
-                if(isupdated==Boolean.TRUE){
-                    try{
-                        ClientMain.db.sendObject(tosend, new Integer(2));
-                    }catch(IOException e1){
-                        gui.panel1.errorMessage.setText("Error while sending to server");
-                    }
-                }
+                gui.panel3.errorMessage.setText(ClientMain.db.updateSubject(gui.panel3.table.getSelectedRow(),
+                        gui.panel3.table.getValueAt(e.getLastRow(),e.getColumn()),
+                        ClientMain.db.defaultTableModelAgent.getColumnName(gui.panel3.table.getSelectedColumn())));
             }
         }
     }

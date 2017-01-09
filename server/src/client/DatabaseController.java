@@ -239,10 +239,10 @@ public class DatabaseController {
         } catch(IOException e1) {
             return "Error while updating data ";
         }
-        return "OK";
+        return "";
     }
 
-    public String updatePayment(String type, String value, String beginDate, String endDate, String owner, String subject, String document, String notes) {
+    public String addPayment(String type, String value, String beginDate, String endDate, String owner, String subject, String document, String notes) {
 
         Boolean foundAgent = Boolean.FALSE;
         Boolean foundSubject = Boolean.FALSE;
@@ -297,7 +297,7 @@ public class DatabaseController {
         }
 
         int paymentID = 0;
-        for(Payment item: ClientMain.db.rowDataPayment){
+        for(Payment item: this.rowDataPayment){
             if(item.id>paymentID)paymentID = item.id;
         }
         Payment toInsert = new Payment(paymentID+1,Boolean.FALSE, type, numberValue, dateBeginDate, dateEndDate, Integer.valueOf(owner), Integer.valueOf(subject), document, notes);
@@ -311,7 +311,267 @@ public class DatabaseController {
         } catch (IOException e1) {
             return "Error while sending data to server";
         }
-        return "Success";
+        return "";
+    }
+
+    public String updatePayment(int rowIndex, Object updatedField, String updatedColumn){
+
+        Vector<Agent> agentToUpdate = new Vector<>();
+        Vector<Subject> subjectToUpdate = new Vector<>();
+        Float numberValue;
+
+        Vector<Payment> toSend = new Vector<>();
+        toSend.addElement(this.rowDataPayment.elementAt(rowIndex));
+
+        Boolean found;
+        Boolean valueChanged = Boolean.FALSE;
+        Boolean isUpdated = Boolean.FALSE;
+
+        switch(updatedColumn) {
+            case "Type":
+                toSend.elementAt(0).type = (String)updatedField;
+                isUpdated = Boolean.TRUE;
+                break;
+            case "Accepted":
+                toSend.elementAt(0).accepted = (Boolean)updatedField;
+                isUpdated = Boolean.TRUE;
+                break;
+            case "Value":
+                try{
+                    numberValue = Float.valueOf((String)updatedField);
+                }
+                catch(NumberFormatException e1){
+                    return "Incorrect Value";
+                }
+                for(Agent item: this.rowDataAgent){
+                    if(item.id==toSend.elementAt(0).owner_id){
+                        item.commission +=(numberValue-toSend.elementAt(0).value);
+                        agentToUpdate.addElement(item);
+                    }
+                }
+                for(Subject item: this.rowDataSubject){
+                    if(item.id==toSend.elementAt(0).subject_id){
+                        item.bill +=(numberValue-toSend.elementAt(0).value);
+                        subjectToUpdate.addElement(item);
+                    }
+                }
+                toSend.elementAt(0).value = numberValue;
+                isUpdated = Boolean.TRUE;
+                valueChanged = Boolean.TRUE;
+                break;
+            case "Begin Date":
+                try{
+                    toSend.elementAt(0).begin_date = this.getADate((String)updatedField);
+                    isUpdated = Boolean.TRUE;
+                }catch(ParseException e2){
+                    return"Unparseable Begin Date";
+                }
+                break;
+            case "End Date":
+                try{
+                    toSend.elementAt(0).end_date = ClientMain.db.getADate((String)updatedField);
+                    isUpdated = Boolean.TRUE;
+                }catch(ParseException e2){
+                    return"Unparseable End Date";
+                }
+                break;
+            case "Owner":
+                found = Boolean.FALSE;
+                for(int i=0; i<this.rowDataAgent.size(); i++){
+                    if(this.rowDataAgent.elementAt(i).id==Integer.valueOf((String)updatedField)){
+                        updateAgent(toSend.elementAt(0).owner_id-1,-1*toSend.elementAt(0).value,"Commission");//replace to find agent function
+                        toSend.elementAt(0).owner_id = Integer.valueOf((String)updatedField);
+                        updateAgent(i,toSend.elementAt(0).value,"Commission");
+                        found = Boolean.TRUE;
+                        isUpdated = Boolean.TRUE;
+                    }
+                }
+                if(!found){
+                    return "Owner doesn't exist";
+                }
+                break;
+            case "Subject":
+                found = Boolean.FALSE;
+                for(int i=0; i<this.rowDataSubject.size(); i++){
+                    if(this.rowDataSubject.elementAt(i).id==Integer.valueOf((String)updatedField)){
+                        updateSubject(toSend.elementAt(0).subject_id-1,-1*toSend.elementAt(0).value,"Bill");
+                        toSend.elementAt(0).subject_id = Integer.valueOf((String)updatedField);
+                        updateSubject(i,toSend.elementAt(0),"Bill");
+                        found = Boolean.TRUE;
+                        isUpdated = Boolean.TRUE;
+                    }
+                }
+                if(!found){
+                    return "Subject doesn't exist";
+                }
+                break;
+            case "Document":
+                toSend.elementAt(0).document_name = (String)updatedField;
+                isUpdated = Boolean.TRUE;
+                break;
+            case "Notes":
+                toSend.elementAt(0).notes = (String)updatedField;
+                isUpdated = Boolean.TRUE;
+                break;
+        }
+        if(isUpdated){
+            try{
+                this.sendObject(toSend, new Integer(2));
+                if(valueChanged){
+                    this.sendObject(agentToUpdate, new Integer(2));
+                    this.sendObject(subjectToUpdate, new Integer(2));
+                }
+            }catch(IOException e1){
+                return "Error while sending to server";
+            }
+        }
+        return"";
+    }
+
+    public String removeAgent(int rowIndex){
+
+        Vector<Agent> tosend = new Vector<>();
+        tosend.addElement(this.rowDataAgent.elementAt(rowIndex));
+        for(Payment item: this.rowDataPayment){
+            if(item.owner_id == tosend.elementAt(0).id){
+                return "Agent exist in Payment table";
+            }
+        }
+        try{
+            this.sendObject(tosend, new Integer(0));
+        } catch( IOException e1) {
+            return "Sending error";
+        }
+        return "";
+    }
+
+    public String addAgent(String name,String phone,String email){
+
+        int agentID=0;
+
+        for(Agent item: this.rowDataAgent){
+            if(item.id>agentID)agentID = item.id;
+        }
+        Agent toInsert = new Agent(agentID+1,name,phone,email,new Float(0.0));
+        Vector<Agent> toSend = new Vector<>();
+        toSend.addElement(toInsert);
+        try {
+            this.sendObject(toSend, new Integer(1));
+        } catch (IOException e1) {
+            return "Error while sending to server";
+        }
+        return "";
+    }
+
+    public String updateAgent(int rowIndex, Object updatedField, String updatedColumn){
+
+        Vector<Agent> toSend = new Vector<>();
+        toSend.addElement(this.rowDataAgent.elementAt(rowIndex));
+
+        Boolean isUpdated = false;
+
+        switch(updatedColumn) {
+            case "Name":
+                toSend.elementAt(0).name = (String)updatedField;
+                isUpdated = Boolean.TRUE;
+                break;
+            case "Phone":
+                toSend.elementAt(0).phone = (String)updatedField;
+                isUpdated = Boolean.TRUE;
+                break;
+            case "Email":
+                toSend.elementAt(0).email = (String)updatedField;
+                isUpdated = Boolean.TRUE;
+                break;
+            case "Commission": //use only in logic
+                toSend.elementAt(0).commission += (Float)updatedField;
+                isUpdated = Boolean.TRUE;
+                break;
+        }
+        if(isUpdated==Boolean.TRUE){
+            try{
+                this.sendObject(toSend, new Integer(2));
+            }catch(IOException e1){
+                return"Error while sending to server";
+            }
+        }
+        return "";
+    }
+
+    public String removeSubject(int rowIndex){
+        Vector<Subject> toSend = new Vector<>();
+        toSend.addElement(this.rowDataSubject.elementAt(rowIndex));
+        for(Payment item: this.rowDataPayment){
+            if(item.subject_id == toSend.elementAt(0).id){
+                return "Subject exist in Payment table";
+            }
+        }
+        try{
+            this.sendObject(toSend, new Integer(0));
+        } catch(IOException e1) {
+            return "Sending to server error";
+        }
+        return "";
+    }
+
+    public String addSubject(String name,String phone,String email,String address,String notes){
+
+        int subjectID=0;
+        for(Subject item: ClientMain.db.rowDataSubject){
+            if(item.id>subjectID)subjectID = item.id;
+        }
+        Subject toInsert = new Subject(subjectID+1,name,phone,email,address,new Float(0.0),notes);
+        Vector<Subject> toSend = new Vector<>();
+        toSend.addElement(toInsert);
+        try {
+            this.sendObject(toSend, new Integer(1));
+        } catch (IOException e1) {
+            return"Server sending error";
+        }
+        return "";
+    }
+
+    public String updateSubject(int rowIndex, Object updatedField, String updatedColumn){
+
+        Vector<Subject> toSend = new Vector<>();
+        toSend.addElement(this.rowDataSubject.elementAt(rowIndex));
+
+        Boolean isUpdated = false;
+
+        switch(updatedColumn) {
+            case "Name":
+                toSend.elementAt(0).name = (String)updatedField;
+                isUpdated = Boolean.TRUE;
+                break;
+            case "Phone":
+                toSend.elementAt(0).phone = (String)updatedField;
+                isUpdated = Boolean.TRUE;
+                break;
+            case "Email":
+                toSend.elementAt(0).email = (String)updatedField;
+                isUpdated = Boolean.TRUE;
+                break;
+            case "Address":
+                toSend.elementAt(0).address = (String)updatedField;
+                isUpdated = Boolean.TRUE;
+                break;
+            case "Notes":
+                toSend.elementAt(0).notes = (String)updatedField;
+                isUpdated = Boolean.TRUE;
+                break;
+            case"Bill":
+                toSend.elementAt(0).bill += (float)updatedField;
+                isUpdated = Boolean.TRUE;
+                break;
+        }
+        if(isUpdated==Boolean.TRUE){
+            try{
+                this.sendObject(toSend, new Integer(2));
+            }catch(IOException e1){
+                return "Error while sending to server";
+            }
+        }
+        return"";
     }
 
     /**

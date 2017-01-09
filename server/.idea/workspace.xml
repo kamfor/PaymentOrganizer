@@ -2,19 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b4d04a8f-a4f7-441c-bf8d-a1b4fa4c6942" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/Tests/DatabaseConnectorTest.java" afterPath="$PROJECT_DIR$/src/Tests/DatabaseControllerConnectorTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/Tests/DatabaseTest.java" afterPath="$PROJECT_DIR$/src/Tests/DatabaseControllerTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/Tests/ModelTest.java" afterPath="$PROJECT_DIR$/src/Tests/ControllerTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/classes/Agent.java" afterPath="$PROJECT_DIR$/src/model/Agent.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/classes/Payment.java" afterPath="$PROJECT_DIR$/src/model/Payment.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/classes/Subject.java" afterPath="$PROJECT_DIR$/src/model/Subject.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/client/Client.java" afterPath="$PROJECT_DIR$/src/client/ClientMain.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/client/Database.java" afterPath="$PROJECT_DIR$/src/client/DatabaseController.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/client/Model.java" afterPath="$PROJECT_DIR$/src/client/Controller.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/client/View.java" afterPath="$PROJECT_DIR$/src/client/View.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/DatabaseConnector.java" afterPath="$PROJECT_DIR$/src/server/DatabaseConnector.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/server/ServerMain.java" afterPath="$PROJECT_DIR$/src/server/ServerMain.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/client/Controller.java" afterPath="$PROJECT_DIR$/src/client/Controller.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/client/DatabaseController.java" afterPath="$PROJECT_DIR$/src/client/DatabaseController.java" />
     </list>
     <ignored path="server.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -34,114 +23,7 @@
     <favorites_list name="server" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ServerMain.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/ServerMain.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="446">
-              <caret line="46" column="51" selection-start-line="46" selection-start-column="51" selection-end-line="46" selection-end-column="51" />
-              <folding>
-                <element signature="method#ClientHandler#0;class#ClientHandler#0;class#ServerMain#0" expanded="false" />
-                <element signature="method#run#0;class#ClientHandler#0;class#ServerMain#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ClientMain.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/client/ClientMain.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="34" column="9" selection-start-line="34" selection-start-column="9" selection-end-line="34" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DatabaseController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/client/DatabaseController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="810">
-              <caret line="252" column="0" selection-start-line="252" selection-start-column="0" selection-end-line="252" selection-end-column="0" />
-              <folding>
-                <element signature="docComment;class#IncomingHandler#0;class#DatabaseController#0" expanded="false" />
-                <element signature="docComment;method#DatabaseController#0;class#DatabaseController#0" expanded="false" />
-                <element signature="method#DatabaseController#0;class#DatabaseController#0" expanded="false" />
-                <element signature="docComment;method#connectToServer#0;class#DatabaseController#0" expanded="false" />
-                <element signature="method#connectToServer#0;class#DatabaseController#0" expanded="false" />
-                <element signature="docComment;method#sendObject#0;class#DatabaseController#0" expanded="false" />
-                <element signature="method#sendObject#0;class#DatabaseController#0" expanded="false" />
-                <element signature="docComment;method#disconnect#0;class#DatabaseController#0" expanded="false" />
-                <element signature="method#disconnect#0;class#DatabaseController#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Controller.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/client/Controller.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1332">
-              <caret line="89" column="41" selection-start-line="89" selection-start-column="41" selection-end-line="89" selection-end-column="41" />
-              <folding>
-                <element signature="method#actionPerformed#0;class#ListenForAgentAction#0;class#Controller#0" expanded="false" />
-                <element signature="method#actionPerformed#0;class#ListenForSubjectAction#0;class#Controller#0" expanded="false" />
-                <element signature="method#focusGained#0;class#ListenForFocus#0;class#Controller#0" expanded="false" />
-                <element signature="method#focusLost#0;class#ListenForFocus#0;class#Controller#0" expanded="false" />
-                <element signature="method#mouseReleased#0;class#ListenForMouse#0;class#Controller#0" expanded="false" />
-                <element signature="method#tableChanged#0;class#ListenForClickPayment#0;class#Controller#0" expanded="false" />
-                <element signature="method#tableChanged#0;class#ListenForClickAgent#0;class#Controller#0" expanded="false" />
-                <element signature="method#tableChanged#0;class#ListenForClickSubject#0;class#Controller#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="View.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/client/View.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-540">
-              <caret line="42" column="28" selection-start-line="42" selection-start-column="28" selection-end-line="42" selection-end-column="28" />
-              <folding>
-                <element signature="method#agentPanel#0;class#agentPanel#0;class#View#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Agent.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/model/Agent.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Payment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/model/Payment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="20" column="145" selection-start-line="20" selection-start-column="145" selection-end-line="20" selection-end-column="145" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Subject.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/model/Subject.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="249">
-              <caret line="22" column="26" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="26" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -213,6 +95,7 @@
         <option value="$PROJECT_DIR$/src/client/View.java" />
         <option value="$PROJECT_DIR$/src/client/Database.java" />
         <option value="$PROJECT_DIR$/src/client/Controller.java" />
+        <option value="$PROJECT_DIR$/src/client/DatabaseController.java" />
       </list>
     </option>
   </component>
@@ -253,6 +136,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -341,9 +225,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -367,7 +250,7 @@
       <recent name="$PROJECT_DIR$/Client/src" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.ClientMain">
     <configuration default="false" name="ServerMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="server.ServerMain" />
@@ -779,7 +662,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -788,13 +671,12 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.13368984" sideWeight="0.27291667" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11635565" sideWeight="0.7270833" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16575192" sideWeight="0.7270833" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14529915" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -805,6 +687,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -853,11 +736,17 @@
           <properties />
           <option name="timeStamp" value="46" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/client/Controller.java</url>
+          <line>120</line>
+          <properties />
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="48" />
+      <option name="time" value="52" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -872,6 +761,8 @@
           <caret line="42" column="31" selection-start-line="42" selection-start-column="31" selection-end-line="42" selection-end-column="31" />
           <folding>
             <element signature="docComment;class#IncomingHandler#0;class#DatabaseController#0" expanded="false" />
+            <element signature="class#IncomingHandler#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#run#0;class#IncomingHandler#0;class#DatabaseController#0" expanded="false" />
             <element signature="docComment;method#DatabaseController#0;class#DatabaseController#0" expanded="false" />
             <element signature="method#DatabaseController#0;class#DatabaseController#0" expanded="false" />
             <element signature="docComment;method#connectToServer#0;class#DatabaseController#0" expanded="false" />
@@ -880,6 +771,17 @@
             <element signature="method#sendObject#0;class#DatabaseController#0" expanded="false" />
             <element signature="docComment;method#disconnect#0;class#DatabaseController#0" expanded="false" />
             <element signature="method#disconnect#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#removePayment#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#addPayment#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#updatePayment#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#removeAgent#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#addAgent#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#updateAgent#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#removeSubject#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#addSubject#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#updateSubject#0;class#DatabaseController#0" expanded="false" />
+            <element signature="docComment;method#getADate#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#getADate#0;class#DatabaseController#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1021,9 +923,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="252">
           <caret line="14" column="83" selection-start-line="14" selection-start-column="83" selection-end-line="14" selection-end-column="83" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1038,6 +937,83 @@
             <element signature="method#writeMysqlData#0;class#DatabaseConnector#0" expanded="false" />
             <element signature="method#removeMysqlData#0;class#DatabaseConnector#0" expanded="false" />
             <element signature="method#updateMysqlData#0;class#DatabaseConnector#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/ServerMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="492">
+          <caret line="46" column="51" selection-start-line="46" selection-start-column="51" selection-end-line="46" selection-end-column="51" />
+          <folding>
+            <element signature="method#ClientHandler#0;class#ClientHandler#0;class#ServerMain#0" expanded="false" />
+            <element signature="method#run#0;class#ClientHandler#0;class#ServerMain#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/ClientMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="34" column="9" selection-start-line="34" selection-start-column="9" selection-end-line="34" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/DatabaseController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="39" column="55" selection-start-line="39" selection-start-column="55" selection-end-line="39" selection-end-column="55" />
+          <folding>
+            <element signature="docComment;class#IncomingHandler#0;class#DatabaseController#0" expanded="false" />
+            <element signature="class#IncomingHandler#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#run#0;class#IncomingHandler#0;class#DatabaseController#0" expanded="false" />
+            <element signature="docComment;method#DatabaseController#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#DatabaseController#0;class#DatabaseController#0" expanded="false" />
+            <element signature="docComment;method#connectToServer#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#connectToServer#0;class#DatabaseController#0" expanded="false" />
+            <element signature="docComment;method#sendObject#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#sendObject#0;class#DatabaseController#0" expanded="false" />
+            <element signature="docComment;method#disconnect#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#disconnect#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#removePayment#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#addPayment#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#updatePayment#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#removeAgent#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#addAgent#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#updateAgent#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#removeSubject#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#addSubject#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#updateSubject#0;class#DatabaseController#0" expanded="false" />
+            <element signature="docComment;method#getADate#0;class#DatabaseController#0" expanded="false" />
+            <element signature="method#getADate#0;class#DatabaseController#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/Controller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="251">
+          <caret line="237" column="9" selection-start-line="237" selection-start-column="9" selection-end-line="237" selection-end-column="9" />
+          <folding>
+            <element signature="method#actionPerformed#0;class#ListenForPaymentAction#0;class#Controller#0" expanded="false" />
+            <element signature="method#actionPerformed#0;class#ListenForAgentAction#0;class#Controller#0" expanded="false" />
+            <element signature="method#actionPerformed#0;class#ListenForSubjectAction#0;class#Controller#0" expanded="false" />
+            <element signature="method#focusGained#0;class#ListenForFocus#0;class#Controller#0" expanded="false" />
+            <element signature="method#focusLost#0;class#ListenForFocus#0;class#Controller#0" expanded="false" />
+            <element signature="method#mouseReleased#0;class#ListenForMouse#0;class#Controller#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/View.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="42" column="28" selection-start-line="42" selection-start-column="28" selection-end-line="42" selection-end-column="28" />
+          <folding>
+            <element signature="method#agentPanel#0;class#agentPanel#0;class#View#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1063,72 +1039,6 @@
         <state relative-caret-position="249">
           <caret line="22" column="26" selection-start-line="22" selection-start-column="26" selection-end-line="22" selection-end-column="26" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/ServerMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="446">
-          <caret line="46" column="51" selection-start-line="46" selection-start-column="51" selection-end-line="46" selection-end-column="51" />
-          <folding>
-            <element signature="method#ClientHandler#0;class#ClientHandler#0;class#ServerMain#0" expanded="false" />
-            <element signature="method#run#0;class#ClientHandler#0;class#ServerMain#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/ClientMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="34" column="9" selection-start-line="34" selection-start-column="9" selection-end-line="34" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/View.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-540">
-          <caret line="42" column="28" selection-start-line="42" selection-start-column="28" selection-end-line="42" selection-end-column="28" />
-          <folding>
-            <element signature="method#agentPanel#0;class#agentPanel#0;class#View#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/DatabaseController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
-          <caret line="252" column="0" selection-start-line="252" selection-start-column="0" selection-end-line="252" selection-end-column="0" />
-          <folding>
-            <element signature="docComment;class#IncomingHandler#0;class#DatabaseController#0" expanded="false" />
-            <element signature="docComment;method#DatabaseController#0;class#DatabaseController#0" expanded="false" />
-            <element signature="method#DatabaseController#0;class#DatabaseController#0" expanded="false" />
-            <element signature="docComment;method#connectToServer#0;class#DatabaseController#0" expanded="false" />
-            <element signature="method#connectToServer#0;class#DatabaseController#0" expanded="false" />
-            <element signature="docComment;method#sendObject#0;class#DatabaseController#0" expanded="false" />
-            <element signature="method#sendObject#0;class#DatabaseController#0" expanded="false" />
-            <element signature="docComment;method#disconnect#0;class#DatabaseController#0" expanded="false" />
-            <element signature="method#disconnect#0;class#DatabaseController#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/Controller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1332">
-          <caret line="89" column="41" selection-start-line="89" selection-start-column="41" selection-end-line="89" selection-end-column="41" />
-          <folding>
-            <element signature="method#actionPerformed#0;class#ListenForAgentAction#0;class#Controller#0" expanded="false" />
-            <element signature="method#actionPerformed#0;class#ListenForSubjectAction#0;class#Controller#0" expanded="false" />
-            <element signature="method#focusGained#0;class#ListenForFocus#0;class#Controller#0" expanded="false" />
-            <element signature="method#focusLost#0;class#ListenForFocus#0;class#Controller#0" expanded="false" />
-            <element signature="method#mouseReleased#0;class#ListenForMouse#0;class#Controller#0" expanded="false" />
-            <element signature="method#tableChanged#0;class#ListenForClickPayment#0;class#Controller#0" expanded="false" />
-            <element signature="method#tableChanged#0;class#ListenForClickAgent#0;class#Controller#0" expanded="false" />
-            <element signature="method#tableChanged#0;class#ListenForClickSubject#0;class#Controller#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>

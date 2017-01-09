@@ -16,15 +16,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 import javax.swing.*;
-import classes.Agent;
-import classes.Payment;
-import classes.Subject;
-import client.Client;
+import model.Agent;
+import model.Payment;
+import model.Subject;
 
 /**
- * MVC model class, event loop controller
+ * MVC class, event loop controller
  */
-public class Model {
+public class Controller {
 
     ListenForMouse mouseListener = new ListenForMouse();
     ListenForFocus focusListener = new ListenForFocus();
@@ -40,7 +39,7 @@ public class Model {
     /**
      * Class constructor
      */
-    public Model(){
+    public Controller(){
         gui = new View();
 
         gui.panel1.tfType.addFocusListener(focusListener);
@@ -83,117 +82,18 @@ public class Model {
      */
     private class ListenForPaymentAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            if(e.getSource() == gui.panel1.addRecord) { // If the user clicks Add Record, add the information into the database
-
-                Boolean foundAgent = Boolean.FALSE;
-                Boolean foundSubject = Boolean.FALSE;
-                String Type, Value, BeginDate, EndDate, Owner, Subject, Document, Notes;
-                Value = gui.panel1.tfValue.getText();
-                Type = gui.panel1.tfType.getText();
-                BeginDate = gui.panel1.tfBeginDate.getText();
-                EndDate = gui.panel1.tfEndDate.getText();
-                Owner = gui.panel1.tfOwner.getText();
-                Subject = gui.panel1.tfSubject.getText();
-                Document = gui.panel1.tfDocument.getText();
-                Notes = gui.panel1.tfNotes.getText();
-                Vector<Agent> agentToUpdate = new Vector<>();
-                Vector<Subject> subjectToUpdate = new Vector<>();
-                Float numberValue;
-
-
-                try{
-                    numberValue = Float.valueOf(Value);
-                }
-                catch(NumberFormatException e1){
-                    gui.panel1.errorMessage.setText("Incorrect Value");
-                    return;
-                }
-
-                if(!BeginDate.matches("[0-2][0-9]{3}-[0-1][0-2]-[0-3][0-9]")) {
-                    gui.panel1.errorMessage.setText("The date should be in the following format: YYYY-MM-DD");
-                    return;
-                }
-
-                if(!EndDate.matches("[0-2][0-9]{3}-[0-1][0-2]-[0-3][0-9]")) {
-                    gui.panel1.errorMessage.setText("The date should be in the following format: YYYY-MM-DD");
-                    return;
-                }
-
-                try{
-                    gui.panel1.dateBeginDate = getADate(BeginDate);
-                    gui.panel1.dateEndDate = getADate(EndDate);
-                }
-                catch(ParseException e1){
-                    gui.panel1.errorMessage.setText("Incorrect Date");
-                }
-
-                for(Agent item: Client.db.rowDataAgent){
-                    if(item.id==Integer.valueOf(Owner)){
-                        foundAgent = Boolean.TRUE;
-                        item.commission +=numberValue;
-                        agentToUpdate.addElement(item);
-                    }
-                }
-                if(!foundAgent){
-                    gui.panel1.errorMessage.setText("Owner doesn't exist");
-                    return;
-                }
-                for(Subject item: Client.db.rowDataSubject){
-                    if(item.id==Integer.valueOf(Subject)){
-                        foundSubject = Boolean.TRUE;
-                        item.bill +=numberValue;
-                        subjectToUpdate.addElement(item);
-                    }
-                }
-                if(!foundSubject){
-                    gui.panel1.errorMessage.setText("Subject doesn't exist");
-                    return;
-                }
-
-                int paymentID = 0;
-                for(Payment item: Client.db.rowDataPayment){
-                    if(item.id>paymentID)paymentID = item.id;
-                }
-                Payment toinsert = new Payment(paymentID+1,Boolean.FALSE, Type, numberValue, gui.panel1.dateBeginDate, gui.panel1.dateEndDate, Integer.valueOf(Owner), Integer.valueOf(Subject), Document, Notes);
-
-                Vector<Payment> tosend = new Vector<>();
-                tosend.addElement(toinsert);
-                try {
-                    Client.db.sendObject(tosend, new Integer(1));
-                    if(foundAgent)Client.db.sendObject(agentToUpdate, new Integer(2));
-                    if(foundSubject)Client.db.sendObject(subjectToUpdate, new Integer(2));
-                } catch (IOException e1) {
-                    gui.panel1.errorMessage.setText("Error while sending data to server");
-                }
-                gui.panel1.errorMessage.setText("");
+            if(e.getSource() == gui.panel1.addRecord) {
+                gui.panel1.errorMessage.setText(ClientMain.db.updatePayment(gui.panel1.tfType.getText(),
+                                                                            gui.panel1.tfValue.getText(),
+                                                                            gui.panel1.tfBeginDate.getText(),
+                                                                            gui.panel1.tfEndDate.getText(),
+                                                                            gui.panel1.tfOwner.getText(),
+                                                                            gui.panel1.tfSubject.getText(),
+                                                                            gui.panel1.tfDocument.getText(),
+                                                                            gui.panel1.tfNotes.getText()));
 
             } else if (e.getSource() == gui.panel1.removeRecord) {
-
-                Vector<Agent> agentToUpdate = new Vector<>();
-                Vector<Subject> subjectToUpdate = new Vector<>();
-                Vector<Payment> tosend = new Vector<>();
-                int removeIndex = gui.panel1.table.getSelectedRow();
-                tosend.addElement(Client.db.rowDataPayment.elementAt(removeIndex));
-                for(Agent item: Client.db.rowDataAgent){
-                    if(item.id==tosend.elementAt(0).owner_id){
-                        item.commission -=tosend.elementAt(0).value;
-                        agentToUpdate.addElement(item);
-                    }
-                }
-                for(Subject item: Client.db.rowDataSubject){
-                    if(item.id==tosend.elementAt(0).subject_id){
-                        item.bill -=tosend.elementAt(0).value;
-                        subjectToUpdate.addElement(item);
-                    }
-                }
-
-                try{
-                    Client.db.sendObject(tosend, new Integer(0));
-                    Client.db.sendObject(agentToUpdate, new Integer(2));
-                    Client.db.sendObject(subjectToUpdate, new Integer(2));
-                } catch(ArrayIndexOutOfBoundsException | IOException e1) {
-                    gui.panel1.errorMessage.setText("To delete an customer, you must first select a row.");
-                }
+                gui.panel1.errorMessage.setText(ClientMain.db.removePayment(gui.panel1.table.getSelectedRow()));
             }
         }
     }
@@ -215,14 +115,14 @@ public class Model {
                 // Check dependences
 
                 int agentID=0;
-                for(Agent item: Client.db.rowDataAgent){
+                for(Agent item: ClientMain.db.rowDataAgent){
                     if(item.id>agentID)agentID = item.id;
                 }
                 Agent toinsert = new Agent(agentID+1,Name,Phone,Email,Commission);
                 Vector<Agent> tosend = new Vector<>();
                 tosend.addElement(toinsert);
                 try {
-                    Client.db.sendObject(tosend, new Integer(1));
+                    ClientMain.db.sendObject(tosend, new Integer(1));
                 } catch (IOException e1) {
                     gui.panel1.errorMessage.setText("Error while sending to server");
                 }
@@ -234,15 +134,15 @@ public class Model {
 
                 Vector<Agent> tosend = new Vector<>();
                 int removeIndex = gui.panel2.table.getSelectedRow();
-                tosend.addElement(Client.db.rowDataAgent.elementAt(removeIndex));
-                for(Payment item: Client.db.rowDataPayment){
+                tosend.addElement(ClientMain.db.rowDataAgent.elementAt(removeIndex));
+                for(Payment item: ClientMain.db.rowDataPayment){
                     if(item.owner_id == tosend.elementAt(0).id){
                         gui.panel2.errorMessage.setText("Agent exist in Payment table");
                         return;
                     }
                 }
                 try{
-                    Client.db.sendObject(tosend, new Integer(0));
+                    ClientMain.db.sendObject(tosend, new Integer(0));
                 } catch(ArrayIndexOutOfBoundsException | IOException e1) {
                     gui.panel2.errorMessage.setText("To delete an agent, you must first select a row.");
                     return;
@@ -268,14 +168,14 @@ public class Model {
                 Bill = new Float(0.0);
 
                 int subjectID=0;
-                for(Subject item: Client.db.rowDataSubject){
+                for(Subject item: ClientMain.db.rowDataSubject){
                     if(item.id>subjectID)subjectID = item.id;
                 }
                 Subject toinsert = new Subject(subjectID+1,Name,Phone,Email,Address,Bill,Notes);
                 Vector<Subject> tosend = new Vector<>();
                 tosend.addElement(toinsert);
                 try {
-                    Client.db.sendObject(tosend, new Integer(1));
+                    ClientMain.db.sendObject(tosend, new Integer(1));
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -286,15 +186,15 @@ public class Model {
 
                 Vector<Subject> tosend = new Vector<>();
                 int removeIndex = gui.panel3.table.getSelectedRow();
-                tosend.addElement(Client.db.rowDataSubject.elementAt(removeIndex));
-                for(Payment item: Client.db.rowDataPayment){
+                tosend.addElement(ClientMain.db.rowDataSubject.elementAt(removeIndex));
+                for(Payment item: ClientMain.db.rowDataPayment){
                     if(item.subject_id == tosend.elementAt(0).id){
                         gui.panel3.errorMessage.setText("Subject exist in Payment table");
                         return;
                     }
                 }
                 try{
-                    Client.db.sendObject(tosend, new Integer(0));
+                    ClientMain.db.sendObject(tosend, new Integer(0));
                 } catch(ArrayIndexOutOfBoundsException | IOException e1) {
                     e1.printStackTrace();
                     gui.panel3.errorMessage.setText("To delete a Subject, you must first select a row.");
@@ -412,14 +312,14 @@ public class Model {
 
 
                 Vector<Payment> tosend = new Vector<>();
-                tosend.addElement(Client.db.rowDataPayment.elementAt(gui.panel1.table.getSelectedRow()));
+                tosend.addElement(ClientMain.db.rowDataPayment.elementAt(gui.panel1.table.getSelectedRow()));
 
                 Boolean found;
                 Boolean valueChanged = Boolean.FALSE;
                 Boolean isUpdated = Boolean.FALSE;
 
                 String updateColumn;
-                updateColumn = Client.db.defaultTableModelPayment.getColumnName(gui.panel1.table.getSelectedColumn());
+                updateColumn = ClientMain.db.defaultTableModelPayment.getColumnName(gui.panel1.table.getSelectedColumn());
 
                 switch(updateColumn) {
                     case "Type":
@@ -438,13 +338,13 @@ public class Model {
                             gui.panel1.errorMessage.setText("Incorrect Value");
                             return;
                         }
-                        for(Agent item: Client.db.rowDataAgent){
+                        for(Agent item: ClientMain.db.rowDataAgent){
                             if(item.id==tosend.elementAt(0).owner_id){
                                 item.commission +=(numberValue-tosend.elementAt(0).value);
                                 agentToUpdate.addElement(item);
                             }
                         }
-                        for(Subject item: Client.db.rowDataSubject){
+                        for(Subject item: ClientMain.db.rowDataSubject){
                             if(item.id==tosend.elementAt(0).subject_id){
                                 item.bill +=(numberValue-tosend.elementAt(0).value);
                                 subjectToUpdate.addElement(item);
@@ -456,7 +356,7 @@ public class Model {
                         break;
                     case "Begin Date":
                         try{
-                            tosend.elementAt(0).begin_date = getADate((String)field);
+                            tosend.elementAt(0).begin_date = ClientMain.db.getADate((String)field);
                             isUpdated = Boolean.TRUE;
                         }catch(ParseException e2){
                             gui.panel1.table.setValueAt(tosend.elementAt(0).begin_date,e.getLastRow(),e.getColumn());
@@ -465,7 +365,7 @@ public class Model {
                         break;
                     case "End Date":
                         try{
-                            tosend.elementAt(0).end_date = getADate((String)field);
+                            tosend.elementAt(0).end_date = ClientMain.db.getADate((String)field);
                             isUpdated = Boolean.TRUE;
                         }catch(ParseException e2){
                             gui.panel1.table.setValueAt(tosend.elementAt(0).end_date,e.getLastRow(),e.getColumn());
@@ -474,7 +374,7 @@ public class Model {
                         break;
                     case "Owner":
                         found = Boolean.FALSE;
-                        for(Agent item: Client.db.rowDataAgent){
+                        for(Agent item: ClientMain.db.rowDataAgent){
                             if(item.id==Integer.valueOf((String)field)){
                                 tosend.elementAt(0).owner_id = Integer.valueOf((String)field);
                                 found = Boolean.TRUE;
@@ -490,7 +390,7 @@ public class Model {
                         break;
                     case "Subject":
                         found = Boolean.FALSE;
-                        for(Subject item: Client.db.rowDataSubject){
+                        for(Subject item: ClientMain.db.rowDataSubject){
                             if(item.id==Integer.valueOf((String)field)){
                                 tosend.elementAt(0).subject_id = Integer.valueOf((String)field);
                                 found = Boolean.TRUE;
@@ -516,10 +416,10 @@ public class Model {
                 gui.panel1.errorMessage.setText("");
                 if(isUpdated){
                     try{
-                        Client.db.sendObject(tosend, new Integer(2));
+                        ClientMain.db.sendObject(tosend, new Integer(2));
                         if(valueChanged){
-                            Client.db.sendObject(agentToUpdate, new Integer(2));
-                            Client.db.sendObject(subjectToUpdate, new Integer(2));
+                            ClientMain.db.sendObject(agentToUpdate, new Integer(2));
+                            ClientMain.db.sendObject(subjectToUpdate, new Integer(2));
                         }
                     }catch(IOException e1){
                         gui.panel1.errorMessage.setText("Error while sending to server");
@@ -540,10 +440,10 @@ public class Model {
 
 
                 Vector<Agent> tosend = new Vector<>();
-                tosend.addElement(Client.db.rowDataAgent.elementAt(gui.panel2.table.getSelectedRow()));
+                tosend.addElement(ClientMain.db.rowDataAgent.elementAt(gui.panel2.table.getSelectedRow()));
 
                 String updateColumn;
-                updateColumn = Client.db.defaultTableModelAgent.getColumnName(gui.panel2.table.getSelectedColumn());
+                updateColumn = ClientMain.db.defaultTableModelAgent.getColumnName(gui.panel2.table.getSelectedColumn());
 
                 Boolean isupdated = false;
 
@@ -563,7 +463,7 @@ public class Model {
                 }
                 if(isupdated==Boolean.TRUE){
                     try{
-                        Client.db.sendObject(tosend, new Integer(2));
+                        ClientMain.db.sendObject(tosend, new Integer(2));
                     }catch(IOException e1){
                         gui.panel1.errorMessage.setText("Error while sending to server");
                     }
@@ -583,10 +483,10 @@ public class Model {
 
 
                 Vector<Subject> tosend = new Vector<>();
-                tosend.addElement(Client.db.rowDataSubject.elementAt(gui.panel3.table.getSelectedRow()));
+                tosend.addElement(ClientMain.db.rowDataSubject.elementAt(gui.panel3.table.getSelectedRow()));
 
                 String updateColumn;
-                updateColumn = Client.db.defaultTableModelAgent.getColumnName(gui.panel3.table.getSelectedColumn());
+                updateColumn = ClientMain.db.defaultTableModelAgent.getColumnName(gui.panel3.table.getSelectedColumn());
 
                 Boolean isupdated = false;
 
@@ -614,33 +514,12 @@ public class Model {
                 }
                 if(isupdated==Boolean.TRUE){
                     try{
-                        Client.db.sendObject(tosend, new Integer(2));
+                        ClientMain.db.sendObject(tosend, new Integer(2));
                     }catch(IOException e1){
                         gui.panel1.errorMessage.setText("Error while sending to server");
                     }
                 }
             }
         }
-    }
-
-    /**
-     * Date parsing method
-     * @param dateRegistered
-     * @return  java.sql.Date format
-     * @throws ParseException
-     */
-    public java.util.Date getADate(String dateRegistered) throws ParseException{
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-
-        try {
-            gui.panel1.dateBeginDate = dateFormatter.parse(dateRegistered);
-            gui.panel1.dateBeginDate = new java.sql.Date(gui.panel1.dateBeginDate.getTime());
-        } catch (ParseException e1) {
-            if(e1.getMessage().toString().startsWith("Unparseable date:")) {
-                gui.panel1.errorMessage.setText("The date should be in the following format: YYYY-MM-DD");
-            }
-            throw new ParseException("Error",0);
-        }
-        return gui.panel1.dateBeginDate;
     }
 }

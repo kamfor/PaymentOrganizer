@@ -1,4 +1,4 @@
-package classes;
+package model;
 
 import java.io.Serializable;
 import java.util.Vector;
@@ -7,23 +7,20 @@ import java.util.Vector;
  * Created by kamil on 27.11.16.
  * Data structure class
  */
-public class Subject implements Serializable {
+public class Agent implements Serializable {
     public int id;
     public String name;
     public String phone;
     public String email;
-    public String address;
-    public Float bill;
-    public String notes;
+    public Float commission;
+    public static Object[] agentColumns = new Object[]{"ID","Name","Phone","Email","Commission"};
 
-    public Subject(int par_id, String par_name,String par_phone, String par_email, String par_address, Float par_bill, String par_notes){
+    public Agent(int par_id, String par_name,String par_phone, String par_email, Float par_commission){
         id  = par_id;
         name = par_name;
         phone = par_phone;
         email= par_email;
-        address = par_address;
-        bill = par_bill;
-        notes = par_notes;
+        commission = par_commission;
     }
 
     /**
@@ -35,11 +32,10 @@ public class Subject implements Serializable {
         temp.addElement(name);
         temp.addElement(phone);
         temp.addElement(email);
-        temp.addElement(address);
-        temp.addElement(String.valueOf(bill));
-        temp.addElement(notes);
+        temp.addElement(String.valueOf(commission));
         return temp;
     }
+
     /**
      * Prints data fields
      */
@@ -48,8 +44,6 @@ public class Subject implements Serializable {
         System.out.println("Name:"+name);
         System.out.println("Phone:"+phone);
         System.out.println("Email:"+email);
-        System.out.println("Address:"+address);
-        System.out.println("Bill:"+bill);
-        System.out.println("Notes:"+notes);
+        System.out.println("Commission:"+commission);
     }
 }

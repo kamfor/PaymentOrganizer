@@ -2,17 +2,10 @@ package Tests;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-import client.Model;
-
-import java.awt.event.ActionEvent;
-import java.lang.reflect.Method;
-import java.util.Date;
-
 /**
  * Created by kamil on 07.01.17.
  */
-public class ModelTest { //divade functions for smaller units able to create tests
+public class ControllerTest { //divade functions for smaller units able to create tests
 
     @Test
     public void ListenForPaymentActionTest() throws Exception{

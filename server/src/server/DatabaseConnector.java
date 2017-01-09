@@ -4,9 +4,9 @@ package server;
  */
 
 
-import classes.Payment;
-import classes.Agent;
-import classes.Subject;
+import model.Payment;
+import model.Agent;
+import model.Subject;
 import java.sql.*;
 import java.util.Vector;
 
@@ -20,7 +20,7 @@ public class DatabaseConnector {
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     static final String DB_URL = "jdbc:mysql://s52.hekko.net.pl/kfforex_java";
 
-    //  Database credentials
+    //  DatabaseController credentials
     static final String USER = "kfforex_java";
     static final String PASS = "fasada";
 
@@ -52,7 +52,7 @@ public class DatabaseConnector {
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
         }catch(SQLException | ClassNotFoundException e1){
-            System.out.println("Database connection error" + e1.getMessage());
+            System.out.println("DatabaseController connection error" + e1.getMessage());
         }
 
     }

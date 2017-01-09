@@ -3,7 +3,7 @@ package Tests;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import client.Database;
+import client.DatabaseController;
 import java.io.IOException;
 import java.net.SocketException;
 
@@ -11,13 +11,13 @@ import java.net.SocketException;
 /**
  * Created by kamil on 07.01.17.
  */
-public class DatabaseTest {
+public class DatabaseControllerTest {
 
     @Test
     public void connectToServer() throws Exception {
 
         try{
-             new Database();
+             new DatabaseController();
         }catch(IOException e){
             System.out.println(e.getMessage());
             assertFalse(Boolean.TRUE);
@@ -27,10 +27,10 @@ public class DatabaseTest {
     @Test
     public void sendObject() throws Exception {
 
-        Database testDatabase = new Database();
-        testDatabase.disconnect();
+        DatabaseController testDatabaseController = new DatabaseController();
+        testDatabaseController.disconnect();
         try{
-            testDatabase.sendObject(new Object(),new Integer(0));
+            testDatabaseController.sendObject(new Object(),new Integer(0));
 
             fail("expected IllegalArgumentException");
 

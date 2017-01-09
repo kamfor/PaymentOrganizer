@@ -1,14 +1,16 @@
 package client;
 
-import classes.Agent;
-import classes.Payment;
-import classes.Subject;
+import model.Agent;
+import model.Payment;
+import model.Subject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Vector;
 
 import javax.swing.*;
@@ -18,18 +20,12 @@ import javax.swing.table.DefaultTableModel;
 /**
  * Server redirecting class, able to sending data through socket
  */
-public class Database {
+public class DatabaseController {
 
     private static Socket socket;
     protected static ObjectOutputStream oos;
     protected static ObjectInputStream ios;
-    private static Object[][] databaseResultsPayment;
-    private static Object[][] databaseResultsSubject;
-    private static Object[][] databaseResultsAgent;
-    public static Object[] paymentColumns = new Object[]{"Accepted","Type","Value","Begin Date","End Date","Owner","Subject","Document","Notes"};
-    public static Object[] agentColumns = new Object[]{"ID","Name","Phone","Email","Commission"};
-    public static Object[] subjectColumns = new Object[]{"ID","Name","Phone","Email","Address","Bill","Notes"};
-
+    private static Object[][] databaseResults;
     public static DefaultTableModel defaultTableModelPayment;
     public static DefaultTableModel defaultTableModelAgent;
     public static DefaultTableModel defaultTableModelSubject;
@@ -41,7 +37,7 @@ public class Database {
     /**
      * Runnable class, event loop service
      */
-    public static class IncomingHandler extends Thread {
+    public static class IncomingHandler extends Thread { //make it more clear
 
         public void run() {
             try {
@@ -59,7 +55,7 @@ public class Database {
                                     for (int i = 0; i < rowDataPayment.size(); i++) {
                                         if (rowDataPayment.elementAt(i).id == ((Payment)item).id) {
                                             rowDataPayment.removeElementAt(i);
-                                            defaultTableModelPayment.removeRow(i); // popraw to jakos
+                                            defaultTableModelPayment.removeRow(i);
                                         }
                                     }
                                 }
@@ -69,7 +65,7 @@ public class Database {
                                     for (int i = 0; i < rowDataAgent.size(); i++) {
                                         if (rowDataAgent.elementAt(i).id == ((Agent)item).id) {
                                             rowDataAgent.removeElementAt(i);
-                                            defaultTableModelAgent.removeRow(i); //to też popraw
+                                            defaultTableModelAgent.removeRow(i);
                                         }
                                     }
                                 }
@@ -111,7 +107,7 @@ public class Database {
                                 }
                             }
                             else{
-                                JOptionPane.showMessageDialog(Client.GUI.gui, "Empty client.Database");
+                                JOptionPane.showMessageDialog(ClientMain.ctrl.gui, "Empty client.DatabaseController");
                             }
                         }else if(qualifier==2){
                             temp= (Vector<Object>)ios.readObject();
@@ -160,7 +156,7 @@ public class Database {
                 }
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("Error handling data" + e);
-                JOptionPane.showMessageDialog(Client.GUI.gui, "Read Data error", "Inane error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(ClientMain.ctrl.gui, "Read Data error", "Inane error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -169,7 +165,7 @@ public class Database {
      * Class constructor, initialize server connection
      * @throws IOException
      */
-    public Database() throws IOException{
+    public DatabaseController() throws IOException{
 
         try{
             this.connectToServer();
@@ -179,9 +175,9 @@ public class Database {
             throw new IOException();
         }
 
-        defaultTableModelPayment = new DefaultTableModel(databaseResultsPayment, paymentColumns);
-        defaultTableModelAgent = new DefaultTableModel(databaseResultsAgent, agentColumns);
-        defaultTableModelSubject = new DefaultTableModel(databaseResultsSubject, subjectColumns);
+        defaultTableModelPayment = new DefaultTableModel(databaseResults, Payment.paymentColumns);
+        defaultTableModelAgent = new DefaultTableModel(databaseResults, Agent.agentColumns);
+        defaultTableModelSubject = new DefaultTableModel(databaseResults, Subject.subjectColumns);
     }
 
     /**
@@ -216,5 +212,124 @@ public class Database {
         }catch(IOException e1){
             System.out.println(e1.getMessage());
         }
+    }
+
+    public String removePayment(int rowIndex){
+
+        Vector<Payment> tosend = new Vector<>();
+        Vector<Agent> agentToUpdate = new Vector<>();
+        Vector<Subject> subjectToUpdate = new Vector<>();
+        tosend.addElement(this.rowDataPayment.elementAt(rowIndex));
+        for(Agent item: this.rowDataAgent){
+            if(item.id==tosend.elementAt(0).owner_id){
+                item.commission -=tosend.elementAt(0).value;
+                agentToUpdate.addElement(item);
+            }
+        }
+        for(Subject item: this.rowDataSubject){
+            if(item.id==tosend.elementAt(0).subject_id){
+                item.bill -=tosend.elementAt(0).value;
+                subjectToUpdate.addElement(item);
+            }
+        }
+        try{
+            this.sendObject(tosend, new Integer(0));
+            this.sendObject(agentToUpdate, new Integer(2));
+            this.sendObject(subjectToUpdate, new Integer(2));
+        } catch(IOException e1) {
+            return "Error while updating data ";
+        }
+        return "OK";
+    }
+
+    public String updatePayment(String type, String value, String beginDate, String endDate, String owner, String subject, String document, String notes) {
+
+        Boolean foundAgent = Boolean.FALSE;
+        Boolean foundSubject = Boolean.FALSE;
+        Vector<Agent> agentToUpdate = new Vector<>();
+        Vector<Subject> subjectToUpdate = new Vector<>();
+        java.util.Date dateBeginDate, dateEndDate;
+        Float numberValue;
+
+        try{
+            numberValue = Float.valueOf(value);
+        }
+        catch(NumberFormatException e1){
+            return "Incorrect Value";
+
+        }
+
+        if(!beginDate.matches("[0-2][0-9]{3}-[0-1][0-2]-[0-3][0-9]")) {
+            return "The date should be in the following format: YYYY-MM-DD";
+        }
+
+        if(!endDate.matches("[0-2][0-9]{3}-[0-1][0-2]-[0-3][0-9]")) {
+            return "The date should be in the following format: YYYY-MM-DD";
+        }
+
+        try{
+            dateBeginDate = getADate(beginDate);
+            dateEndDate = getADate(endDate);
+        }
+        catch(ParseException e1){
+            return "Incorrect Date format should be YYYY-MM-DD";
+        }
+
+        for(Agent item: this.rowDataAgent){
+            if(item.id==Integer.valueOf(owner)){
+                foundAgent = Boolean.TRUE;
+                item.commission +=numberValue;
+                agentToUpdate.addElement(item);
+            }
+        }
+        if(!foundAgent){
+            return "Owner doesn't exist";
+        }
+        for(Subject item: this.rowDataSubject){
+            if(item.id==Integer.valueOf(subject)){
+                foundSubject = Boolean.TRUE;
+                item.bill +=numberValue;
+                subjectToUpdate.addElement(item);
+            }
+        }
+        if(!foundSubject){
+            return "Subject doesn't exist";
+        }
+
+        int paymentID = 0;
+        for(Payment item: ClientMain.db.rowDataPayment){
+            if(item.id>paymentID)paymentID = item.id;
+        }
+        Payment toInsert = new Payment(paymentID+1,Boolean.FALSE, type, numberValue, dateBeginDate, dateEndDate, Integer.valueOf(owner), Integer.valueOf(subject), document, notes);
+
+        Vector<Payment> toSend = new Vector<>();
+        toSend.addElement(toInsert);
+        try {
+            this.sendObject(toSend, new Integer(1));
+            if(foundAgent) this.sendObject(agentToUpdate, new Integer(2));
+            if(foundSubject) this.sendObject(subjectToUpdate, new Integer(2));
+        } catch (IOException e1) {
+            return "Error while sending data to server";
+        }
+        return "Success";
+    }
+
+    /**
+     * Date parsing method
+     * @param dateRegistered
+     * @return  java.sql.Date format
+     * @throws ParseException
+     */
+    public java.util.Date getADate(String dateRegistered) throws ParseException{
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+        java.util.Date toReturn;
+
+        try {
+            toReturn = dateFormatter.parse(dateRegistered);
+            toReturn = new java.sql.Date(toReturn.getTime());
+        } catch (ParseException e1) {
+            throw new ParseException("Error",0);
+        }
+        return toReturn;
     }
 }

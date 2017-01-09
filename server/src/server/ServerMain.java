@@ -2,7 +2,7 @@ package server;
 /**
  * Created by kamil on 21.11.16.
  * * <h1>Server</h1>
- * Client handling application
+ * ClientMain handling application
  * <p>
  * <b>Note:</b> There is no GUI interface 
  *

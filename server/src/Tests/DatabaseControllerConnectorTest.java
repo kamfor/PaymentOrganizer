@@ -2,18 +2,17 @@ package Tests;
 
 import static org.junit.Assert.*;
 
-import classes.Agent;
-import classes.Payment;
-import classes.Subject;
+import model.Agent;
+import model.Payment;
+import model.Subject;
 import server.DatabaseConnector;
 
-import java.util.Date;
 import java.util.Vector;
 
 /**
  * Created by kamil on 07.01.17.
  */
-public class DatabaseConnectorTest {
+public class DatabaseControllerConnectorTest {
 
     DatabaseConnector testDatabase = new DatabaseConnector();
 

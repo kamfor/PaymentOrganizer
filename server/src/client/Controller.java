@@ -16,6 +16,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 import javax.swing.*;
+import javax.swing.plaf.synth.SynthEditorPaneUI;
+
 import model.Agent;
 import model.Payment;
 import model.Subject;

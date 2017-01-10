@@ -35,15 +35,4 @@ public class Agent implements Serializable {
         temp.addElement(String.valueOf(commission));
         return temp;
     }
-
-    /**
-     * Prints data fields
-     */
-    public void printObject(){
-        System.out.println("ID:"+id);
-        System.out.println("Name:"+name);
-        System.out.println("Phone:"+phone);
-        System.out.println("Email:"+email);
-        System.out.println("Commission:"+commission);
-    }
 }

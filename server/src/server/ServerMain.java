@@ -37,6 +37,8 @@ public class ServerMain {
                 data.readMysqlData();
                 clients.lastElement().start();
             }
+        }catch(IOException e){
+                e.printStackTrace();
         }finally {
             listener.close();
         }

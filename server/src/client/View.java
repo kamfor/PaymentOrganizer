@@ -18,7 +18,7 @@ public class View extends JFrame{
 
     public View(){
         super();
-        setTitle("Payment client.DatabaseController");
+        setTitle("Payment");
         this.setSize(1200, 600);
         jtp = new JTabbedPane();
         jtp.addTab("Payments",panel1);

@@ -224,7 +224,7 @@ public class DatabaseController {
             this.sendObject(agentToUpdate, new Integer(2));
             this.sendObject(subjectToUpdate, new Integer(2));
         } catch(IOException e1) {
-            return "Error while updating data ";
+            return "Error while updating data";
         }
         return "";
     }
@@ -434,7 +434,7 @@ public class DatabaseController {
         try{
             this.sendObject(tosend, new Integer(0));
         } catch( IOException e1) {
-            return "Sending error";
+            return "Error while updating data";
         }
         return "";
     }
@@ -459,7 +459,7 @@ public class DatabaseController {
         try {
             this.sendObject(toSend, new Integer(1));
         } catch (IOException e1) {
-            return "Error while sending to server";
+            return "Error while sending to data";
         }
         return "";
     }
@@ -520,7 +520,7 @@ public class DatabaseController {
         try{
             this.sendObject(toSend, new Integer(0));
         } catch(IOException e1) {
-            return "Sending to server error";
+            return "Error while updating data";
         }
         return "";
     }
@@ -632,7 +632,6 @@ public class DatabaseController {
         }
         return -1;
     }
-
 
     /**
      * Date parsing method

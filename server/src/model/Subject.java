@@ -41,16 +41,4 @@ public class Subject implements Serializable {
         temp.addElement(notes);
         return temp;
     }
-    /**
-     * Prints data fields
-     */
-    public void printObject(){
-        System.out.println("ID:"+id);
-        System.out.println("Name:"+name);
-        System.out.println("Phone:"+phone);
-        System.out.println("Email:"+email);
-        System.out.println("Address:"+address);
-        System.out.println("Bill:"+bill);
-        System.out.println("Notes:"+notes);
-    }
 }

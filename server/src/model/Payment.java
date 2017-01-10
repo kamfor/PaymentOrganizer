@@ -51,19 +51,4 @@ public class Payment implements Serializable {
         temp.addElement(notes);
         return temp;
     }
-    /**
-     * prints data fields
-     */
-    public void printPaymentObject(){
-        System.out.println("ID:"+id);
-        System.out.println("Accepted:"+accepted);
-        System.out.println("Type:"+type);
-        System.out.println("Value:"+value);
-        System.out.println("Begin Date:"+begin_date);
-        System.out.println("End Date:"+end_date);
-        System.out.println("Owner:"+owner_id);
-        System.out.println("Subject:"+subject_id);
-        System.out.println("Document:"+document_name);
-        System.out.println("Notes:"+notes);
-    }
 }

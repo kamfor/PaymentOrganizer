@@ -19,7 +19,8 @@ import javax.swing.table.DefaultTableModel;
 
 
 /**
- * Server redirecting class, able to sending data through socket
+ * Server redirecting class, able to sending data through socket,
+ * operate on local data agreed in vectors
  */
 public class DatabaseController {
 
@@ -53,32 +54,23 @@ public class DatabaseController {
                             if (temp.elementAt(0) instanceof Payment) {
                                 System.out.println("Payment removed");
                                 for (Object item : temp) {
-                                    for (int i = 0; i < rowDataPayment.size(); i++) {
-                                        if (rowDataPayment.elementAt(i).id == ((Payment)item).id) {
-                                            rowDataPayment.removeElementAt(i);
-                                            defaultTableModelPayment.removeRow(i);
-                                        }
-                                    }
+                                    int rowPaymentToRemove = getPaymentRow(((Payment)item).id);
+                                    rowDataPayment.removeElementAt(rowPaymentToRemove);
+                                    defaultTableModelPayment.removeRow(rowPaymentToRemove);
                                 }
                             } else if (temp.elementAt(0) instanceof Agent) {
                                 System.out.println("Agent removed");
                                 for (Object item : temp) {
-                                    for (int i = 0; i < rowDataAgent.size(); i++) {
-                                        if (rowDataAgent.elementAt(i).id == ((Agent)item).id) {
-                                            rowDataAgent.removeElementAt(i);
-                                            defaultTableModelAgent.removeRow(i);
-                                        }
-                                    }
+                                    int rowAgentToRemove = getAgentRow(((Agent)item).id);
+                                    rowDataAgent.removeElementAt(rowAgentToRemove);
+                                    defaultTableModelAgent.removeRow(rowAgentToRemove);
                                 }
                             } else if (temp.elementAt(0) instanceof Subject) {
                                 System.out.println("Subject removed");
                                 for (Object item : temp) {
-                                    for (int i = 0; i < rowDataSubject.size(); i++) {
-                                        if (rowDataSubject.elementAt(i).id == ((Subject)item).id) {
-                                            rowDataSubject.removeElementAt(i);
-                                            defaultTableModelSubject.removeRow(i);
-                                        }
-                                    }
+                                    int rowSubjectToRemove = getSubjectRow(((Subject)item).id);
+                                    rowDataSubject.removeElementAt(rowSubjectToRemove);
+                                    defaultTableModelSubject.removeRow(rowSubjectToRemove);
                                 }
                             }
                         }
@@ -116,37 +108,28 @@ public class DatabaseController {
                                 if(temp.elementAt(0) instanceof Payment){
                                     System.out.println("Payment updated");
                                     for(Object item: temp){
-                                        for (int i = 0; i < rowDataPayment.size(); i++) {
-                                            if (rowDataPayment.elementAt(i).id == ((Payment)item).id) {
-                                                rowDataPayment.setElementAt((Payment)item,i);
-                                                defaultTableModelPayment.removeRow(i);
-                                                defaultTableModelPayment.insertRow(i,((Payment)item).toVector());
-                                            }
-                                        }
+                                        int rowPaymentToUpdate = getPaymentRow(((Payment)item).id);
+                                        rowDataPayment.setElementAt((Payment)item,rowPaymentToUpdate);
+                                        defaultTableModelPayment.removeRow(rowPaymentToUpdate);
+                                        defaultTableModelPayment.insertRow(rowPaymentToUpdate,((Payment)item).toVector());
                                     }
                                 }
                                 else if(temp.elementAt(0) instanceof Agent){
                                     System.out.println("Agent updated");
                                     for(Object item: temp){
-                                        for (int i = 0; i < rowDataAgent.size(); i++) {
-                                            if (rowDataAgent.elementAt(i).id == ((Agent)item).id) {
-                                                rowDataAgent.setElementAt((Agent) item,i);
-                                                defaultTableModelAgent.removeRow(i);
-                                                defaultTableModelAgent.insertRow(i,((Agent)item).toVector());
-                                            }
-                                        }
+                                        int rowAgentToUpdate = getAgentRow(((Agent)item).id);
+                                        rowDataAgent.setElementAt((Agent) item,rowAgentToUpdate);
+                                        defaultTableModelAgent.removeRow(rowAgentToUpdate);
+                                        defaultTableModelAgent.insertRow(rowAgentToUpdate,((Agent)item).toVector());
                                     }
                                 }
                                 else if(temp.elementAt(0) instanceof Subject) {
                                     System.out.println("Subject updated");
                                     for(Object item: temp){
-                                        for (int i = 0; i < rowDataSubject.size(); i++) {
-                                            if (rowDataSubject.elementAt(i).id == ((Subject)item).id) {
-                                                rowDataSubject.setElementAt((Subject) item,i);
-                                                defaultTableModelSubject.removeRow(i);
-                                                defaultTableModelSubject.insertRow(i,((Subject)item).toVector());
-                                            }
-                                        }
+                                        int rowSubjectToUpdate = getSubjectRow(((Subject)item).id);
+                                        rowDataSubject.setElementAt((Subject) item,rowSubjectToUpdate);
+                                        defaultTableModelSubject.removeRow(rowSubjectToUpdate);
+                                        defaultTableModelSubject.insertRow(rowSubjectToUpdate,((Subject)item).toVector());
                                     }
                                 }
                             }
@@ -157,7 +140,7 @@ public class DatabaseController {
                 }
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("Error handling data" + e);
-                JOptionPane.showMessageDialog(ClientMain.ctrl.gui, "Read Data error", "Inane error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(ClientMain.ctrl.gui, "Read Data error", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -215,6 +198,10 @@ public class DatabaseController {
         }
     }
 
+    /**
+     * @param rowIndex index in local payment vector to remove
+     * @return message, if "" operation succeed
+     */
     public String removePayment(int rowIndex){
 
         Vector<Payment> toSend = new Vector<>();
@@ -242,6 +229,18 @@ public class DatabaseController {
         return "";
     }
 
+    /**
+     * parameters are payment's record data fields
+     * @param type
+     * @param value
+     * @param beginDate
+     * @param endDate
+     * @param owner
+     * @param subject
+     * @param document
+     * @param notes
+     * @return message, if "" operation succeed
+     */
     public String addPayment(String type, String value, String beginDate, String endDate, String owner, String subject, String document, String notes) {
 
         Vector<Agent> agentToUpdate = new Vector<>();
@@ -310,6 +309,12 @@ public class DatabaseController {
         return "";
     }
 
+    /**
+     * @param rowIndex index of record in local vector
+     * @param updatedField data field to update
+     * @param updatedColumn column name to update
+     * @return message, if "" operation succeed
+     */
     public String updatePayment(int rowIndex, Object updatedField, String updatedColumn){
 
         Vector<Agent> agentToUpdate = new Vector<>();
@@ -412,6 +417,10 @@ public class DatabaseController {
         return"";
     }
 
+    /**
+     * @param rowIndex index of record in local vector
+     * @return message, if "" operation succeed
+     */
     public String removeAgent(int rowIndex){
 
         Vector<Agent> tosend = new Vector<>();
@@ -430,6 +439,13 @@ public class DatabaseController {
         return "";
     }
 
+    /**
+     * parameters are agent's record data fields
+     * @param name
+     * @param phone
+     * @param email
+     * @return message, if "" operation succeed
+     */
     public String addAgent(String name,String phone,String email){
 
         int agentID=0;
@@ -448,6 +464,12 @@ public class DatabaseController {
         return "";
     }
 
+    /**
+     * @param rowIndex index of record in local vector
+     * @param updatedField data field to update
+     * @param updatedColumn column name to update
+     * @return message, if "" operation succeed
+     */
     public String updateAgent(int rowIndex, Object updatedField, String updatedColumn){
 
         Vector<Agent> toSend = new Vector<>();
@@ -483,6 +505,10 @@ public class DatabaseController {
         return "";
     }
 
+    /**
+     * @param rowIndex index of record in local vector
+     * @return message, if "" operation succeed
+     */
     public String removeSubject(int rowIndex){
         Vector<Subject> toSend = new Vector<>();
         toSend.addElement(rowDataSubject.elementAt(rowIndex));
@@ -499,6 +525,15 @@ public class DatabaseController {
         return "";
     }
 
+    /**
+     * parameters are subject's record data fields
+     * @param name
+     * @param phone
+     * @param email
+     * @param address
+     * @param notes
+     * @return message, if "" operation succeed
+     */
     public String addSubject(String name,String phone,String email,String address,String notes){
 
         int subjectID=0;
@@ -516,6 +551,12 @@ public class DatabaseController {
         return "";
     }
 
+    /**
+     * @param rowIndex index of record in local vector
+     * @param updatedField data field to update
+     * @param updatedColumn column name to update
+     * @return message, if "" operation succeed
+     */
     public String updateSubject(int rowIndex, Object updatedField, String updatedColumn){
 
         Vector<Subject> toSend = new Vector<>();
@@ -559,21 +600,33 @@ public class DatabaseController {
         return"";
     }
 
-    public int getPaymentRow(int id){
+    /**
+     * @param id id of record to find position in vector
+     * @return position in vector
+     */
+    public static int getPaymentRow(int id){
         for(int i=0; i<rowDataPayment.size(); i++){
             if(rowDataPayment.elementAt(i).id==id)return i;
         }
         return -1;
     }
 
-    public int getAgentRow(int id){
+    /**
+     * @param id id of record to find position in vector
+     * @return position in vector
+     */
+    public static int getAgentRow(int id){
         for(int i=0; i<rowDataAgent.size(); i++){
             if(rowDataAgent.elementAt(i).id==id)return i;
         }
         return -1;
     }
 
-    public int getSubjectRow(int id){
+    /**
+     * @param id id of record to find position in vector
+     * @return position in vector
+     */
+    public static int getSubjectRow(int id){
         for(int i=0; i<rowDataSubject.size(); i++){
             if(rowDataSubject.elementAt(i).id==id)return i;
         }

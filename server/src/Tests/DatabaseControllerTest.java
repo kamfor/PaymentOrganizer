@@ -14,6 +14,66 @@ import java.net.SocketException;
 public class DatabaseControllerTest {
 
     @Test
+    public void removePayment() throws Exception {
+
+    }
+
+    @Test
+    public void addPayment() throws Exception {
+
+    }
+
+    @Test
+    public void updatePayment() throws Exception {
+
+    }
+
+    @Test
+    public void removeAgent() throws Exception {
+
+    }
+
+    @Test
+    public void addAgent() throws Exception {
+
+    }
+
+    @Test
+    public void updateAgent() throws Exception {
+
+    }
+
+    @Test
+    public void removeSubject() throws Exception {
+
+    }
+
+    @Test
+    public void addSubject() throws Exception {
+
+    }
+
+    @Test
+    public void updateSubject() throws Exception {
+
+    }
+
+    @Test
+    public void getPaymentRow() throws Exception {
+
+    }
+
+    @Test
+    public void getAgentRow() throws Exception {
+
+    }
+
+    @Test
+    public void getSubjectRow() throws Exception {
+
+    }
+
+    @Test
     public void connectToServer() throws Exception {
 
         try{

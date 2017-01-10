@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b4d04a8f-a4f7-441c-bf8d-a1b4fa4c6942" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Tests/DatabaseControllerTest.java" afterPath="$PROJECT_DIR$/src/Tests/DatabaseControllerTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/client/DatabaseController.java" afterPath="$PROJECT_DIR$/src/client/DatabaseController.java" />
     </list>
     <ignored path="server.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,7 +22,77 @@
     <favorites_list name="server" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="ServerMain.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/server/ServerMain.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="738">
+              <caret line="46" column="51" selection-start-line="46" selection-start-column="51" selection-end-line="46" selection-end-column="51" />
+              <folding>
+                <element signature="method#ClientHandler#0;class#ClientHandler#0;class#ServerMain#0" expanded="false" />
+                <element signature="method#run#0;class#ClientHandler#0;class#ServerMain#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DatabaseControllerTest.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Tests/DatabaseControllerTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="72">
+              <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DatabaseController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/client/DatabaseController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-250">
+              <caret line="243" column="151" selection-start-line="243" selection-start-column="151" selection-end-line="243" selection-end-column="151" />
+              <folding>
+                <element signature="docComment;class#IncomingHandler#0;class#DatabaseController#0" expanded="false" />
+                <element signature="class#IncomingHandler#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#run#0;class#IncomingHandler#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#DatabaseController#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#connectToServer#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#connectToServer#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#sendObject#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#sendObject#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#disconnect#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#disconnect#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#removePayment#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#removePayment#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#addPayment#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#addPayment#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#updatePayment#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#removeAgent#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#removeAgent#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#addAgent#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#addAgent#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#updateAgent#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#updateAgent#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#removeSubject#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#removeSubject#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#addSubject#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#addSubject#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#updateSubject#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#updateSubject#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#getPaymentRow#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#getPaymentRow#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#getAgentRow#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#getAgentRow#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#getSubjectRow#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#getSubjectRow#0;class#DatabaseController#0" expanded="false" />
+                <element signature="docComment;method#getADate#0;class#DatabaseController#0" expanded="false" />
+                <element signature="method#getADate#0;class#DatabaseController#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -137,6 +205,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -225,9 +296,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -251,7 +319,7 @@
       <recent name="$PROJECT_DIR$/Client/src" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.ClientMain">
+  <component name="RunManager" selected="JUnit.DatabaseControllerTest">
     <configuration default="false" name="ServerMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <option name="MAIN_CLASS_NAME" value="server.ServerMain" />
@@ -608,9 +676,9 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.ClientMain" />
-        <item index="1" class="java.lang.String" itemvalue="Application.ServerMain" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.DatabaseControllerTest" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.DatabaseControllerTest" />
+        <item index="1" class="java.lang.String" itemvalue="Application.ClientMain" />
+        <item index="2" class="java.lang.String" itemvalue="Application.ServerMain" />
         <item index="3" class="java.lang.String" itemvalue="JUnit.DatabaseControllerConnectorTest" />
         <item index="4" class="java.lang.String" itemvalue="JUnit.All in server (1)" />
       </list>
@@ -630,20 +698,20 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="DatabaseConnectorTest - 2017.01.07 at 14h 43m 22s.xml">
-      <configuration name="DatabaseConnectorTest" configurationId="JUnit" />
+    <history-entry file="DatabaseControllerTest - 2017.01.10 at 12h 08m 16s.xml">
+      <configuration name="DatabaseControllerTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="DatabaseConnectorTest - 2017.01.07 at 14h 45m 58s.xml">
-      <configuration name="DatabaseConnectorTest" configurationId="JUnit" />
+    <history-entry file="DatabaseControllerTest - 2017.01.10 at 12h 08m 50s.xml">
+      <configuration name="DatabaseControllerTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="DatabaseConnectorTest - 2017.01.07 at 14h 46m 33s.xml">
-      <configuration name="DatabaseConnectorTest" configurationId="JUnit" />
+    <history-entry file="DatabaseControllerTest - 2017.01.10 at 12h 10m 47s.xml">
+      <configuration name="DatabaseControllerTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="DatabaseConnectorTest - 2017.01.07 at 14h 57m 24s.xml">
-      <configuration name="DatabaseConnectorTest" configurationId="JUnit" />
+    <history-entry file="DatabaseControllerTest - 2017.01.10 at 12h 14m 52s.xml">
+      <configuration name="DatabaseControllerTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="DatabaseConnectorTest - 2017.01.07 at 14h 59m 01s.xml">
-      <configuration name="DatabaseConnectorTest" configurationId="JUnit" />
+    <history-entry file="DatabaseControllerTest - 2017.01.10 at 12h 24m 37s.xml">
+      <configuration name="DatabaseControllerTest" configurationId="JUnit" />
     </history-entry>
     <history-entry file="DatabaseTest - 2017.01.07 at 16h 11m 17s.xml">
       <configuration name="DatabaseTest" configurationId="JUnit" />
@@ -671,8 +739,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="27" width="1920" height="1053" extended-state="0" />
-    <editor active="false" />
+    <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32930845" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -681,16 +749,16 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.13368984" sideWeight="0.27291667" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16575192" sideWeight="0.7270833" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19209659" sideWeight="0.7270833" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14529915" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14529915" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21390374" sideWeight="0.49583334" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2129528" sideWeight="0.49583334" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -762,7 +830,7 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="57" />
+      <option name="time" value="60" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -891,21 +959,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/DatabaseConnector.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="636">
-          <caret line="237" column="42" selection-start-line="237" selection-start-column="42" selection-end-line="237" selection-end-column="42" />
-          <folding>
-            <element signature="method#DatabaseConnector#0;class#DatabaseConnector#0" expanded="false" />
-            <element signature="method#connectMysql#0;class#DatabaseConnector#0" expanded="false" />
-            <element signature="method#readMysqlData#0;class#DatabaseConnector#0" expanded="false" />
-            <element signature="method#writeMysqlData#0;class#DatabaseConnector#0" expanded="false" />
-            <element signature="method#removeMysqlData#0;class#DatabaseConnector#0" expanded="false" />
-            <element signature="method#updateMysqlData#0;class#DatabaseConnector#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/client/View.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="18">
@@ -954,6 +1007,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/client/DatabaseControllerTest.java" />
+    <entry file="file://$PROJECT_DIR$/src/client/Controller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1494">
+          <caret line="258" column="52" selection-start-line="258" selection-start-column="52" selection-end-line="258" selection-end-column="52" />
+          <folding>
+            <element signature="method#Controller#0;class#Controller#0" expanded="false" />
+            <element signature="method#actionPerformed#0;class#ListenForPaymentAction#0;class#Controller#0" expanded="false" />
+            <element signature="method#actionPerformed#0;class#ListenForAgentAction#0;class#Controller#0" expanded="false" />
+            <element signature="method#actionPerformed#0;class#ListenForSubjectAction#0;class#Controller#0" expanded="false" />
+            <element signature="method#focusGained#0;class#ListenForFocus#0;class#Controller#0" expanded="false" />
+            <element signature="method#focusLost#0;class#ListenForFocus#0;class#Controller#0" expanded="false" />
+            <element signature="method#mouseReleased#0;class#ListenForMouse#0;class#Controller#0" expanded="false" />
+            <element signature="method#tableChanged#0;class#ListenForClickPayment#0;class#Controller#0" expanded="false" />
+            <element signature="method#tableChanged#0;class#ListenForClickAgent#0;class#Controller#0" expanded="false" />
+            <element signature="method#tableChanged#0;class#ListenForClickSubject#0;class#Controller#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/DatabaseConnector.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="810">
+          <caret line="237" column="41" selection-start-line="237" selection-start-column="41" selection-end-line="237" selection-end-column="41" />
+          <folding>
+            <element signature="method#DatabaseConnector#0;class#DatabaseConnector#0" expanded="false" />
+            <element signature="method#connectMysql#0;class#DatabaseConnector#0" expanded="false" />
+            <element signature="method#readMysqlData#0;class#DatabaseConnector#0" expanded="false" />
+            <element signature="method#writeMysqlData#0;class#DatabaseConnector#0" expanded="false" />
+            <element signature="method#removeMysqlData#0;class#DatabaseConnector#0" expanded="false" />
+            <element signature="method#updateMysqlData#0;class#DatabaseConnector#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/server/ServerMain.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="738">
@@ -965,32 +1053,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/DatabaseControllerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1188">
-          <caret line="68" column="5" selection-start-line="68" selection-start-column="5" selection-end-line="68" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Tests/DatabaseControllerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="14" column="4" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/client/DatabaseController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="24" column="18" selection-start-line="24" selection-start-column="18" selection-end-line="24" selection-end-column="18" />
+        <state relative-caret-position="-250">
+          <caret line="243" column="151" selection-start-line="243" selection-start-column="151" selection-end-line="243" selection-end-column="151" />
           <folding>
             <element signature="docComment;class#IncomingHandler#0;class#DatabaseController#0" expanded="false" />
             <element signature="class#IncomingHandler#0;class#DatabaseController#0" expanded="false" />
             <element signature="method#run#0;class#IncomingHandler#0;class#DatabaseController#0" expanded="false" />
             <element signature="docComment;method#DatabaseController#0;class#DatabaseController#0" expanded="false" />
-            <element signature="method#DatabaseController#0;class#DatabaseController#0" expanded="false" />
             <element signature="docComment;method#connectToServer#0;class#DatabaseController#0" expanded="false" />
             <element signature="method#connectToServer#0;class#DatabaseController#0" expanded="false" />
             <element signature="docComment;method#sendObject#0;class#DatabaseController#0" expanded="false" />
@@ -999,12 +1070,14 @@
             <element signature="method#disconnect#0;class#DatabaseController#0" expanded="false" />
             <element signature="docComment;method#removePayment#0;class#DatabaseController#0" expanded="false" />
             <element signature="method#removePayment#0;class#DatabaseController#0" expanded="false" />
+            <element signature="docComment;method#addPayment#0;class#DatabaseController#0" expanded="false" />
             <element signature="method#addPayment#0;class#DatabaseController#0" expanded="false" />
-            <element signature="method#updatePayment#0;class#DatabaseController#0" expanded="false" />
+            <element signature="docComment;method#updatePayment#0;class#DatabaseController#0" expanded="false" />
             <element signature="docComment;method#removeAgent#0;class#DatabaseController#0" expanded="false" />
             <element signature="method#removeAgent#0;class#DatabaseController#0" expanded="false" />
             <element signature="docComment;method#addAgent#0;class#DatabaseController#0" expanded="false" />
             <element signature="method#addAgent#0;class#DatabaseController#0" expanded="false" />
+            <element signature="docComment;method#updateAgent#0;class#DatabaseController#0" expanded="false" />
             <element signature="method#updateAgent#0;class#DatabaseController#0" expanded="false" />
             <element signature="docComment;method#removeSubject#0;class#DatabaseController#0" expanded="false" />
             <element signature="method#removeSubject#0;class#DatabaseController#0" expanded="false" />
@@ -1024,22 +1097,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/client/Controller.java">
+    <entry file="file://$PROJECT_DIR$/src/Tests/DatabaseControllerTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1494">
-          <caret line="258" column="52" selection-start-line="258" selection-start-column="52" selection-end-line="258" selection-end-column="52" />
-          <folding>
-            <element signature="method#Controller#0;class#Controller#0" expanded="false" />
-            <element signature="method#actionPerformed#0;class#ListenForPaymentAction#0;class#Controller#0" expanded="false" />
-            <element signature="method#actionPerformed#0;class#ListenForAgentAction#0;class#Controller#0" expanded="false" />
-            <element signature="method#actionPerformed#0;class#ListenForSubjectAction#0;class#Controller#0" expanded="false" />
-            <element signature="method#focusGained#0;class#ListenForFocus#0;class#Controller#0" expanded="false" />
-            <element signature="method#focusLost#0;class#ListenForFocus#0;class#Controller#0" expanded="false" />
-            <element signature="method#mouseReleased#0;class#ListenForMouse#0;class#Controller#0" expanded="false" />
-            <element signature="method#tableChanged#0;class#ListenForClickPayment#0;class#Controller#0" expanded="false" />
-            <element signature="method#tableChanged#0;class#ListenForClickAgent#0;class#Controller#0" expanded="false" />
-            <element signature="method#tableChanged#0;class#ListenForClickSubject#0;class#Controller#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="72">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

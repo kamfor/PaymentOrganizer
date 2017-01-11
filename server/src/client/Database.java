@@ -22,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
  * Server redirecting class, able to sending data through socket,
  * operate on local data agreed in vectors
  */
-public class DatabaseController {
+public class Database {
 
     private static Socket socket;
     protected static ObjectOutputStream oos;
@@ -36,9 +36,6 @@ public class DatabaseController {
     public static Vector<Subject> rowDataSubject = new Vector<>();
     public IncomingHandler receiver = new IncomingHandler();
 
-    /**
-     * Runnable class, event loop service
-     */
     public static class IncomingHandler extends Thread { //make it more clear
 
         public void run() {
@@ -100,7 +97,7 @@ public class DatabaseController {
                                 }
                             }
                             else{
-                                JOptionPane.showMessageDialog(ClientMain.ctrl.gui, "Empty client.DatabaseController");
+                                JOptionPane.showMessageDialog(ClientMain.ctrl.gui, "Empty client.Database");
                             }
                         }else if(qualifier==2){
                             temp= (Vector<Object>)ios.readObject();
@@ -145,11 +142,7 @@ public class DatabaseController {
         }
     }
 
-    /**
-     * Class constructor, initialize server connection
-     * @throws IOException
-     */
-    public DatabaseController() throws IOException{
+    public Database() throws IOException{
 
         try{
             this.connectToServer();
@@ -164,30 +157,23 @@ public class DatabaseController {
         defaultTableModelSubject = new DefaultTableModel(databaseResults, Subject.subjectColumns);
     }
 
-    /**
-     * Socket opening method
-     * @throws IOException
-     */
     public void connectToServer() throws IOException {
         socket = new Socket(InetAddress.getLocalHost(), 9091);
         oos = new ObjectOutputStream(socket.getOutputStream());
         ios = new ObjectInputStream(socket.getInputStream());
     }
 
-    /**
-     * Sending data through socket method
-     * @param input object to change in database
-     * @param remove qualifier 0 - add to database, 1 - remove from database. 2 - record actualization
-     * @throws IOException
-     */
-    public void sendObject(Object input, Integer remove) throws IOException {
-        oos.writeObject(remove);
+    public void sendObjectUpdate(Object input,Object olds, Integer qualifier) throws IOException {
+        oos.writeObject(qualifier);
+        oos.writeObject(input);
+        oos.writeObject(olds);
+    }
+
+    public void sendObject(Object input,Integer qualifier) throws IOException {
+        oos.writeObject(qualifier);
         oos.writeObject(input);
     }
 
-    /**
-     * Closing socket method
-     */
     public void disconnect(){
         try{
             socket.close();
@@ -198,18 +184,15 @@ public class DatabaseController {
         }
     }
 
-    /**
-     * @param rowIndex index in local payment vector to remove
-     * @return message, if "" operation succeed
-     */
     public String removePayment(int rowIndex){
 
         Vector<Payment> toSend = new Vector<>();
-        Vector<Agent> agentToUpdate = new Vector<>();
+        toSend.addElement(rowDataPayment.elementAt(rowIndex));
+
+        /*Vector<Agent> agentToUpdate = new Vector<>();
         Vector<Subject> subjectToUpdate = new Vector<>();
         Agent tempAgent;
         Subject tempSubject;
-        toSend.addElement(rowDataPayment.elementAt(rowIndex));
 
         tempAgent = rowDataAgent.elementAt(getAgentRow(toSend.elementAt(0).owner_id));
         tempAgent.commission-=toSend.elementAt(0).value;
@@ -217,39 +200,23 @@ public class DatabaseController {
 
         tempSubject = rowDataSubject.elementAt(getSubjectRow(toSend.elementAt(0).subject_id));
         tempSubject.bill-=toSend.elementAt(0).value;
-        subjectToUpdate.addElement(tempSubject);
+        subjectToUpdate.addElement(tempSubject);*/
 
         try{
-            this.sendObject(toSend, new Integer(0));
-            this.sendObject(agentToUpdate, new Integer(2));
-            this.sendObject(subjectToUpdate, new Integer(2));
+            this.sendObject(toSend,new Integer(0));
+            //this.sendObject(agentToUpdate, new Integer(2));
+            //this.sendObject(subjectToUpdate, new Integer(2));
         } catch(IOException e1) {
             return "Error while updating data";
         }
         return "";
     }
 
-    /**
-     * parameters are payment's record data fields
-     * @param type
-     * @param value
-     * @param beginDate
-     * @param endDate
-     * @param owner
-     * @param subject
-     * @param document
-     * @param notes
-     * @return message, if "" operation succeed
-     */
     public String addPayment(String type, String value, String beginDate, String endDate, String owner, String subject, String document, String notes) {
 
-        Vector<Agent> agentToUpdate = new Vector<>();
-        Vector<Subject> subjectToUpdate = new Vector<>();
-        Agent tempAgent;
-        Subject tempSubject;
+
         java.util.Date dateBeginDate, dateEndDate;
         Float numberValue;
-
         try{
             numberValue = Float.valueOf(value);
         }
@@ -275,21 +242,12 @@ public class DatabaseController {
         }
 
         int agentRow = getAgentRow(Integer.valueOf(owner));
-        if(agentRow>=0){
-            tempAgent = rowDataAgent.elementAt(agentRow);
-            tempAgent.commission+=numberValue;
-            agentToUpdate.addElement(tempAgent);
-        }
-        else return "Owner doesn't exist";
+        if(agentRow>=0);
+        else return "Owner doesn't exist"; //change to value receive from server
 
         int subjectRow = getSubjectRow(Integer.valueOf(subject));
-        if(subjectRow>=0){
-            tempSubject = rowDataSubject.elementAt(subjectRow);
-            tempSubject.bill+=numberValue;
-            subjectToUpdate.addElement(tempSubject);
-        }
+        if(subjectRow>=0);
         else return "Subject doesn't exist";
-
 
         int paymentID = 0;
         for(Payment item: rowDataPayment){
@@ -300,21 +258,15 @@ public class DatabaseController {
         Vector<Payment> toSend = new Vector<>();
         toSend.addElement(toInsert);
         try {
-            this.sendObject(toSend, new Integer(1));
-            this.sendObject(agentToUpdate, new Integer(2));
-            this.sendObject(subjectToUpdate, new Integer(2));
+            this.sendObject(toSend,new Integer(1));
+            //this.sendObject(agentToUpdate, new Integer(2));
+            //this.sendObject(subjectToUpdate, new Integer(2));
         } catch (IOException e1) {
             return "Error while sending data to server";
         }
         return "";
     }
 
-    /**
-     * @param rowIndex index of record in local vector
-     * @param updatedField data field to update
-     * @param updatedColumn column name to update
-     * @return message, if "" operation succeed
-     */
     public String updatePayment(int rowIndex, Object updatedField, String updatedColumn){
 
         Vector<Agent> agentToUpdate = new Vector<>();
@@ -324,7 +276,9 @@ public class DatabaseController {
         Float numberValue;
 
         Vector<Payment> toSend = new Vector<>();
-        toSend.addElement(this.rowDataPayment.elementAt(rowIndex));
+        toSend.addElement(rowDataPayment.elementAt(rowIndex));
+        Vector<Payment> oldOne = new Vector<>();
+        oldOne.addElement(rowDataPayment.elementAt(rowIndex));
 
         Boolean valueChanged = Boolean.FALSE;
         Boolean isUpdated = Boolean.FALSE;
@@ -359,7 +313,7 @@ public class DatabaseController {
                 break;
             case "Begin Date":
                 try{
-                    toSend.elementAt(0).begin_date = this.getADate((String)updatedField);
+                    toSend.elementAt(0).begin_date = getADate((String)updatedField);
                     isUpdated = Boolean.TRUE;
                 }catch(ParseException e2){
                     return"Unparseable Begin Date";
@@ -367,7 +321,7 @@ public class DatabaseController {
                 break;
             case "End Date":
                 try{
-                    toSend.elementAt(0).end_date = ClientMain.db.getADate((String)updatedField);
+                    toSend.elementAt(0).end_date = getADate((String)updatedField);
                     isUpdated = Boolean.TRUE;
                 }catch(ParseException e2){
                     return"Unparseable End Date";
@@ -405,10 +359,10 @@ public class DatabaseController {
         }
         if(isUpdated){
             try{
-                this.sendObject(toSend, new Integer(2));
+                this.sendObjectUpdate(toSend,oldOne,new Integer(2));
                 if(valueChanged){
-                    this.sendObject(agentToUpdate, new Integer(2));
-                    this.sendObject(subjectToUpdate, new Integer(2));
+                    this.sendObjectUpdate(agentToUpdate,agentToUpdate,new Integer(2));
+                    this.sendObjectUpdate(subjectToUpdate,agentToUpdate,new Integer(2));
                 }
             }catch(IOException e1){
                 return "Error while sending to server";
@@ -417,10 +371,6 @@ public class DatabaseController {
         return"";
     }
 
-    /**
-     * @param rowIndex index of record in local vector
-     * @return message, if "" operation succeed
-     */
     public String removeAgent(int rowIndex){
 
         Vector<Agent> tosend = new Vector<>();
@@ -432,20 +382,13 @@ public class DatabaseController {
             }
         }
         try{
-            this.sendObject(tosend, new Integer(0));
+            this.sendObject(tosend,new Integer(0));
         } catch( IOException e1) {
             return "Error while updating data";
         }
         return "";
     }
 
-    /**
-     * parameters are agent's record data fields
-     * @param name
-     * @param phone
-     * @param email
-     * @return message, if "" operation succeed
-     */
     public String addAgent(String name,String phone,String email){
 
         int agentID=0;
@@ -457,23 +400,20 @@ public class DatabaseController {
         Vector<Agent> toSend = new Vector<>();
         toSend.addElement(toInsert);
         try {
-            this.sendObject(toSend, new Integer(1));
+            this.sendObject(toSend,new Integer(1));
         } catch (IOException e1) {
             return "Error while sending to data";
         }
         return "";
     }
 
-    /**
-     * @param rowIndex index of record in local vector
-     * @param updatedField data field to update
-     * @param updatedColumn column name to update
-     * @return message, if "" operation succeed
-     */
     public String updateAgent(int rowIndex, Object updatedField, String updatedColumn){
 
         Vector<Agent> toSend = new Vector<>();
         toSend.addElement(this.rowDataAgent.elementAt(rowIndex));
+
+        Vector<Agent>  oldOne = new Vector<>();
+        oldOne.addElement(this.rowDataAgent.elementAt(rowIndex));
 
         Boolean isUpdated = false;
 
@@ -497,7 +437,7 @@ public class DatabaseController {
         }
         if(isUpdated==Boolean.TRUE){
             try{
-                this.sendObject(toSend, new Integer(2));
+                this.sendObjectUpdate(toSend,oldOne, new Integer(2));
             }catch(IOException e1){
                 return"Error while sending to server";
             }
@@ -505,10 +445,6 @@ public class DatabaseController {
         return "";
     }
 
-    /**
-     * @param rowIndex index of record in local vector
-     * @return message, if "" operation succeed
-     */
     public String removeSubject(int rowIndex){
         Vector<Subject> toSend = new Vector<>();
         toSend.addElement(rowDataSubject.elementAt(rowIndex));
@@ -525,19 +461,10 @@ public class DatabaseController {
         return "";
     }
 
-    /**
-     * parameters are subject's record data fields
-     * @param name
-     * @param phone
-     * @param email
-     * @param address
-     * @param notes
-     * @return message, if "" operation succeed
-     */
     public String addSubject(String name,String phone,String email,String address,String notes){
 
         int subjectID=0;
-        for(Subject item: ClientMain.db.rowDataSubject){
+        for(Subject item: rowDataSubject){
             if(item.id>subjectID)subjectID = item.id;
         }
         Subject toInsert = new Subject(subjectID+1,name,phone,email,address,new Float(0.0),notes);
@@ -551,16 +478,13 @@ public class DatabaseController {
         return "";
     }
 
-    /**
-     * @param rowIndex index of record in local vector
-     * @param updatedField data field to update
-     * @param updatedColumn column name to update
-     * @return message, if "" operation succeed
-     */
     public String updateSubject(int rowIndex, Object updatedField, String updatedColumn){
 
         Vector<Subject> toSend = new Vector<>();
         toSend.addElement(this.rowDataSubject.elementAt(rowIndex));
+
+        Vector<Subject> oldOne = new Vector<>();
+        oldOne.addElement(this.rowDataSubject.elementAt(rowIndex));
 
         Boolean isUpdated = false;
 
@@ -592,7 +516,7 @@ public class DatabaseController {
         }
         if(isUpdated==Boolean.TRUE){
             try{
-                this.sendObject(toSend, new Integer(2));
+                this.sendObjectUpdate(toSend,oldOne, new Integer(2));
             }catch(IOException e1){
                 return "Error while sending to server";
             }
@@ -600,10 +524,6 @@ public class DatabaseController {
         return"";
     }
 
-    /**
-     * @param id id of record to find position in vector
-     * @return position in vector
-     */
     public static int getPaymentRow(int id){
         for(int i=0; i<rowDataPayment.size(); i++){
             if(rowDataPayment.elementAt(i).id==id)return i;
@@ -611,10 +531,6 @@ public class DatabaseController {
         return -1;
     }
 
-    /**
-     * @param id id of record to find position in vector
-     * @return position in vector
-     */
     public static int getAgentRow(int id){
         for(int i=0; i<rowDataAgent.size(); i++){
             if(rowDataAgent.elementAt(i).id==id)return i;
@@ -622,10 +538,6 @@ public class DatabaseController {
         return -1;
     }
 
-    /**
-     * @param id id of record to find position in vector
-     * @return position in vector
-     */
     public static int getSubjectRow(int id){
         for(int i=0; i<rowDataSubject.size(); i++){
             if(rowDataSubject.elementAt(i).id==id)return i;
@@ -633,12 +545,6 @@ public class DatabaseController {
         return -1;
     }
 
-    /**
-     * Date parsing method
-     * @param dateRegistered
-     * @return  java.sql.Date format
-     * @throws ParseException
-     */
     public java.util.Date getADate(String dateRegistered) throws ParseException{
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date toReturn;

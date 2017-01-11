@@ -12,7 +12,7 @@ import java.util.Vector;
 /**
  * Created by kamil on 07.01.17.
  */
-public class DatabaseControllerConnectorTest {
+public class DatabaseConnectorTest {
 
     DatabaseConnector testDatabase = new DatabaseConnector();
 
@@ -41,9 +41,9 @@ public class DatabaseControllerConnectorTest {
         agentVectorToAdd.addElement(agentToAdd);
         subjectVectorToAdd.addElement(subjectToAdd);
 
-        testDatabase.writeMysqlData(agentVectorToAdd);
-        testDatabase.writeMysqlData(subjectVectorToAdd);
-        testDatabase.writeMysqlData(paymentVectorToAdd);
+        //testDatabase.writeMysqlData(agentVectorToAdd);
+        //testDatabase.writeMysqlData(subjectVectorToAdd);
+        //testDatabase.writeMysqlData(paymentVectorToAdd);
 
         assertEquals(paymentToAdd.id,testDatabase.dataPayment.lastElement().id);
         assertEquals(paymentToAdd.type,testDatabase.dataPayment.lastElement().type);
@@ -70,9 +70,9 @@ public class DatabaseControllerConnectorTest {
         assertEquals(subjectToAdd.bill,testDatabase.dataSubject.lastElement().bill);
         assertEquals(subjectToAdd.notes,testDatabase.dataSubject.lastElement().notes);
 
-        testDatabase.removeMysqlData(agentVectorToAdd);
-        testDatabase.removeMysqlData(subjectVectorToAdd);
-        testDatabase.removeMysqlData(paymentVectorToAdd);
+        //testDatabase.removeMysqlData(agentVectorToAdd);
+        //testDatabase.removeMysqlData(subjectVectorToAdd);
+        //testDatabase.removeMysqlData(paymentVectorToAdd);
     }
 
     @org.junit.Test
@@ -91,17 +91,17 @@ public class DatabaseControllerConnectorTest {
         agentVectorToAdd.addElement(agentToAdd);
         subjectVectorToAdd.addElement(subjectToAdd);
 
-        testDatabase.writeMysqlData(agentVectorToAdd);
-        testDatabase.writeMysqlData(subjectVectorToAdd);
-        testDatabase.writeMysqlData(paymentVectorToAdd);
+        //testDatabase.writeMysqlData(agentVectorToAdd);
+        //testDatabase.writeMysqlData(subjectVectorToAdd);
+        //testDatabase.writeMysqlData(paymentVectorToAdd);
 
         int lastPament = testDatabase.dataPayment.size();
         int lastAgent  = testDatabase.dataAgent.size();
         int lastSubject = testDatabase.dataSubject.size();
 
-        testDatabase.removeMysqlData(agentVectorToAdd);
-        testDatabase.removeMysqlData(subjectVectorToAdd);
-        testDatabase.removeMysqlData(paymentVectorToAdd);
+        //testDatabase.removeMysqlData(agentVectorToAdd);
+        //testDatabase.removeMysqlData(subjectVectorToAdd);
+        //testDatabase.removeMysqlData(paymentVectorToAdd);
 
         assertEquals(lastPament-1,testDatabase.dataPayment.size());
         assertEquals(lastAgent-1,testDatabase.dataAgent.size());
@@ -125,25 +125,25 @@ public class DatabaseControllerConnectorTest {
         agentVectorToAdd.addElement(agentToAdd);
         subjectVectorToAdd.addElement(subjectToAdd);
 
-        testDatabase.writeMysqlData(agentVectorToAdd);
-        testDatabase.writeMysqlData(subjectVectorToAdd);
-        testDatabase.writeMysqlData(paymentVectorToAdd);
+        //testDatabase.writeMysqlData(agentVectorToAdd);
+        //testDatabase.writeMysqlData(subjectVectorToAdd);
+        //testDatabase.writeMysqlData(paymentVectorToAdd);
 
         paymentVectorToAdd.lastElement().type = "Type1";
         agentVectorToAdd.lastElement().name = "name1";
         subjectVectorToAdd.lastElement().name = "name1";
 
-        testDatabase.updateMysqlData(agentVectorToAdd);
-        testDatabase.updateMysqlData(subjectVectorToAdd);
-        testDatabase.updateMysqlData(paymentVectorToAdd);
+        //testDatabase.updateMysqlData(agentVectorToAdd);
+        //testDatabase.updateMysqlData(subjectVectorToAdd);
+        //testDatabase.updateMysqlData(paymentVectorToAdd);
 
         assertEquals(paymentVectorToAdd.lastElement().type,testDatabase.dataPayment.lastElement().type);
         assertEquals(agentVectorToAdd.lastElement().name,testDatabase.dataAgent.lastElement().name);
         assertEquals(subjectVectorToAdd.lastElement().name,testDatabase.dataSubject.lastElement().name);
 
-        testDatabase.removeMysqlData(agentVectorToAdd);
-        testDatabase.removeMysqlData(subjectVectorToAdd);
-        testDatabase.removeMysqlData(paymentVectorToAdd);
+        //testDatabase.removeMysqlData(agentVectorToAdd);
+        //testDatabase.removeMysqlData(subjectVectorToAdd);
+        //testDatabase.removeMysqlData(paymentVectorToAdd);
     }
 
 }

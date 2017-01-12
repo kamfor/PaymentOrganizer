@@ -5,11 +5,76 @@ import static org.junit.Assert.*;
 import model.Agent;
 import model.Payment;
 import model.Subject;
+import org.junit.Test;
 import server.DatabaseConnector;
 
 import java.util.Vector;
 
 public class DatabaseConnectorTest {
+    @Test
+    public void connectMysql() throws Exception {
+
+    }
+
+    @Test
+    public void readMysqlData1() throws Exception {
+
+    }
+
+    @Test
+    public void addSubjectToMysql() throws Exception {
+
+    }
+
+    @Test
+    public void addAgentToMysql() throws Exception {
+
+    }
+
+    @Test
+    public void addPaymentToMysql() throws Exception {
+
+    }
+
+    @Test
+    public void removeSubjectFrommMysql() throws Exception {
+
+    }
+
+    @Test
+    public void removeAgentFromMysql() throws Exception {
+
+    }
+
+    @Test
+    public void removePaymentFromMysql() throws Exception {
+
+    }
+
+    @Test
+    public void updateSubjectInMysql() throws Exception {
+
+    }
+
+    @Test
+    public void updateAgentInMysql() throws Exception {
+
+    }
+
+    @Test
+    public void updatePaymentInMysql() throws Exception {
+
+    }
+
+    @Test
+    public void getAgentFromPayment() throws Exception {
+
+    }
+
+    @Test
+    public void getSubjectFromPayment() throws Exception {
+
+    }
 
     DatabaseConnector testDatabase = new DatabaseConnector();
 

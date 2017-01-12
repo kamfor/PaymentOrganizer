@@ -40,7 +40,7 @@ public class ServerMain {
         }
     }
 
-    private static class ClientHandler extends Thread {
+    private static class ClientHandler extends Thread { //make tests
         private Socket socket;
         private int clientNumber;
         private DatabaseConnector database;

@@ -13,6 +13,90 @@ import java.io.IOException;
  * Created by kamil on 07.01.17.
  */
 public class DatabaseTest {
+    @Test
+    public void connectToServer1() throws Exception {
+
+    }
+
+    @Test
+    public void sendObjectUpdate() throws Exception {
+
+    }
+
+    @Test
+    public void sendObject1() throws Exception {
+
+    }
+
+    @Test
+    public void disconnect() throws Exception {
+
+    }
+
+    @Test
+    public void removePayment1() throws Exception {
+
+    }
+
+    @Test
+    public void addPayment1() throws Exception {
+
+    }
+
+    @Test
+    public void updatePayment1() throws Exception {
+
+    }
+
+    @Test
+    public void removeAgent1() throws Exception {
+
+    }
+
+    @Test
+    public void addAgent1() throws Exception {
+
+    }
+
+    @Test
+    public void updateAgent1() throws Exception {
+
+    }
+
+    @Test
+    public void removeSubject1() throws Exception {
+
+    }
+
+    @Test
+    public void addSubject1() throws Exception {
+
+    }
+
+    @Test
+    public void updateSubject1() throws Exception {
+
+    }
+
+    @Test
+    public void getPaymentRow1() throws Exception {
+
+    }
+
+    @Test
+    public void getAgentRow1() throws Exception {
+
+    }
+
+    @Test
+    public void getSubjectRow1() throws Exception {
+
+    }
+
+    @Test
+    public void getADate() throws Exception {
+
+    }
 
     @Test
     public void removePayment() throws Exception {

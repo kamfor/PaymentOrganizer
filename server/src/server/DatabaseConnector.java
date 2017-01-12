@@ -254,45 +254,6 @@ public class DatabaseConnector {
         }
     }
 
-    public Vector<Agent> getUpdatedAgentCommission(Vector<Payment> parent,Vector<Payment> old,int qualifier){ //zmień na przesyłanie dwóch wartości wszędzie
-        Vector<Agent> agentToUpdate = new Vector<>();
-        Agent tempAgent;
-        tempAgent = dataAgent.elementAt(getAgentRow(parent.elementAt(0).owner_id));
-        switch(qualifier){
-            case 0: // zrób jakiś enum tutaj;
-                tempAgent.commission-=parent.elementAt(0).value;
-                agentToUpdate.addElement(tempAgent);
-                break;
-            case 1:
-                tempAgent.commission+=parent.elementAt(0).value;
-                agentToUpdate.addElement(tempAgent);
-                break;
-            case 2: //update should have old and changed value
-                break;
-        }
-        return null;
-    }
-
-    public Vector<Subject> getUpdatedSubjectCommission(Vector<Payment> parent,Vector<Payment> old,int qualifier){
-        Vector<Subject> subjectToUpdate = new Vector<>();
-        Subject tempSubject;
-        tempSubject = dataSubject.elementAt(getSubjectRow(parent.elementAt(0).subject_id));
-        switch(qualifier){
-            case 0:
-                tempSubject.bill-=parent.elementAt(0).value;
-                subjectToUpdate.addElement(tempSubject);
-                break;
-            case 1:
-                tempSubject.bill+=parent.elementAt(0).value;
-                subjectToUpdate.addElement(tempSubject);
-                break;
-            case 2:
-
-                break;
-        }
-        return null;
-    }
-
     private int getPaymentRow(int toFind){
         for (int i = 0; i < dataPayment.size(); i++) {
             if (dataPayment.elementAt(i).id == toFind) return i;
@@ -312,5 +273,13 @@ public class DatabaseConnector {
             if (dataSubject.elementAt(i).id == toFind) return i;
         }
         return  -1;
+    }
+
+    public Agent getAgentFromPayment (Payment element){
+        return dataAgent.elementAt(getAgentRow(element.owner_id));
+    }
+
+    public Subject getSubjectFromPayment (Payment element){
+        return dataSubject.elementAt(getSubjectRow(element.subject_id));
     }
 }

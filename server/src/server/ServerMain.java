@@ -24,6 +24,9 @@ import java.util.Vector;
 
 public class ServerMain {
     public static Vector<ClientHandler> clients = new Vector<>();
+    public enum Qualifier {
+        Remove, Add, Update, Message;
+    }
 
     public static void main(String[] args) throws IOException {
         ServerSocket listener = new ServerSocket(9091);
@@ -52,10 +55,12 @@ public class ServerMain {
         protected ObjectOutputStream oos;
         protected ObjectInputStream ois;
 
-        public ClientHandler(Socket socket, int clientNumber, DatabaseConnector tosend) {
+
+
+        public ClientHandler(Socket socket, int clientNumber, DatabaseConnector toSend) {
             this.socket = socket;
             this.clientNumber = clientNumber;
-            this.database = tosend;
+            this.database = toSend;
             System.out.println("New connection with client# " + clientNumber + " at " + socket);
 
             try{
@@ -69,81 +74,131 @@ public class ServerMain {
         public void run() {
             try {
                 writeStartupData();
-                while (true) { // za dużo tego tutaj i dodaj jeszcze wysyłanie stringa do kilenta żeby go poinformować o błędach różnych
+                while (true) {
                     Object incoming = ois.readObject();
-                    if(incoming instanceof Integer){
-                        Integer qualifier = (Integer) incoming;
-                        if(qualifier==0){ //remove
-                            incoming = ois.readObject();
-                            Vector<Object> temp = (Vector<Object>) incoming;
-                            if (temp.elementAt(0) instanceof Payment) {
-                                database.removePaymentFromMysql((Vector<Payment>) incoming);
-                                //update salaries
-                            } else if (temp.elementAt(0) instanceof Agent) {
-                                database.removeAgentFromMysql((Vector<Agent>) incoming);
-                            } else if (temp.elementAt(0) instanceof Subject) {
-                                database.removeSubjectFrommMysql((Vector<Subject>) incoming);
-                            }
-                            writeToClients(incoming, qualifier);
-                        }
-                        else if(qualifier==1){ //add
-                            incoming = ois.readObject();
-                            Vector<Object> temp = (Vector<Object>)incoming;
-                            if (temp.elementAt(0) instanceof Payment) {
-                                database.addPaymentToMysql((Vector<Payment>)incoming);
-                                //update salaries
-                            } else if (temp.elementAt(0) instanceof Agent) {
-                                database.addAgentToMysql((Vector<Agent>)incoming);
-                            } else if (temp.elementAt(0) instanceof Subject) {
-                                database.addSubjectToMysql((Vector<Subject>)incoming);
-                            }
-                            writeToClients(incoming, qualifier);
-                        }
-                        else if(qualifier==2){ //update
-                            incoming = ois.readObject();
-                            Vector<Object> temp = (Vector<Object>) incoming;
-                            incoming = ois.readObject();
-                            Vector<Object> olds = (Vector<Object>) incoming;
-                            if (temp.elementAt(0) instanceof Payment) {
-                                database.updatePaymentInMysql((Vector<Payment>) incoming);
-                                //update salaries
-                            } else if (temp.elementAt(0) instanceof Agent) {
-                                database.updateAgentInMysql((Vector<Agent>) incoming);
-                            } else if (temp.elementAt(0) instanceof Subject) {
-                                database.updateSubjectInMysql((Vector<Subject>) incoming);
-                            }
-                            writeToClients(incoming, qualifier);
+                    if(incoming instanceof Qualifier){
+                        Qualifier qualifier = (Qualifier)incoming;
+                        switch(qualifier){
+                            case Remove:
+                                incoming = ois.readObject();
+                                removeIncomingRecords(incoming);
+                            break;
+                            case Add:
+                                incoming = ois.readObject();
+                                addIncomingRecords(incoming);
+                            break;
+                            case Update:
+                                incoming = ois.readObject();
+                                Object incomingOld = ois.readObject();
+                                updateIncomingRecords(incoming, incomingOld);
+                            break;
                         }
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {
                 System.out.println("Error handling client# " + clientNumber + ": " + e);
             } finally {
-                try {
                     closeSockets();
-                } catch (IOException e) {
-                    System.out.println("Couldn't close a socket");
-                }
-                System.out.println("Connection with client# " + clientNumber + " closed");
             }
         }
 
+        private void updateIncomingRecords(Object incoming,Object incomingOld) throws IOException { //recognize changes
+            Vector<Object> temp = (Vector<Object>) incoming;
+            Vector<Object> olds = (Vector<Object>) incomingOld;
+            if (temp.elementAt(0) instanceof Payment) {
+                database.updatePaymentInMysql((Vector<Payment>) incoming);
+            } else if (temp.elementAt(0) instanceof Agent) {
+                database.updateAgentInMysql((Vector<Agent>) incoming);
+            } else if (temp.elementAt(0) instanceof Subject) {
+                database.updateSubjectInMysql((Vector<Subject>) incoming);
+            }
+            writeToClients(incoming, Qualifier.Update);
+        }
+
+        private void addIncomingRecords(Object incoming) throws IOException {
+            Vector<Object> temp = (Vector<Object>)incoming;
+            if (temp.elementAt(0) instanceof Payment) {
+                database.addPaymentToMysql((Vector<Payment>)incoming);
+                Vector<Agent> agentToUpdate = new Vector<>();
+                Vector<Subject> subjectToUpdate = new Vector<>();
+                Agent tempAgent;
+                Subject tempSubject;
+
+                tempAgent = database.getAgentFromPayment((Payment)temp.elementAt(0));
+                tempAgent.commission=tempAgent.commission+((Payment)temp.elementAt(0)).value;
+                agentToUpdate.addElement(tempAgent);
+
+                tempSubject = database.getSubjectFromPayment((Payment)temp.elementAt(0));
+                tempSubject.bill=tempSubject.bill+((Payment)temp.elementAt(0)).value;
+                subjectToUpdate.addElement(tempSubject);
+
+                updateIncomingRecords(agentToUpdate,agentToUpdate);
+                updateIncomingRecords(subjectToUpdate,subjectToUpdate);
+
+                database.updateAgentInMysql(agentToUpdate);
+                database.updateSubjectInMysql(subjectToUpdate);
+
+                writeToClients(agentToUpdate,Qualifier.Update);
+                writeToClients(subjectToUpdate,Qualifier.Update);
+
+            } else if (temp.elementAt(0) instanceof Agent) {
+                database.addAgentToMysql((Vector<Agent>)incoming);
+            } else if (temp.elementAt(0) instanceof Subject) {
+                database.addSubjectToMysql((Vector<Subject>)incoming);
+            }
+            writeToClients(incoming, Qualifier.Add);
+        }
+
+        private void removeIncomingRecords(Object incoming) throws IOException {
+            Vector<Object> temp = (Vector<Object>) incoming;
+            if (temp.elementAt(0) instanceof Payment) {
+                database.removePaymentFromMysql((Vector<Payment>) incoming);
+                Vector<Agent> agentToUpdate = new Vector<>();
+                Vector<Subject> subjectToUpdate = new Vector<>();
+                Agent tempAgent;
+                Subject tempSubject;
+
+                tempAgent = database.getAgentFromPayment((Payment)temp.elementAt(0));
+                tempAgent.commission=tempAgent.commission-((Payment)temp.elementAt(0)).value;
+                agentToUpdate.addElement(tempAgent);
+
+                tempSubject = database.getSubjectFromPayment((Payment)temp.elementAt(0));
+                tempSubject.bill=tempSubject.bill-((Payment)temp.elementAt(0)).value;
+                subjectToUpdate.addElement(tempSubject);
+
+                database.updateAgentInMysql(agentToUpdate);
+                database.updateSubjectInMysql(subjectToUpdate);
+
+                writeToClients(agentToUpdate,Qualifier.Update);
+                writeToClients(subjectToUpdate,Qualifier.Update);
+            } else if (temp.elementAt(0) instanceof Agent) {
+                database.removeAgentFromMysql((Vector<Agent>) incoming);
+            } else if (temp.elementAt(0) instanceof Subject) {
+                database.removeSubjectFrommMysql((Vector<Subject>) incoming);
+            }
+            writeToClients(incoming, Qualifier.Remove);
+        }
+
         private void writeStartupData() throws IOException {
-            oos.writeObject(new Integer(1));
+            oos.writeObject(Qualifier.Add);
             oos.writeObject(database.dataPayment);
-            oos.writeObject(new Integer(1));
+            oos.writeObject(Qualifier.Add);
             oos.writeObject(database.dataAgent);
-            oos.writeObject(new Integer(1));
+            oos.writeObject(Qualifier.Add);
             oos.writeObject(database.dataSubject);
         }
 
-        private void closeSockets() throws IOException {
-            ois.close();
-            oos.close();
-            socket.close();
+        private void closeSockets() {
+            try {
+                ois.close();
+                oos.close();
+                socket.close();
+            } catch (IOException e) {
+                System.out.println("Couldn't close a socket");
+            }
         }
 
-        private void writeToClients(Object incoming, Integer qualifier) throws IOException {
+        private void writeToClients(Object incoming, Qualifier qualifier) throws IOException {
             for(ClientHandler item :clients){
                 if(item.isAlive()) {
                     item.oos.writeObject(qualifier);

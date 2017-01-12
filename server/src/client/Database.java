@@ -3,6 +3,7 @@ package client;
 import model.Agent;
 import model.Payment;
 import model.Subject;
+import server.ServerMain;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -44,92 +45,95 @@ public class Database {
                 Vector<Object> temp;
                 while (true) {
                     Object incoming = ios.readObject();
-                    if(incoming instanceof Integer){
-                        Integer qualifier = (Integer)incoming;
-                        if(qualifier==0){
-                            temp= (Vector<Object>)ios.readObject();
-                            if (temp.elementAt(0) instanceof Payment) {
-                                System.out.println("Payment removed");
-                                for (Object item : temp) {
-                                    int rowPaymentToRemove = getPaymentRow(((Payment)item).id);
-                                    rowDataPayment.removeElementAt(rowPaymentToRemove);
-                                    defaultTableModelPayment.removeRow(rowPaymentToRemove);
-                                }
-                            } else if (temp.elementAt(0) instanceof Agent) {
-                                System.out.println("Agent removed");
-                                for (Object item : temp) {
-                                    int rowAgentToRemove = getAgentRow(((Agent)item).id);
-                                    rowDataAgent.removeElementAt(rowAgentToRemove);
-                                    defaultTableModelAgent.removeRow(rowAgentToRemove);
-                                }
-                            } else if (temp.elementAt(0) instanceof Subject) {
-                                System.out.println("Subject removed");
-                                for (Object item : temp) {
-                                    int rowSubjectToRemove = getSubjectRow(((Subject)item).id);
-                                    rowDataSubject.removeElementAt(rowSubjectToRemove);
-                                    defaultTableModelSubject.removeRow(rowSubjectToRemove);
-                                }
-                            }
-                        }
-                        else if(qualifier ==1){
-                            temp= (Vector<Object>)ios.readObject();
-                            if(temp.size()>0){
-                                if(temp.elementAt(0) instanceof Payment){
-                                    System.out.println("Payment added");
-                                    for(Object item: temp){
-                                        rowDataPayment.addElement((Payment)item);
-                                        defaultTableModelPayment.addRow(((Payment)item).toVector());
+                    if(incoming instanceof ServerMain.Qualifier){
+                        ServerMain.Qualifier qualifier = (ServerMain.Qualifier) incoming;
+                        switch(qualifier){
+                            case Remove:
+                                temp= (Vector<Object>)ios.readObject();
+                                if (temp.elementAt(0) instanceof Payment) {
+                                    System.out.println("Payment removed");
+                                    for (Object item : temp) {
+                                        int rowPaymentToRemove = getPaymentRow(((Payment)item).id);
+                                        rowDataPayment.removeElementAt(rowPaymentToRemove);
+                                        defaultTableModelPayment.removeRow(rowPaymentToRemove);
+                                    }
+                                } else if (temp.elementAt(0) instanceof Agent) {
+                                    System.out.println("Agent removed");
+                                    for (Object item : temp) {
+                                        int rowAgentToRemove = getAgentRow(((Agent)item).id);
+                                        rowDataAgent.removeElementAt(rowAgentToRemove);
+                                        defaultTableModelAgent.removeRow(rowAgentToRemove);
+                                    }
+                                } else if (temp.elementAt(0) instanceof Subject) {
+                                    System.out.println("Subject removed");
+                                    for (Object item : temp) {
+                                        int rowSubjectToRemove = getSubjectRow(((Subject)item).id);
+                                        rowDataSubject.removeElementAt(rowSubjectToRemove);
+                                        defaultTableModelSubject.removeRow(rowSubjectToRemove);
                                     }
                                 }
-                                else if(temp.elementAt(0) instanceof Agent){
-                                    System.out.println("Agent added");
-                                    for(Object item: temp){
-                                        rowDataAgent.addElement((Agent)item);
-                                        defaultTableModelAgent.addRow(((Agent)item).toVector());
+                            break;
+                            case Add:
+                                temp= (Vector<Object>)ios.readObject();
+                                if(temp.size()>0) {
+                                    if (temp.elementAt(0) instanceof Payment) {
+                                        System.out.println("Payment added");
+                                        for (Object item : temp) {
+                                            rowDataPayment.addElement((Payment) item);
+                                            defaultTableModelPayment.addRow(((Payment) item).toVector());
+                                        }
+                                    } else if (temp.elementAt(0) instanceof Agent) {
+                                        System.out.println("Agent added");
+                                        for (Object item : temp) {
+                                            rowDataAgent.addElement((Agent) item);
+                                            defaultTableModelAgent.addRow(((Agent) item).toVector());
+                                        }
+                                    } else if (temp.elementAt(0) instanceof Subject) {
+                                        System.out.println("Subject added");
+                                        for (Object item : temp) {
+                                            rowDataSubject.addElement((Subject) item);
+                                            defaultTableModelSubject.addRow(((Subject) item).toVector());
+                                        }
                                     }
                                 }
-                                else if(temp.elementAt(0) instanceof Subject) {
-                                    System.out.println("Subject added");
-                                    for(Object item: temp){
-                                        rowDataSubject.addElement((Subject)item);
-                                        defaultTableModelSubject.addRow(((Subject)item).toVector());
+                                else{
+                                    JOptionPane.showMessageDialog(ClientMain.ctrl.gui, "Empty client.Database");
+                                }
+                            break;
+                            case Update:
+                                temp= (Vector<Object>)ios.readObject();
+                                if(temp.size()>0){
+                                    if(temp.elementAt(0) instanceof Payment){
+                                        System.out.println("Payment updated");
+                                        for(Object item: temp){
+                                            int rowPaymentToUpdate = getPaymentRow(((Payment)item).id);
+                                            rowDataPayment.setElementAt((Payment)item,rowPaymentToUpdate);
+                                            defaultTableModelPayment.removeRow(rowPaymentToUpdate);
+                                            defaultTableModelPayment.insertRow(rowPaymentToUpdate,((Payment)item).toVector());
+                                        }
+                                    }
+                                    else if(temp.elementAt(0) instanceof Agent){
+                                        System.out.println("Agent updated");
+                                        for(Object item: temp){
+                                            int rowAgentToUpdate = getAgentRow(((Agent)item).id);
+                                            rowDataAgent.setElementAt((Agent) item,rowAgentToUpdate);
+                                            defaultTableModelAgent.removeRow(rowAgentToUpdate);
+                                            defaultTableModelAgent.insertRow(rowAgentToUpdate,((Agent)item).toVector());
+                                        }
+                                    }
+                                    else if(temp.elementAt(0) instanceof Subject) {
+                                        System.out.println("Subject updated");
+                                        for(Object item: temp){
+                                            int rowSubjectToUpdate = getSubjectRow(((Subject)item).id);
+                                            rowDataSubject.setElementAt((Subject) item,rowSubjectToUpdate);
+                                            defaultTableModelSubject.removeRow(rowSubjectToUpdate);
+                                            defaultTableModelSubject.insertRow(rowSubjectToUpdate,((Subject)item).toVector());
+                                        }
                                     }
                                 }
-                            }
-                            else{
-                                JOptionPane.showMessageDialog(ClientMain.ctrl.gui, "Empty client.Database");
-                            }
-                        }else if(qualifier==2){
-                            temp= (Vector<Object>)ios.readObject();
-                            if(temp.size()>0){
-                                if(temp.elementAt(0) instanceof Payment){
-                                    System.out.println("Payment updated");
-                                    for(Object item: temp){
-                                        int rowPaymentToUpdate = getPaymentRow(((Payment)item).id);
-                                        rowDataPayment.setElementAt((Payment)item,rowPaymentToUpdate);
-                                        defaultTableModelPayment.removeRow(rowPaymentToUpdate);
-                                        defaultTableModelPayment.insertRow(rowPaymentToUpdate,((Payment)item).toVector());
-                                    }
-                                }
-                                else if(temp.elementAt(0) instanceof Agent){
-                                    System.out.println("Agent updated");
-                                    for(Object item: temp){
-                                        int rowAgentToUpdate = getAgentRow(((Agent)item).id);
-                                        rowDataAgent.setElementAt((Agent) item,rowAgentToUpdate);
-                                        defaultTableModelAgent.removeRow(rowAgentToUpdate);
-                                        defaultTableModelAgent.insertRow(rowAgentToUpdate,((Agent)item).toVector());
-                                    }
-                                }
-                                else if(temp.elementAt(0) instanceof Subject) {
-                                    System.out.println("Subject updated");
-                                    for(Object item: temp){
-                                        int rowSubjectToUpdate = getSubjectRow(((Subject)item).id);
-                                        rowDataSubject.setElementAt((Subject) item,rowSubjectToUpdate);
-                                        defaultTableModelSubject.removeRow(rowSubjectToUpdate);
-                                        defaultTableModelSubject.insertRow(rowSubjectToUpdate,((Subject)item).toVector());
-                                    }
-                                }
-                            }
+                            break;
+                            case Message:
+                                System.out.println(ios.readObject());
                         }
                     }else{
                         System.out.println("Unsupported data");
@@ -163,13 +167,13 @@ public class Database {
         ios = new ObjectInputStream(socket.getInputStream());
     }
 
-    public void sendObjectUpdate(Object input,Object olds, Integer qualifier) throws IOException {
+    public void sendObjectUpdate(Object input,Object odds, ServerMain.Qualifier qualifier) throws IOException {
         oos.writeObject(qualifier);
         oos.writeObject(input);
-        oos.writeObject(olds);
+        oos.writeObject(odds);
     }
 
-    public void sendObject(Object input,Integer qualifier) throws IOException {
+    public void sendObject(Object input, ServerMain.Qualifier qualifier) throws IOException {
         oos.writeObject(qualifier);
         oos.writeObject(input);
     }
@@ -189,7 +193,7 @@ public class Database {
         Vector<Payment> toSend = new Vector<>();
         toSend.addElement(rowDataPayment.elementAt(rowIndex));
 
-        /*Vector<Agent> agentToUpdate = new Vector<>();
+        Vector<Agent> agentToUpdate = new Vector<>();
         Vector<Subject> subjectToUpdate = new Vector<>();
         Agent tempAgent;
         Subject tempSubject;
@@ -200,12 +204,12 @@ public class Database {
 
         tempSubject = rowDataSubject.elementAt(getSubjectRow(toSend.elementAt(0).subject_id));
         tempSubject.bill-=toSend.elementAt(0).value;
-        subjectToUpdate.addElement(tempSubject);*/
+        subjectToUpdate.addElement(tempSubject);
 
         try{
-            this.sendObject(toSend,new Integer(0));
-            //this.sendObject(agentToUpdate, new Integer(2));
-            //this.sendObject(subjectToUpdate, new Integer(2));
+            this.sendObject(toSend, ServerMain.Qualifier.Remove);
+            //this.sendObject(agentToUpdate, ServerMain.Qualifier.Update);
+            //this.sendObject(subjectToUpdate, ServerMain.Qualifier.Update);
         } catch(IOException e1) {
             return "Error while updating data";
         }
@@ -257,10 +261,22 @@ public class Database {
 
         Vector<Payment> toSend = new Vector<>();
         toSend.addElement(toInsert);
+        Vector<Agent> agentToUpdate = new Vector<>();
+        Vector<Subject> subjectToUpdate = new Vector<>();
+        Agent tempAgent;
+        Subject tempSubject;
+
+        tempAgent = rowDataAgent.elementAt(getAgentRow(toSend.elementAt(0).owner_id));
+        tempAgent.commission+=toSend.elementAt(0).value;
+        agentToUpdate.addElement(tempAgent);
+
+        tempSubject = rowDataSubject.elementAt(getSubjectRow(toSend.elementAt(0).subject_id));
+        tempSubject.bill+=toSend.elementAt(0).value;
+        subjectToUpdate.addElement(tempSubject);
         try {
-            this.sendObject(toSend,new Integer(1));
-            //this.sendObject(agentToUpdate, new Integer(2));
-            //this.sendObject(subjectToUpdate, new Integer(2));
+            this.sendObject(toSend, ServerMain.Qualifier.Add);
+            //this.sendObjectUpdate(agentToUpdate,agentToUpdate, ServerMain.Qualifier.Update);
+            //this.sendObjectUpdate(subjectToUpdate,subjectToUpdate, ServerMain.Qualifier.Update);
         } catch (IOException e1) {
             return "Error while sending data to server";
         }
@@ -359,10 +375,10 @@ public class Database {
         }
         if(isUpdated){
             try{
-                this.sendObjectUpdate(toSend,oldOne,new Integer(2));
+                this.sendObjectUpdate(toSend,oldOne, ServerMain.Qualifier.Update);
                 if(valueChanged){
-                    this.sendObjectUpdate(agentToUpdate,agentToUpdate,new Integer(2));
-                    this.sendObjectUpdate(subjectToUpdate,agentToUpdate,new Integer(2));
+                    this.sendObjectUpdate(agentToUpdate,agentToUpdate, ServerMain.Qualifier.Update);
+                    this.sendObjectUpdate(subjectToUpdate,agentToUpdate, ServerMain.Qualifier.Update);
                 }
             }catch(IOException e1){
                 return "Error while sending to server";
@@ -382,7 +398,7 @@ public class Database {
             }
         }
         try{
-            this.sendObject(tosend,new Integer(0));
+            this.sendObject(tosend, ServerMain.Qualifier.Remove);
         } catch( IOException e1) {
             return "Error while updating data";
         }
@@ -400,7 +416,7 @@ public class Database {
         Vector<Agent> toSend = new Vector<>();
         toSend.addElement(toInsert);
         try {
-            this.sendObject(toSend,new Integer(1));
+            this.sendObject(toSend, ServerMain.Qualifier.Add);
         } catch (IOException e1) {
             return "Error while sending to data";
         }
@@ -437,7 +453,7 @@ public class Database {
         }
         if(isUpdated==Boolean.TRUE){
             try{
-                this.sendObjectUpdate(toSend,oldOne, new Integer(2));
+                this.sendObjectUpdate(toSend,oldOne, ServerMain.Qualifier.Update);
             }catch(IOException e1){
                 return"Error while sending to server";
             }
@@ -454,7 +470,7 @@ public class Database {
             }
         }
         try{
-            this.sendObject(toSend, new Integer(0));
+            this.sendObject(toSend, ServerMain.Qualifier.Remove);
         } catch(IOException e1) {
             return "Error while updating data";
         }
@@ -471,7 +487,7 @@ public class Database {
         Vector<Subject> toSend = new Vector<>();
         toSend.addElement(toInsert);
         try {
-            this.sendObject(toSend, new Integer(1));
+            this.sendObject(toSend, ServerMain.Qualifier.Add);
         } catch (IOException e1) {
             return"Server sending error";
         }
@@ -516,7 +532,7 @@ public class Database {
         }
         if(isUpdated==Boolean.TRUE){
             try{
-                this.sendObjectUpdate(toSend,oldOne, new Integer(2));
+                this.sendObjectUpdate(toSend,oldOne, ServerMain.Qualifier.Update);
             }catch(IOException e1){
                 return "Error while sending to server";
             }

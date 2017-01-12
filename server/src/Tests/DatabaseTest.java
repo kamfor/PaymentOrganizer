@@ -2,6 +2,7 @@ package Tests;
 
 import client.Database;
 import org.junit.Test;
+import server.ServerMain;
 
 import static org.junit.Assert.*;
 
@@ -138,7 +139,7 @@ public class DatabaseTest {
     public void sendObject() throws Exception {
 
         try{
-            new Database().sendObject(new Object(),new Integer(0));
+            new Database().sendObject(new Object(), ServerMain.Qualifier.Remove);
             fail("expected IllegalArgumentException");
         } catch(IOException e){
 

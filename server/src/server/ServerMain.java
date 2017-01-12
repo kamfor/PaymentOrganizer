@@ -1,13 +1,5 @@
 package server;
 
-// odrzucanie zmian w wyścigu
-// plik konfiguracyjny ze ściezką do bazy danych
-// wykrywanie kolizji przy update wysyłamy zarówno co się zmieniło i z czego się zmieniło
-// w widoku jakoś id reprezentować żeby było ładniej ale to niekoniecznie
-// skrócić funkcje
-// testy tylko logiki
-// logika po stronie serwera
-// krytyczne wartości
 // więcej funkcji enkapsulacja
 //adres ip servera i potr jako parametr uruchomienia
 
@@ -102,11 +94,65 @@ public class ServerMain {
             }
         }
 
-        private void updateIncomingRecords(Object incoming,Object incomingOld) throws IOException { //recognize changes
+        private void updateIncomingRecords(Object incoming,Object incomingOld) throws IOException {
             Vector<Object> temp = (Vector<Object>) incoming;
             Vector<Object> olds = (Vector<Object>) incomingOld;
             if (temp.elementAt(0) instanceof Payment) {
                 database.updatePaymentInMysql((Vector<Payment>) incoming);
+
+
+                if(((Payment) temp.elementAt(0)).value!=((Payment) olds.elementAt(0)).value){
+                    Agent tempAgent;
+                    Subject tempSubject;
+                    Vector<Agent> agentToUpdate = new Vector<>();
+                    Vector<Subject> subjectToUpdate = new Vector<>();
+                    tempAgent = database.getAgentFromPayment((Payment)temp.elementAt(0));
+                    tempAgent.commission +=(((Payment)temp.elementAt(0)).value-((Payment)olds.elementAt(0)).value);
+                    agentToUpdate.addElement(new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission));
+
+                    tempSubject = database.getSubjectFromPayment((Payment)temp.elementAt(0));
+                    tempSubject.bill+=(((Payment)temp.elementAt(0)).value-((Payment)olds.elementAt(0)).value);
+                    subjectToUpdate.addElement(new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill,tempSubject.notes));
+
+                    database.updateAgentInMysql(agentToUpdate);
+                    database.updateSubjectInMysql(subjectToUpdate);
+
+                    writeToClients(agentToUpdate,Qualifier.Update);
+                    writeToClients(subjectToUpdate,Qualifier.Update);
+                    System.out.println("value changed");
+
+                }
+                if(((Payment) temp.elementAt(0)).owner_id!=((Payment) olds.elementAt(0)).owner_id){
+                    Agent tempAgent;
+                    Vector<Agent> agentToUpdate = new Vector<>();
+                    tempAgent = database.getAgentFromPayment((Payment)temp.elementAt(0));
+                    tempAgent.commission +=((Payment)temp.elementAt(0)).value;
+                    agentToUpdate.addElement(new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission));
+                    tempAgent = database.getAgentFromPayment((Payment)olds.elementAt(0));
+                    tempAgent.commission -=((Payment)temp.elementAt(0)).value;
+                    agentToUpdate.addElement(new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission));
+
+                    database.updateAgentInMysql(agentToUpdate);
+                    writeToClients(agentToUpdate,Qualifier.Update);
+                    System.out.println("Owner changed");
+                }
+                if(((Payment) temp.elementAt(0)).subject_id!=((Payment) olds.elementAt(0)).subject_id){
+                    Subject tempSubject;
+                    Vector<Subject> subjectToUpdate = new Vector<>();
+                    tempSubject = database.getSubjectFromPayment((Payment)temp.elementAt(0));
+                    tempSubject.bill+=((Payment)temp.elementAt(0)).value;
+                    subjectToUpdate.addElement(new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill,tempSubject.notes));
+                    database.updateSubjectInMysql(subjectToUpdate);
+                    writeToClients(subjectToUpdate,Qualifier.Update);
+                    tempSubject = database.getSubjectFromPayment((Payment)olds.elementAt(0));
+                    tempSubject.bill-=((Payment)temp.elementAt(0)).value;
+                    subjectToUpdate.addElement(new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill,tempSubject.notes));
+
+                    database.updateSubjectInMysql(subjectToUpdate);
+                    writeToClients(subjectToUpdate,Qualifier.Update);
+                    System.out.println("Subject changed");
+                }
+
             } else if (temp.elementAt(0) instanceof Agent) {
                 database.updateAgentInMysql((Vector<Agent>) incoming);
             } else if (temp.elementAt(0) instanceof Subject) {
@@ -126,21 +172,17 @@ public class ServerMain {
 
                 tempAgent = database.getAgentFromPayment((Payment)temp.elementAt(0));
                 tempAgent.commission=tempAgent.commission+((Payment)temp.elementAt(0)).value;
-                agentToUpdate.addElement(tempAgent);
+                agentToUpdate.addElement(new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission));
 
                 tempSubject = database.getSubjectFromPayment((Payment)temp.elementAt(0));
                 tempSubject.bill=tempSubject.bill+((Payment)temp.elementAt(0)).value;
-                subjectToUpdate.addElement(tempSubject);
-
-                updateIncomingRecords(agentToUpdate,agentToUpdate);
-                updateIncomingRecords(subjectToUpdate,subjectToUpdate);
+                subjectToUpdate.addElement(new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill,tempSubject.notes));
 
                 database.updateAgentInMysql(agentToUpdate);
                 database.updateSubjectInMysql(subjectToUpdate);
 
                 writeToClients(agentToUpdate,Qualifier.Update);
                 writeToClients(subjectToUpdate,Qualifier.Update);
-
             } else if (temp.elementAt(0) instanceof Agent) {
                 database.addAgentToMysql((Vector<Agent>)incoming);
             } else if (temp.elementAt(0) instanceof Subject) {
@@ -160,11 +202,11 @@ public class ServerMain {
 
                 tempAgent = database.getAgentFromPayment((Payment)temp.elementAt(0));
                 tempAgent.commission=tempAgent.commission-((Payment)temp.elementAt(0)).value;
-                agentToUpdate.addElement(tempAgent);
+                agentToUpdate.addElement(new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission));
 
                 tempSubject = database.getSubjectFromPayment((Payment)temp.elementAt(0));
                 tempSubject.bill=tempSubject.bill-((Payment)temp.elementAt(0)).value;
-                subjectToUpdate.addElement(tempSubject);
+                subjectToUpdate.addElement(new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill,tempSubject.notes));
 
                 database.updateAgentInMysql(agentToUpdate);
                 database.updateSubjectInMysql(subjectToUpdate);

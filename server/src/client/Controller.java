@@ -1,7 +1,4 @@
 package client;
-/**
- * Created by kamil on 30.12.16.
- */
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,28 +19,47 @@ import model.Agent;
 import model.Payment;
 import model.Subject;
 
-/**
- * MVC class, event loop controller
- */
 public class Controller {
 
-    ListenForMouse mouseListener = new ListenForMouse();
-    ListenForFocus focusListener = new ListenForFocus();
-    ListenForPaymentAction paymentActionListener  =new ListenForPaymentAction();
-    ListenForAgentAction agentActionListener  =new ListenForAgentAction();
-    ListenForSubjectAction subjectActionListener  =new ListenForSubjectAction();
-    ListenForClickPayment paymentClickListener = new ListenForClickPayment();
-    ListenForClickAgent agentClickListener = new ListenForClickAgent();
-    ListenForClickSubject subjectClickListener = new ListenForClickSubject();
+    private ListenForFocus focusListener = new ListenForFocus();
+    private ListenForPaymentAction paymentActionListener  =new ListenForPaymentAction();
+    private ListenForAgentAction agentActionListener  =new ListenForAgentAction();
+    private ListenForSubjectAction subjectActionListener  =new ListenForSubjectAction();
+    private ListenForClickPayment paymentClickListener = new ListenForClickPayment();
+    private ListenForClickAgent agentClickListener = new ListenForClickAgent();
+    private ListenForClickSubject subjectClickListener = new ListenForClickSubject();
 
     static View gui;
 
-    /**
-     * Class constructor
-     */
     public Controller(){
         gui = new View();
+        setPaymentPanelListeners();
+        setAgentPanelListeners();
+        setSubjectPanelListeners();
+        gui.panel1.errorMessage.setText("");
+    }
 
+    private void setSubjectPanelListeners() {
+        gui.panel3.tfName.addFocusListener(focusListener);
+        gui.panel3.tfPhone.addFocusListener(focusListener);
+        gui.panel3.tfEmail.addFocusListener(focusListener);
+        gui.panel3.tfAddress.addFocusListener(focusListener);
+        gui.panel3.tfNotes.addFocusListener(focusListener);
+        gui.panel3.addRecord.addActionListener(subjectActionListener);
+        gui.panel3.removeRecord.addActionListener(subjectActionListener);
+        gui.panel3.table.getModel().addTableModelListener(subjectClickListener);
+    }
+
+    private void setAgentPanelListeners() {
+        gui.panel2.tfName.addFocusListener(focusListener);
+        gui.panel2.tfPhone.addFocusListener(focusListener);
+        gui.panel2.tfEmail.addFocusListener(focusListener);
+        gui.panel2.addRecord.addActionListener(agentActionListener);
+        gui.panel2.removeRecord.addActionListener(agentActionListener);
+        gui.panel2.table.getModel().addTableModelListener(agentClickListener);
+    }
+
+    private void setPaymentPanelListeners() {
         gui.panel1.tfType.addFocusListener(focusListener);
         gui.panel1.tfValue.addFocusListener(focusListener);
         gui.panel1.tfBeginDate.addFocusListener(focusListener);
@@ -52,36 +68,11 @@ public class Controller {
         gui.panel1.tfSubject.addFocusListener(focusListener);
         gui.panel1.tfDocument.addFocusListener(focusListener);
         gui.panel1.tfNotes.addFocusListener(focusListener);
-        gui.panel1.table.addMouseListener(mouseListener);
         gui.panel1.addRecord.addActionListener(paymentActionListener);
         gui.panel1.removeRecord.addActionListener(paymentActionListener);
-
-        gui.panel2.tfName.addFocusListener(focusListener);
-        gui.panel2.tfPhone.addFocusListener(focusListener);
-        gui.panel2.tfEmail.addFocusListener(focusListener);
-        gui.panel2.table.addMouseListener(mouseListener);
-        gui.panel2.addRecord.addActionListener(agentActionListener);
-        gui.panel2.removeRecord.addActionListener(agentActionListener);
-
-        gui.panel3.tfName.addFocusListener(focusListener);
-        gui.panel3.tfPhone.addFocusListener(focusListener);
-        gui.panel3.tfEmail.addFocusListener(focusListener);
-        gui.panel3.tfAddress.addFocusListener(focusListener);
-        gui.panel3.tfNotes.addFocusListener(focusListener);
-        gui.panel3.table.addMouseListener(mouseListener);
-        gui.panel3.addRecord.addActionListener(subjectActionListener);
-        gui.panel3.removeRecord.addActionListener(subjectActionListener);
-
         gui.panel1.table.getModel().addTableModelListener(paymentClickListener);
-        gui.panel2.table.getModel().addTableModelListener(agentClickListener);
-        gui.panel3.table.getModel().addTableModelListener(subjectClickListener);
-
-        gui.panel1.errorMessage.setText("");
     }
 
-    /**
-     * Payments panel button events listener
-     */
     private class ListenForPaymentAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == gui.panel1.addRecord) {
@@ -100,9 +91,6 @@ public class Controller {
         }
     }
 
-    /**
-     * Agents panel button events listener
-     */
     private class ListenForAgentAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == gui.panel2.addRecord) {
@@ -115,9 +103,6 @@ public class Controller {
         }
     }
 
-    /**
-     * Subjects panel button events listener
-     */
     private class ListenForSubjectAction implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == gui.panel3.addRecord) {
@@ -132,9 +117,6 @@ public class Controller {
         }
     }
 
-    /**
-     * Text field focused/unfocused listener
-     */
     private class ListenForFocus implements FocusListener {
         public void focusGained(FocusEvent e) { // If a text field gains focus and has the default text, remove the text
             if(gui.panel1.tfType.getText().equals("Type") && e.getSource() == gui.panel1.tfType) {
@@ -209,58 +191,34 @@ public class Controller {
         }
     }
 
-    /**
-     * Mouse event listener
-     * @deprecated
-     */
-    private class ListenForMouse extends MouseAdapter {
-        public void mouseReleased(MouseEvent mouseEvent) {
-            // If the mouse is released and the click was a right click
-            if (SwingUtilities.isRightMouseButton(mouseEvent)) {
-                // Create a dialog for the user to enter new data
-                String value = JOptionPane.showInputDialog(null, "Enter Cell Value:");
-                if(value != null) { // If they entered info, update the database
-
-                }
-            }
-        }
-    }
-
-    /**
-     * Payment panel field edited listener
-     */
     private class ListenForClickPayment implements TableModelListener{
         public void tableChanged(TableModelEvent e) {
             if(e.getType()==TableModelEvent.UPDATE){
                 gui.panel1.errorMessage.setText(
                         ClientMain.db.updatePayment(gui.panel1.table.getSelectedRow(),
                         gui.panel1.table.getValueAt(e.getLastRow(),e.getColumn()),
-                        ClientMain.db.defaultTableModelPayment.getColumnName(gui.panel1.table.getSelectedColumn())));
+                        Database.defaultTableModelPayment.getColumnName(gui.panel1.table.getSelectedColumn())));
             }
         }
     }
-    /**
-     * Agent panel field edited listener
-     */
+
     private class ListenForClickAgent implements TableModelListener{
         public void tableChanged(TableModelEvent e) {
             if(e.getType()==TableModelEvent.UPDATE){
                 gui.panel2.errorMessage.setText(ClientMain.db.updateAgent(gui.panel2.table.getSelectedRow(),
                         gui.panel2.table.getValueAt(e.getLastRow(),e.getColumn()),
-                        ClientMain.db.defaultTableModelAgent.getColumnName(gui.panel2.table.getSelectedColumn())));
+                        Database.defaultTableModelAgent.getColumnName(gui.panel2.table.getSelectedColumn())));
             }
         }
     }
 
-    /**
-     * Subject panel field edited listener
-     */
+
     private class ListenForClickSubject implements TableModelListener{
         public void tableChanged(TableModelEvent e) {
             if(e.getType()==TableModelEvent.UPDATE){
                 gui.panel3.errorMessage.setText(ClientMain.db.updateSubject(gui.panel3.table.getSelectedRow(),
                         gui.panel3.table.getValueAt(e.getLastRow(),e.getColumn()),
-                        ClientMain.db.defaultTableModelAgent.getColumnName(gui.panel3.table.getSelectedColumn())));
+                        Database.defaultTableModelSubject.getColumnName(gui.panel3.table.getSelectedColumn())));
             }
         }
     }

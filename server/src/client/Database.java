@@ -15,20 +15,16 @@ import java.text.SimpleDateFormat;
 import java.util.Vector;
 
 import javax.swing.*;
-import javax.swing.plaf.synth.SynthButtonUI;
 import javax.swing.table.DefaultTableModel;
 
-
-/**
- * Server redirecting class, able to sending data through socket,
- * operate on local data agreed in vectors
- */
 public class Database {
 
     private static Socket socket;
     protected static ObjectOutputStream oos;
     protected static ObjectInputStream ios;
-    private static Object[][] databaseResults;
+    private static Object[][] databasePaymentResults;
+    private static Object[][] databaseAgentResults;
+    private static Object[][] databaseSubjectResults;
     public static DefaultTableModel defaultTableModelPayment;
     public static DefaultTableModel defaultTableModelAgent;
     public static DefaultTableModel defaultTableModelSubject;
@@ -162,9 +158,9 @@ public class Database {
             throw new IOException();
         }
 
-        defaultTableModelPayment = new DefaultTableModel(databaseResults, Payment.paymentColumns);
-        defaultTableModelAgent = new DefaultTableModel(databaseResults, Agent.agentColumns);
-        defaultTableModelSubject = new DefaultTableModel(databaseResults, Subject.subjectColumns);
+        defaultTableModelPayment = new DefaultTableModel(databasePaymentResults, Payment.paymentColumns);
+        defaultTableModelAgent = new DefaultTableModel(databaseAgentResults, Agent.agentColumns);
+        defaultTableModelSubject = new DefaultTableModel(databaseSubjectResults, Subject.subjectColumns);
     }
 
     public void connectToServer() throws IOException {
@@ -195,27 +191,10 @@ public class Database {
     }
 
     public String removePayment(int rowIndex){
-
         Vector<Payment> toSend = new Vector<>();
         toSend.addElement(rowDataPayment.elementAt(rowIndex));
-
-        /*Vector<Agent> agentToUpdate = new Vector<>();
-        Vector<Subject> subjectToUpdate = new Vector<>();
-        Agent tempAgent;
-        Subject tempSubject;
-
-        tempAgent = rowDataAgent.elementAt(getAgentRow(toSend.elementAt(0).owner_id));
-        tempAgent.commission-=toSend.elementAt(0).value;
-        agentToUpdate.addElement(tempAgent);
-
-        tempSubject = rowDataSubject.elementAt(getSubjectRow(toSend.elementAt(0).subject_id));
-        tempSubject.bill-=toSend.elementAt(0).value;
-        subjectToUpdate.addElement(tempSubject);*/
-
         try{
             this.sendObject(toSend, ServerMain.Qualifier.Remove);
-            //this.sendObject(agentToUpdate, ServerMain.Qualifier.Update);
-            //this.sendObject(subjectToUpdate, ServerMain.Qualifier.Update);
         } catch(IOException e1) {
             return "Error while updating data";
         }
@@ -223,7 +202,6 @@ public class Database {
     }
 
     public String addPayment(String type, String value, String beginDate, String endDate, String owner, String subject, String document, String notes) {
-
         java.util.Date dateBeginDate, dateEndDate;
         Float numberValue;
         try{
@@ -248,35 +226,18 @@ public class Database {
         int agentRow = getAgentRow(Integer.valueOf(owner));
         if(agentRow>=0);
         else return "Owner doesn't exist"; //change to value receive from server
-
         int subjectRow = getSubjectRow(Integer.valueOf(subject));
         if(subjectRow>=0);
         else return "Subject doesn't exist";
-
         int paymentID = 0;
         for(Payment item: rowDataPayment){
             if(item.id>paymentID)paymentID = item.id;
         }
         Payment toInsert = new Payment(paymentID+1,Boolean.FALSE, type, numberValue, dateBeginDate, dateEndDate, Integer.valueOf(owner), Integer.valueOf(subject), document, notes);
-
         Vector<Payment> toSend = new Vector<>();
         toSend.addElement(toInsert);
-        /*Vector<Agent> agentToUpdate = new Vector<>();
-        Vector<Subject> subjectToUpdate = new Vector<>();
-        Agent tempAgent;
-        Subject tempSubject;
-
-        tempAgent = rowDataAgent.elementAt(getAgentRow(toSend.elementAt(0).owner_id));
-        tempAgent.commission+=toSend.elementAt(0).value;
-        agentToUpdate.addElement(tempAgent);
-
-        tempSubject = rowDataSubject.elementAt(getSubjectRow(toSend.elementAt(0).subject_id));
-        tempSubject.bill+=toSend.elementAt(0).value;
-        subjectToUpdate.addElement(tempSubject);*/
         try {
             this.sendObject(toSend, ServerMain.Qualifier.Add);
-            //this.sendObjectUpdate(agentToUpdate,agentToUpdate, ServerMain.Qualifier.Update);
-            //this.sendObjectUpdate(subjectToUpdate,subjectToUpdate, ServerMain.Qualifier.Update);
         } catch (IOException e1) {
             return "Error while sending data to server";
         }
@@ -284,22 +245,13 @@ public class Database {
     }
 
     public String updatePayment(int rowIndex, Object updatedField, String updatedColumn){
-
-        Vector<Agent> agentToUpdate = new Vector<>();
-        Vector<Subject> subjectToUpdate = new Vector<>();
-        Agent tempAgent;
-        Subject tempSubject;
         Float numberValue;
-
         Vector<Payment> toSend = new Vector<>();
         Payment temp = rowDataPayment.elementAt(rowIndex);
         toSend.addElement(rowDataPayment.elementAt(rowIndex));
         Vector<Payment> oldOne = new Vector<>();
         oldOne.addElement(new Payment(temp.id,temp.accepted,temp.type,temp.value,temp.begin_date,temp.end_date,temp.owner_id,temp.subject_id,temp.document_name,temp.notes));
-
-        Boolean valueChanged = Boolean.FALSE;
         Boolean isUpdated = Boolean.FALSE;
-
         switch(updatedColumn) {
             case "Type":
                 toSend.elementAt(0).type = (String)updatedField;
@@ -310,60 +262,37 @@ public class Database {
                 isUpdated = Boolean.TRUE;
                 break;
             case "Value":
-                try{
-                    numberValue = Float.valueOf((String)updatedField);
-                }
-                catch(NumberFormatException e1){
-                    return "Incorrect Value";
-                }
-                tempAgent = rowDataAgent.elementAt(getAgentRow(toSend.elementAt(0).owner_id));
-                tempAgent.commission +=(numberValue-toSend.elementAt(0).value);
-                agentToUpdate.addElement(tempAgent);
-
-                tempSubject = rowDataSubject.elementAt(getSubjectRow(toSend.elementAt(0).subject_id));
-                tempSubject.bill+=(numberValue-toSend.elementAt(0).value);
-                subjectToUpdate.addElement(tempSubject);
-
+                try{numberValue = Float.valueOf((String)updatedField);}
+                catch(NumberFormatException e1){ return "Incorrect Value";}
                 toSend.elementAt(0).value = numberValue;
                 isUpdated = Boolean.TRUE;
-                valueChanged = Boolean.TRUE;
                 break;
             case "Begin Date":
                 try{
                     toSend.elementAt(0).begin_date = getADate((String)updatedField);
                     isUpdated = Boolean.TRUE;
-                }catch(ParseException e2){
-                    return"Unparseable Begin Date";
-                }
+                }catch(ParseException e2){return"Unparseable Begin Date";}
                 break;
             case "End Date":
                 try{
                     toSend.elementAt(0).end_date = getADate((String)updatedField);
                     isUpdated = Boolean.TRUE;
-                }catch(ParseException e2){
-                    return"Unparseable End Date";
-                }
+                }catch(ParseException e2){return"Unparseable End Date";}
                 break;
             case "Owner":
                 int updateAgentRow = getAgentRow(Integer.valueOf((String)updatedField));
                 if(updateAgentRow>=0){
-                    //updateAgent(getAgentRow(toSend.elementAt(0).owner_id),-1*toSend.elementAt(0).value,"Commission");
                     toSend.elementAt(0).owner_id = Integer.valueOf((String)updatedField);
-                    //updateAgent(updateAgentRow,toSend.elementAt(0).value,"Commission");
                     isUpdated = Boolean.TRUE;
                 }else return "Owner doesn't exist";
-
                 break;
             case "Subject":
                 int updateSubjectRow = getSubjectRow(Integer.valueOf((String)updatedField));
                 if(updateSubjectRow>=0){
-                    //updateSubject(getSubjectRow(toSend.elementAt(0).subject_id),-1*toSend.elementAt(0).value,"Bill");
                     toSend.elementAt(0).subject_id = Integer.valueOf((String)updatedField);
-                    //updateSubject(updateSubjectRow,toSend.elementAt(0),"Bill");
                     isUpdated = Boolean.TRUE;
                 }
                 else return "Subject doesn't exist";
-
                 break;
             case "Document":
                 toSend.elementAt(0).document_name = (String)updatedField;
@@ -375,31 +304,23 @@ public class Database {
                 break;
         }
         if(isUpdated){
-            try{
-                this.sendObjectUpdate(toSend,oldOne, ServerMain.Qualifier.Update);
-                if(valueChanged){
-                    //this.sendObjectUpdate(agentToUpdate,agentToUpdate, ServerMain.Qualifier.Update);
-                    //this.sendObjectUpdate(subjectToUpdate,agentToUpdate, ServerMain.Qualifier.Update);
-                }
-            }catch(IOException e1){
-                return "Error while sending to server";
-            }
+            try{this.sendObjectUpdate(toSend,oldOne, ServerMain.Qualifier.Update);}
+            catch(IOException e1){return "Error while sending to server";}
         }
         return"";
     }
 
     public String removeAgent(int rowIndex){
 
-        Vector<Agent> tosend = new Vector<>();
-        tosend.addElement(rowDataAgent.elementAt(rowIndex));
-
+        Vector<Agent> toSend = new Vector<>();
+        toSend.addElement(rowDataAgent.elementAt(rowIndex));
         for(Payment item:rowDataPayment){
-            if(item.owner_id == tosend.elementAt(0).id){
+            if(item.owner_id == toSend.elementAt(0).id){
                 return "Agent exist in Payment table";
             }
         }
         try{
-            this.sendObject(tosend, ServerMain.Qualifier.Remove);
+            this.sendObject(toSend, ServerMain.Qualifier.Remove);
         } catch( IOException e1) {
             return "Error while updating data";
         }
@@ -410,7 +331,7 @@ public class Database {
 
         int agentID=0;
 
-        for(Agent item: this.rowDataAgent){
+        for(Agent item: rowDataAgent){
             if(item.id>agentID)agentID = item.id;
         }
         Agent toInsert = new Agent(agentID+1,name,phone,email,new Float(0.0));
@@ -427,11 +348,9 @@ public class Database {
     public String updateAgent(int rowIndex, Object updatedField, String updatedColumn){
 
         Vector<Agent> toSend = new Vector<>();
-        toSend.addElement(this.rowDataAgent.elementAt(rowIndex));
-
+        toSend.addElement(rowDataAgent.elementAt(rowIndex));
         Vector<Agent>  oldOne = new Vector<>();
-        oldOne.addElement(this.rowDataAgent.elementAt(rowIndex));
-
+        oldOne.addElement(rowDataAgent.elementAt(rowIndex));
         Boolean isUpdated = false;
 
         switch(updatedColumn) {
@@ -447,7 +366,7 @@ public class Database {
                 toSend.elementAt(0).email = (String)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
-            case "Commission": //use only in logic
+            case "Commission":
                 toSend.elementAt(0).commission += (Float)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
@@ -498,11 +417,9 @@ public class Database {
     public String updateSubject(int rowIndex, Object updatedField, String updatedColumn){
 
         Vector<Subject> toSend = new Vector<>();
-        toSend.addElement(this.rowDataSubject.elementAt(rowIndex));
-
+        toSend.addElement(rowDataSubject.elementAt(rowIndex));
         Vector<Subject> oldOne = new Vector<>();
-        oldOne.addElement(this.rowDataSubject.elementAt(rowIndex));
-
+        oldOne.addElement(rowDataSubject.elementAt(rowIndex));
         Boolean isUpdated = false;
 
         switch(updatedColumn) {
@@ -542,23 +459,17 @@ public class Database {
     }
 
     public static int getPaymentRow(int id){
-        for(int i=0; i<rowDataPayment.size(); i++){
-            if(rowDataPayment.elementAt(i).id==id)return i;
-        }
+        for(int i=0; i<rowDataPayment.size(); i++)if(rowDataPayment.elementAt(i).id==id)return i;
         return -1;
     }
 
     public static int getAgentRow(int id){
-        for(int i=0; i<rowDataAgent.size(); i++){
-            if(rowDataAgent.elementAt(i).id==id)return i;
-        }
+        for(int i=0; i<rowDataAgent.size(); i++)if(rowDataAgent.elementAt(i).id==id)return i;
         return -1;
     }
 
     public static int getSubjectRow(int id){
-        for(int i=0; i<rowDataSubject.size(); i++){
-            if(rowDataSubject.elementAt(i).id==id)return i;
-        }
+        for(int i=0; i<rowDataSubject.size(); i++)if(rowDataSubject.elementAt(i).id==id)return i;
         return -1;
     }
 

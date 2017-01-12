@@ -45,44 +45,52 @@ public class DatabaseConnector {
 
     public void readMysqlData() {
         try {
-            Statement sqlPaymentStatement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String selectPayment = "SELECT id, accepted, type, value, begin_date, end_date, owner_id, subject_id, document_name, notes FROM payments";
-            rowsPayment = sqlPaymentStatement.executeQuery(selectPayment);
+            readPaymentTable();
+            readAgentTable();
+            readSubjectTable();
 
-            Statement sqlAgentStatement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String selectAgent = "SELECT id, name, phone, email, commission FROM agents";
-            rowsAgent = sqlAgentStatement.executeQuery(selectAgent);
-
-            Statement sqlSubjectStatement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String selectSubject = "SELECT id, name, phone, email, address, bill, notes FROM subjects";
-            rowsSubject = sqlSubjectStatement.executeQuery(selectSubject);
-
-            dataPayment = new Vector<>();
-            while (rowsPayment.next()) {
-                Payment sample = new Payment(rowsPayment.getInt(1), rowsPayment.getBoolean(2), rowsPayment.getString(3),
-                        rowsPayment.getFloat(4), rowsPayment.getDate(5), rowsPayment.getDate(6),
-                        rowsPayment.getInt(7), rowsPayment.getInt(8), rowsPayment.getString(9),
-                        rowsPayment.getString(10));
-                dataPayment.addElement(sample);
-            }
-
-            dataAgent = new Vector<>();
-            while (rowsAgent.next()) {
-                Agent sample = new Agent(rowsAgent.getInt(1), rowsAgent.getString(2), rowsAgent.getString(3), rowsAgent.getString(4), rowsAgent.getFloat(5));
-                dataAgent.addElement(sample);
-            }
-
-            dataSubject = new Vector<>();
-            while (rowsSubject.next()) {
-                Subject sample = new Subject(rowsSubject.getInt(1), rowsSubject.getString(2), rowsSubject.getString(3),
-                        rowsSubject.getString(4), rowsSubject.getString(5), rowsSubject.getFloat(6),
-                        rowsSubject.getString(7));
-                dataSubject.addElement(sample);
-            }
         } catch (SQLException e) {
             System.out.println("Data read error" + e.getMessage());
         }
         System.out.println("Data read!");
+    }
+
+    private void readSubjectTable() throws SQLException {
+        Statement sqlSubjectStatement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        String selectSubject = "SELECT id, name, phone, email, address, bill, notes FROM subjects";
+        rowsSubject = sqlSubjectStatement.executeQuery(selectSubject);
+        dataSubject = new Vector<>();
+        while (rowsSubject.next()) {
+            Subject sample = new Subject(rowsSubject.getInt(1), rowsSubject.getString(2), rowsSubject.getString(3),
+                    rowsSubject.getString(4), rowsSubject.getString(5), rowsSubject.getFloat(6),
+                    rowsSubject.getString(7));
+            dataSubject.addElement(sample);
+        }
+    }
+
+    private void readAgentTable() throws SQLException {
+        Statement sqlAgentStatement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        String selectAgent = "SELECT id, name, phone, email, commission FROM agents";
+        rowsAgent = sqlAgentStatement.executeQuery(selectAgent);
+        dataAgent = new Vector<>();
+        while (rowsAgent.next()) {
+            Agent sample = new Agent(rowsAgent.getInt(1), rowsAgent.getString(2), rowsAgent.getString(3), rowsAgent.getString(4), rowsAgent.getFloat(5));
+            dataAgent.addElement(sample);
+        }
+    }
+
+    private void readPaymentTable() throws SQLException {
+        Statement sqlPaymentStatement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        String selectPayment = "SELECT id, accepted, type, value, begin_date, end_date, owner_id, subject_id, document_name, notes FROM payments";
+        rowsPayment = sqlPaymentStatement.executeQuery(selectPayment);
+        dataPayment = new Vector<>();
+        while (rowsPayment.next()) {
+            Payment sample = new Payment(rowsPayment.getInt(1), rowsPayment.getBoolean(2), rowsPayment.getString(3),
+                    rowsPayment.getFloat(4), rowsPayment.getDate(5), rowsPayment.getDate(6),
+                    rowsPayment.getInt(7), rowsPayment.getInt(8), rowsPayment.getString(9),
+                    rowsPayment.getString(10));
+            dataPayment.addElement(sample);
+        }
     }
 
     public void addSubjectToMysql(Vector<Subject> data) {

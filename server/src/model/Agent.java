@@ -3,10 +3,6 @@ package model;
 import java.io.Serializable;
 import java.util.Vector;
 
-/**
- * Created by kamil on 27.11.16.
- * Data structure class
- */
 public class Agent implements Serializable {
     public int id;
     public String name;
@@ -23,9 +19,6 @@ public class Agent implements Serializable {
         commission = par_commission;
     }
 
-    /**
-     * @return String vector
-     */
     public Vector<String> toVector(){
         Vector<String> temp = new Vector<String>();
         temp.addElement(String.valueOf(id));

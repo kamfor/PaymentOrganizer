@@ -3,10 +3,6 @@ package model;
 import java.io.Serializable;
 import java.util.Vector;
 
-/**
- * Created by kamil on 27.11.16.
- * Data structure class
- */
 public class Subject implements Serializable {
     public int id;
     public String name;
@@ -27,9 +23,6 @@ public class Subject implements Serializable {
         notes = par_notes;
     }
 
-    /**
-     * @return String vector
-     */
     public Vector<String> toVector(){
         Vector<String> temp = new Vector<String>();
         temp.addElement(String.valueOf(id));

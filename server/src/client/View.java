@@ -1,8 +1,4 @@
 package client;
-/**
- * Created by kamil on 18.12.16.
- * MVC view class
- */
 
 import javax.swing.*;
 import java.awt.BorderLayout;
@@ -32,10 +28,7 @@ public class View extends JFrame{
         this.setVisible(true);
     }
 
-    /**
-     * Payment frame panel
-     * */
-    class paymentPanel extends JInternalFrame{
+    public class paymentPanel extends JInternalFrame{
 
         public JButton addRecord, removeRecord;
         public JLabel errorMessage;
@@ -44,24 +37,32 @@ public class View extends JFrame{
 
         public paymentPanel() {
             super();
-            table = new JTable(ClientMain.db.defaultTableModelPayment){
-                @Override
-                public Class getColumnClass(int column) {
-                    switch (column) {
-                        case 0:
-                            return Boolean.class;
-                        default:
-                            return String.class;
-                    }
-                }
-            };
+            preparePaymentTableView();
 
-            table.setRowHeight(table.getRowHeight() + 8);
-            table.setAutoCreateRowSorter(true);
+            JScrollPane scrollPane = getjScrollPane();
+            JPanel inputPanel = getjPanelInput();
+            JPanel errorPanel = getjPanelError();
 
+            this.add(inputPanel, BorderLayout.SOUTH);
+            this.add(errorPanel, BorderLayout.NORTH);
+            this.add(scrollPane, BorderLayout.CENTER);
+        }
+
+        private JPanel getjPanelError() {
+            errorMessage = new JLabel("");
+            errorMessage.setForeground(Color.red);
+            JPanel errorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            errorPanel.add(errorMessage);
+            return errorPanel;
+        }
+
+        private JScrollPane getjScrollPane() {
             JScrollPane scrollPane = new JScrollPane(table);
             this.add(scrollPane, BorderLayout.CENTER);
+            return scrollPane;
+        }
 
+        private JPanel getjPanelInput() {
             addRecord = new JButton("Add Record");
             removeRecord = new JButton("Remove Record");
 
@@ -85,22 +86,29 @@ public class View extends JFrame{
             inputPanel.add(tfNotes);
             inputPanel.add(addRecord);
             inputPanel.add(removeRecord);
+            return inputPanel;
+        }
 
-            errorMessage = new JLabel("");
-            errorMessage.setForeground(Color.red);
-            JPanel errorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            errorPanel.add(errorMessage);
+        private void preparePaymentTableView() {
+            table = new JTable(Database.defaultTableModelPayment){
+                @Override
+                public Class getColumnClass(int column) {
+                    switch (column) {
+                        case 0:
+                            return Boolean.class;
+                        default:
+                            return String.class;
+                    }
+                }
+            };
 
-            this.add(inputPanel, BorderLayout.SOUTH);
-            this.add(errorPanel, BorderLayout.NORTH);
-            this.add(scrollPane, BorderLayout.CENTER);
+            table.setRowHeight(table.getRowHeight() + 8);
+            table.setAutoCreateRowSorter(true);
         }
 
     }
-    /**
-     * Agent frame panel
-     */
-    class agentPanel extends JInternalFrame{
+
+    public class agentPanel extends JInternalFrame{
         public JButton addRecord, removeRecord;
         public JLabel errorMessage;
         public JTextField tfName, tfPhone, tfEmail;
@@ -108,18 +116,25 @@ public class View extends JFrame{
 
         public agentPanel() {
             super();
-            table = new JTable(ClientMain.db.defaultTableModelAgent){
-                public boolean isCellEditable(int row, int column) {
-                    return column == 1 || column == 2 || column == 3;
-                }
-            };
+            prepareAgentTableView();
+            JScrollPane scrollPane = getjScrollPane();
+            JPanel inputPanel = getjPanelInput();
+            JPanel errorPanel = getjPanelError();
 
-            table.setRowHeight(table.getRowHeight() + 8);
-            table.setAutoCreateRowSorter(true);
-
-            JScrollPane scrollPane = new JScrollPane(table);
+            this.add(inputPanel, BorderLayout.SOUTH);
+            this.add(errorPanel, BorderLayout.NORTH);
             this.add(scrollPane, BorderLayout.CENTER);
+        }
 
+        private JPanel getjPanelError() {
+            errorMessage = new JLabel("");
+            errorMessage.setForeground(Color.red);
+            JPanel errorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            errorPanel.add(errorMessage);
+            return errorPanel;
+        }
+
+        private JPanel getjPanelInput() {
             addRecord = new JButton("Add Record");
             removeRecord = new JButton("Remove Record");
 
@@ -133,22 +148,28 @@ public class View extends JFrame{
             inputPanel.add(tfPhone);
             inputPanel.add(addRecord);
             inputPanel.add(removeRecord);
+            return inputPanel;
+        }
 
-            errorMessage = new JLabel("");
-            errorMessage.setForeground(Color.red);
-            JPanel errorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            errorPanel.add(errorMessage);
-
-            this.add(inputPanel, BorderLayout.SOUTH);
-            this.add(errorPanel, BorderLayout.NORTH);
+        private JScrollPane getjScrollPane() {
+            JScrollPane scrollPane = new JScrollPane(table);
             this.add(scrollPane, BorderLayout.CENTER);
+            return scrollPane;
+        }
+
+        private void prepareAgentTableView() {
+            table = new JTable(Database.defaultTableModelAgent){
+                public boolean isCellEditable(int row, int column) {
+                    return column == 1 || column == 2 || column == 3;
+                }
+            };
+            table.setRowHeight(table.getRowHeight() + 8);
+            table.setAutoCreateRowSorter(true);
         }
 
     }
-    /**
-     * Subject frame panel
-     */
-    class subjectPanel extends JInternalFrame{
+
+    public class subjectPanel extends JInternalFrame{
         public JButton addRecord, removeRecord;
         public JLabel errorMessage;
         public JTextField tfName, tfPhone, tfEmail, tfAddress, tfNotes;
@@ -156,18 +177,26 @@ public class View extends JFrame{
 
         public subjectPanel() {
             super();
-            table = new JTable(ClientMain.db.defaultTableModelSubject){
-                public boolean isCellEditable(int row, int column) {
-                    return column ==1 || column == 2 || column == 3 || column == 4 || column == 6;
-                }
-            };
+            prepareSubjectTableView();
 
-            table.setRowHeight(table.getRowHeight() + 8);
-            table.setAutoCreateRowSorter(true);
+            JScrollPane scrollPane = getjScrollPane();
+            JPanel inputPanel = getjPanelInput();
+            JPanel errorPanel = getjPanelError();
 
-            JScrollPane scrollPane = new JScrollPane(table);
+            this.add(inputPanel, BorderLayout.SOUTH);
+            this.add(errorPanel, BorderLayout.NORTH);
             this.add(scrollPane, BorderLayout.CENTER);
+        }
 
+        private JPanel getjPanelError() {
+            errorMessage = new JLabel("");
+            errorMessage.setForeground(Color.red);
+            JPanel errorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            errorPanel.add(errorMessage);
+            return errorPanel;
+        }
+
+        private JPanel getjPanelInput() {
             addRecord = new JButton("Add Record");
             removeRecord = new JButton("Remove Record");
 
@@ -185,18 +214,25 @@ public class View extends JFrame{
             inputPanel.add(tfNotes);
             inputPanel.add(addRecord);
             inputPanel.add(removeRecord);
+            return inputPanel;
+        }
 
-            errorMessage = new JLabel("");
-            errorMessage.setForeground(Color.red);
-            JPanel errorPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            errorPanel.add(errorMessage);
-
-            this.add(inputPanel, BorderLayout.SOUTH);
-            this.add(errorPanel, BorderLayout.NORTH);
+        private JScrollPane getjScrollPane() {
+            JScrollPane scrollPane = new JScrollPane(table);
             this.add(scrollPane, BorderLayout.CENTER);
+            return scrollPane;
+        }
+
+        private void prepareSubjectTableView() {
+            table = new JTable(Database.defaultTableModelSubject){
+                public boolean isCellEditable(int row, int column) {
+                    return column ==1 || column == 2 || column == 3 || column == 4 || column == 6;
+                }
+            };
+            table.setRowHeight(table.getRowHeight() + 8);
+            table.setAutoCreateRowSorter(true);
         }
     }
-
 }
 
 

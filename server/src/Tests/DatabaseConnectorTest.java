@@ -9,9 +9,6 @@ import server.DatabaseConnector;
 
 import java.util.Vector;
 
-/**
- * Created by kamil on 07.01.17.
- */
 public class DatabaseConnectorTest {
 
     DatabaseConnector testDatabase = new DatabaseConnector();

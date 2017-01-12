@@ -17,7 +17,7 @@ import java.util.Vector;
 public class ServerMain {
     public static Vector<ClientHandler> clients = new Vector<>();
     public enum Qualifier {
-        Remove, Add, Update, Message;
+        Remove, Add, Update, Message
     }
 
     public static void main(String[] args) throws IOException {
@@ -96,61 +96,27 @@ public class ServerMain {
 
         private void updateIncomingRecords(Object incoming,Object incomingOld) throws IOException {
             Vector<Object> temp = (Vector<Object>) incoming;
-            Vector<Object> olds = (Vector<Object>) incomingOld;
+            Vector<Object> oldOne = (Vector<Object>) incomingOld;
             if (temp.elementAt(0) instanceof Payment) {
                 database.updatePaymentInMysql((Vector<Payment>) incoming);
 
-
-                if(((Payment) temp.elementAt(0)).value!=((Payment) olds.elementAt(0)).value){
-                    Agent tempAgent;
-                    Subject tempSubject;
-                    Vector<Agent> agentToUpdate = new Vector<>();
-                    Vector<Subject> subjectToUpdate = new Vector<>();
-                    tempAgent = database.getAgentFromPayment((Payment)temp.elementAt(0));
-                    tempAgent.commission +=(((Payment)temp.elementAt(0)).value-((Payment)olds.elementAt(0)).value);
-                    agentToUpdate.addElement(new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission));
-
-                    tempSubject = database.getSubjectFromPayment((Payment)temp.elementAt(0));
-                    tempSubject.bill+=(((Payment)temp.elementAt(0)).value-((Payment)olds.elementAt(0)).value);
-                    subjectToUpdate.addElement(new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill,tempSubject.notes));
-
+                if(((Payment) temp.elementAt(0)).value!=((Payment) oldOne.elementAt(0)).value){
+                    Vector<Agent> agentToUpdate = getAgentsValueDependent(temp, oldOne);
+                    Vector<Subject> subjectToUpdate = getSubjectsValueDependent(temp, oldOne);
                     database.updateAgentInMysql(agentToUpdate);
                     database.updateSubjectInMysql(subjectToUpdate);
-
                     writeToClients(agentToUpdate,Qualifier.Update);
                     writeToClients(subjectToUpdate,Qualifier.Update);
-                    System.out.println("value changed");
-
                 }
-                if(((Payment) temp.elementAt(0)).owner_id!=((Payment) olds.elementAt(0)).owner_id){
-                    Agent tempAgent;
-                    Vector<Agent> agentToUpdate = new Vector<>();
-                    tempAgent = database.getAgentFromPayment((Payment)temp.elementAt(0));
-                    tempAgent.commission +=((Payment)temp.elementAt(0)).value;
-                    agentToUpdate.addElement(new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission));
-                    tempAgent = database.getAgentFromPayment((Payment)olds.elementAt(0));
-                    tempAgent.commission -=((Payment)temp.elementAt(0)).value;
-                    agentToUpdate.addElement(new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission));
-
+                if(((Payment) temp.elementAt(0)).owner_id!=((Payment) oldOne.elementAt(0)).owner_id){
+                    Vector<Agent> agentToUpdate = getAgentsOwnerDependent(temp, oldOne);
                     database.updateAgentInMysql(agentToUpdate);
                     writeToClients(agentToUpdate,Qualifier.Update);
-                    System.out.println("Owner changed");
                 }
-                if(((Payment) temp.elementAt(0)).subject_id!=((Payment) olds.elementAt(0)).subject_id){
-                    Subject tempSubject;
-                    Vector<Subject> subjectToUpdate = new Vector<>();
-                    tempSubject = database.getSubjectFromPayment((Payment)temp.elementAt(0));
-                    tempSubject.bill+=((Payment)temp.elementAt(0)).value;
-                    subjectToUpdate.addElement(new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill,tempSubject.notes));
+                if(((Payment) temp.elementAt(0)).subject_id!=((Payment) oldOne.elementAt(0)).subject_id){
+                    Vector<Subject> subjectToUpdate = getSubjectsOwnerDependent(temp, oldOne);
                     database.updateSubjectInMysql(subjectToUpdate);
                     writeToClients(subjectToUpdate,Qualifier.Update);
-                    tempSubject = database.getSubjectFromPayment((Payment)olds.elementAt(0));
-                    tempSubject.bill-=((Payment)temp.elementAt(0)).value;
-                    subjectToUpdate.addElement(new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill,tempSubject.notes));
-
-                    database.updateSubjectInMysql(subjectToUpdate);
-                    writeToClients(subjectToUpdate,Qualifier.Update);
-                    System.out.println("Subject changed");
                 }
 
             } else if (temp.elementAt(0) instanceof Agent) {
@@ -161,26 +127,56 @@ public class ServerMain {
             writeToClients(incoming, Qualifier.Update);
         }
 
+        private Vector<Subject> getSubjectsOwnerDependent(Vector<Object> temp, Vector<Object> oldOne) {
+            Subject tempSubject;
+            Vector<Subject> subjectToUpdate = new Vector<>();
+            tempSubject = database.getSubjectFromPayment((Payment)temp.elementAt(0));
+            tempSubject.bill+=((Payment)temp.elementAt(0)).value;
+            subjectToUpdate.addElement(new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill,tempSubject.notes));
+            tempSubject = database.getSubjectFromPayment((Payment)oldOne.elementAt(0));
+            tempSubject.bill-=((Payment)temp.elementAt(0)).value;
+            subjectToUpdate.addElement(new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill,tempSubject.notes));
+            return subjectToUpdate;
+        }
+
+        private Vector<Agent> getAgentsOwnerDependent(Vector<Object> temp, Vector<Object> oldOne) {
+            Agent tempAgent;
+            Vector<Agent> agentToUpdate = new Vector<>();
+            tempAgent = database.getAgentFromPayment((Payment)temp.elementAt(0));
+            tempAgent.commission +=((Payment)temp.elementAt(0)).value;
+            agentToUpdate.addElement(new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission));
+            tempAgent = database.getAgentFromPayment((Payment)oldOne.elementAt(0));
+            tempAgent.commission -=((Payment)temp.elementAt(0)).value;
+            agentToUpdate.addElement(new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission));
+            return agentToUpdate;
+        }
+
+        private Vector<Subject> getSubjectsValueDependent(Vector<Object> temp, Vector<Object> oldOne) {
+            Subject tempSubject;
+            Vector<Subject> subjectToUpdate = new Vector<>();
+            tempSubject = database.getSubjectFromPayment((Payment)temp.elementAt(0));
+            tempSubject.bill+=(((Payment)temp.elementAt(0)).value-((Payment)oldOne.elementAt(0)).value);
+            subjectToUpdate.addElement(new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill,tempSubject.notes));
+            return subjectToUpdate;
+        }
+
+        private Vector<Agent> getAgentsValueDependent(Vector<Object> temp, Vector<Object> oldOne) {
+            Agent tempAgent;
+            Vector<Agent> agentToUpdate = new Vector<>();
+            tempAgent = database.getAgentFromPayment((Payment)temp.elementAt(0));
+            tempAgent.commission +=(((Payment)temp.elementAt(0)).value-((Payment)oldOne.elementAt(0)).value);
+            agentToUpdate.addElement(new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission));
+            return agentToUpdate;
+        }
+
         private void addIncomingRecords(Object incoming) throws IOException {
             Vector<Object> temp = (Vector<Object>)incoming;
             if (temp.elementAt(0) instanceof Payment) {
                 database.addPaymentToMysql((Vector<Payment>)incoming);
-                Vector<Agent> agentToUpdate = new Vector<>();
-                Vector<Subject> subjectToUpdate = new Vector<>();
-                Agent tempAgent;
-                Subject tempSubject;
-
-                tempAgent = database.getAgentFromPayment((Payment)temp.elementAt(0));
-                tempAgent.commission=tempAgent.commission+((Payment)temp.elementAt(0)).value;
-                agentToUpdate.addElement(new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission));
-
-                tempSubject = database.getSubjectFromPayment((Payment)temp.elementAt(0));
-                tempSubject.bill=tempSubject.bill+((Payment)temp.elementAt(0)).value;
-                subjectToUpdate.addElement(new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill,tempSubject.notes));
-
+                Vector<Agent> agentToUpdate = getAgentsPaymentAddDependent(temp);
+                Vector<Subject> subjectToUpdate = getSubjectsPaymentAddDependent(temp);
                 database.updateAgentInMysql(agentToUpdate);
                 database.updateSubjectInMysql(subjectToUpdate);
-
                 writeToClients(agentToUpdate,Qualifier.Update);
                 writeToClients(subjectToUpdate,Qualifier.Update);
             } else if (temp.elementAt(0) instanceof Agent) {
@@ -191,26 +187,32 @@ public class ServerMain {
             writeToClients(incoming, Qualifier.Add);
         }
 
+        private Vector<Subject> getSubjectsPaymentAddDependent(Vector<Object> temp) {
+            Subject tempSubject;
+            Vector<Subject> subjectToUpdate = new Vector<>();
+            tempSubject = database.getSubjectFromPayment((Payment)temp.elementAt(0));
+            tempSubject.bill=tempSubject.bill+((Payment)temp.elementAt(0)).value;
+            subjectToUpdate.addElement(new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill,tempSubject.notes));
+            return subjectToUpdate;
+        }
+
+        private Vector<Agent> getAgentsPaymentAddDependent(Vector<Object> temp) {
+            Agent tempAgent;
+            Vector<Agent> agentToUpdate = new Vector<>();
+            tempAgent = database.getAgentFromPayment((Payment)temp.elementAt(0));
+            tempAgent.commission=tempAgent.commission+((Payment)temp.elementAt(0)).value;
+            agentToUpdate.addElement(new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission));
+            return agentToUpdate;
+        }
+
         private void removeIncomingRecords(Object incoming) throws IOException {
             Vector<Object> temp = (Vector<Object>) incoming;
             if (temp.elementAt(0) instanceof Payment) {
                 database.removePaymentFromMysql((Vector<Payment>) incoming);
-                Vector<Agent> agentToUpdate = new Vector<>();
-                Vector<Subject> subjectToUpdate = new Vector<>();
-                Agent tempAgent;
-                Subject tempSubject;
-
-                tempAgent = database.getAgentFromPayment((Payment)temp.elementAt(0));
-                tempAgent.commission=tempAgent.commission-((Payment)temp.elementAt(0)).value;
-                agentToUpdate.addElement(new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission));
-
-                tempSubject = database.getSubjectFromPayment((Payment)temp.elementAt(0));
-                tempSubject.bill=tempSubject.bill-((Payment)temp.elementAt(0)).value;
-                subjectToUpdate.addElement(new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill,tempSubject.notes));
-
+                Vector<Agent> agentToUpdate = getAgentsPaymentRemoveDependent(temp);
+                Vector<Subject> subjectToUpdate = getSubjectsPaymentRemoveDependent(temp);
                 database.updateAgentInMysql(agentToUpdate);
                 database.updateSubjectInMysql(subjectToUpdate);
-
                 writeToClients(agentToUpdate,Qualifier.Update);
                 writeToClients(subjectToUpdate,Qualifier.Update);
             } else if (temp.elementAt(0) instanceof Agent) {
@@ -219,6 +221,24 @@ public class ServerMain {
                 database.removeSubjectFrommMysql((Vector<Subject>) incoming);
             }
             writeToClients(incoming, Qualifier.Remove);
+        }
+
+        private Vector<Subject> getSubjectsPaymentRemoveDependent(Vector<Object> temp) {
+            Subject tempSubject;
+            Vector<Subject> subjectToUpdate = new Vector<>();
+            tempSubject = database.getSubjectFromPayment((Payment)temp.elementAt(0));
+            tempSubject.bill=tempSubject.bill-((Payment)temp.elementAt(0)).value;
+            subjectToUpdate.addElement(new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill,tempSubject.notes));
+            return subjectToUpdate;
+        }
+
+        private Vector<Agent> getAgentsPaymentRemoveDependent(Vector<Object> temp) {
+            Agent tempAgent;
+            Vector<Agent> agentToUpdate = new Vector<>();
+            tempAgent = database.getAgentFromPayment((Payment)temp.elementAt(0));
+            tempAgent.commission=tempAgent.commission-((Payment)temp.elementAt(0)).value;
+            agentToUpdate.addElement(new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission));
+            return agentToUpdate;
         }
 
         private void writeStartupData() throws IOException {

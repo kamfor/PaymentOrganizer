@@ -119,74 +119,74 @@ public class Controller {
 
     private class ListenForFocus implements FocusListener {
         public void focusGained(FocusEvent e) { // If a text field gains focus and has the default text, remove the text
-            if(gui.panel1.tfType.getText().equals("Type") && e.getSource() == gui.panel1.tfType) {
+            if(gui.panel1.tfType.getText().equals("Typ") && e.getSource() == gui.panel1.tfType) {
                 gui.panel1.tfType.setText("");
-            } else if(gui.panel1.tfValue.getText().equals("Value") && e.getSource() == gui.panel1.tfValue) {
+            } else if(gui.panel1.tfValue.getText().equals("Wartość") && e.getSource() == gui.panel1.tfValue) {
                 gui.panel1.tfValue.setText("");
-            } else if(gui.panel1.tfBeginDate.getText().equals("Begin Date") && e.getSource() == gui.panel1.tfBeginDate) {
+            } else if(gui.panel1.tfBeginDate.getText().equals("Data wystawienia") && e.getSource() == gui.panel1.tfBeginDate) {
                 gui.panel1.tfBeginDate.setText("");
-            } else if(gui.panel1.tfEndDate.getText().equals("End Date") && e.getSource() == gui.panel1.tfEndDate) {
+            } else if(gui.panel1.tfEndDate.getText().equals("Termin płatności") && e.getSource() == gui.panel1.tfEndDate) {
                 gui.panel1.tfEndDate.setText("");
-            } else if(gui.panel1.tfOwner.getText().equals("Owner") && e.getSource() == gui.panel1.tfOwner) {
+            } else if(gui.panel1.tfOwner.getText().equals("Właściciel") && e.getSource() == gui.panel1.tfOwner) {
                 gui.panel1.tfOwner.setText("");
-            } else if(gui.panel1.tfSubject.getText().equals("Subject") && e.getSource() == gui.panel1.tfSubject) {
+            } else if(gui.panel1.tfSubject.getText().equals("Podmiot") && e.getSource() == gui.panel1.tfSubject) {
                 gui.panel1.tfSubject.setText("");
-            } else if(gui.panel1.tfDocument.getText().equals("Document") && e.getSource() == gui.panel1.tfDocument) {
+            } else if(gui.panel1.tfDocument.getText().equals("Nazwa dokumentu") && e.getSource() == gui.panel1.tfDocument) {
                 gui.panel1.tfDocument.setText("");
-            } else if(gui.panel1.tfNotes.getText().equals("Notes") && e.getSource() == gui.panel1.tfNotes) {
+            } else if(gui.panel1.tfNotes.getText().equals("Notatki") && e.getSource() == gui.panel1.tfNotes) {
                 gui.panel1.tfNotes.setText("");
-            } else if(gui.panel2.tfName.getText().equals("Name") && e.getSource() == gui.panel2.tfName) {
+            } else if(gui.panel2.tfName.getText().equals("Nazwa") && e.getSource() == gui.panel2.tfName) {
                 gui.panel2.tfName.setText("");
-            } else if(gui.panel2.tfPhone.getText().equals("Phone") && e.getSource() == gui.panel2.tfPhone) {
+            } else if(gui.panel2.tfPhone.getText().equals("Telefon") && e.getSource() == gui.panel2.tfPhone) {
                 gui.panel2.tfPhone.setText("");
             } else if(gui.panel2.tfEmail.getText().equals("Email") && e.getSource() == gui.panel2.tfEmail) {
                 gui.panel2.tfEmail.setText("");
-            } else if(gui.panel3.tfName.getText().equals("Name") && e.getSource() == gui.panel3.tfName) {
+            } else if(gui.panel3.tfName.getText().equals("Nazwa") && e.getSource() == gui.panel3.tfName) {
                 gui.panel3.tfName.setText("");
-            } else if(gui.panel3.tfPhone.getText().equals("Phone") && e.getSource() == gui.panel3.tfPhone) {
+            } else if(gui.panel3.tfPhone.getText().equals("Telefon") && e.getSource() == gui.panel3.tfPhone) {
                 gui.panel3.tfPhone.setText("");
             } else if(gui.panel3.tfEmail.getText().equals("Email") && e.getSource() == gui.panel3.tfEmail) {
                 gui.panel3.tfEmail.setText("");
-            } else if(gui.panel3.tfAddress.getText().equals("Address") && e.getSource() == gui.panel3.tfAddress) {
+            } else if(gui.panel3.tfAddress.getText().equals("Adres") && e.getSource() == gui.panel3.tfAddress) {
                 gui.panel3.tfAddress.setText("");
-            } else if(gui.panel3.tfNotes.getText().equals("Notes") && e.getSource() == gui.panel3.tfNotes) {
+            } else if(gui.panel3.tfNotes.getText().equals("Notatki") && e.getSource() == gui.panel3.tfNotes) {
                 gui.panel3.tfNotes.setText("");
             }
         }
 
         public void focusLost(FocusEvent e) { // If the text field loses focus and is blank, set the default text back
             if(gui.panel1.tfType.getText().equals("") && e.getSource() == gui.panel1.tfType) {
-                gui.panel1.tfType.setText("Type");
+                gui.panel1.tfType.setText("Typ");
             } else if(gui.panel1.tfValue.getText().equals("") && e.getSource() == gui.panel1.tfValue) {
-                gui.panel1.tfValue.setText("Value");
+                gui.panel1.tfValue.setText("Wartość");
             } else if(gui.panel1.tfBeginDate.getText().equals("") && e.getSource() == gui.panel1.tfBeginDate) {
-                gui.panel1.tfBeginDate.setText("Begin Date");
+                gui.panel1.tfBeginDate.setText("Data wystawienia");
             } else if(gui.panel1.tfEndDate.getText().equals("") && e.getSource() == gui.panel1.tfEndDate) {
-                gui.panel1.tfEndDate.setText("End Date");
+                gui.panel1.tfEndDate.setText("Termin płatności");
             } else if(gui.panel1.tfOwner.getText().equals("") && e.getSource() == gui.panel1.tfOwner) {
-                gui.panel1.tfOwner.setText("Owner");
+                gui.panel1.tfOwner.setText("Właściciel");
             } else if(gui.panel1.tfSubject.getText().equals("") && e.getSource() == gui.panel1.tfSubject) {
-                gui.panel1.tfSubject.setText("Subject");
+                gui.panel1.tfSubject.setText("Podmiot");
             } else if(gui.panel1.tfDocument.getText().equals("") && e.getSource() == gui.panel1.tfDocument) {
-                gui.panel1.tfDocument.setText("Document");
+                gui.panel1.tfDocument.setText("Nazwa dokumentu");
             } else if(gui.panel1.tfNotes.getText().equals("") && e.getSource() == gui.panel1.tfNotes) {
-                gui.panel1.tfNotes.setText("Notes");
+                gui.panel1.tfNotes.setText("Notatki");
             } else if(gui.panel2.tfName.getText().equals("") && e.getSource() == gui.panel2.tfName) {
-                gui.panel2.tfName.setText("Name");
+                gui.panel2.tfName.setText("Nazwa");
             } else if(gui.panel2.tfPhone.getText().equals("") && e.getSource() == gui.panel2.tfPhone) {
-                gui.panel2.tfPhone.setText("Phone");
+                gui.panel2.tfPhone.setText("Telefon");
             } else if(gui.panel2.tfEmail.getText().equals("") && e.getSource() == gui.panel2.tfEmail) {
                 gui.panel2.tfEmail.setText("Email");
             } else if(gui.panel3.tfName.getText().equals("") && e.getSource() == gui.panel3.tfName) {
-                gui.panel3.tfName.setText("Name");
+                gui.panel3.tfName.setText("Nazwa");
             } else if(gui.panel3.tfPhone.getText().equals("") && e.getSource() == gui.panel3.tfPhone) {
-                gui.panel3.tfPhone.setText("Phone");
+                gui.panel3.tfPhone.setText("Telefon");
             } else if(gui.panel3.tfEmail.getText().equals("") && e.getSource() == gui.panel3.tfEmail) {
                 gui.panel3.tfEmail.setText("Email");
             } else if(gui.panel3.tfAddress.getText().equals("") && e.getSource() == gui.panel3.tfAddress) {
-                gui.panel3.tfAddress.setText("Address");
+                gui.panel3.tfAddress.setText("Adres");
             } else if(gui.panel3.tfNotes.getText().equals("") && e.getSource() == gui.panel3.tfNotes) {
-                gui.panel3.tfNotes.setText("Notes");
+                gui.panel3.tfNotes.setText("Notatki");
             }
         }
     }

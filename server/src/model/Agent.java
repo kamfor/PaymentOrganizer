@@ -9,7 +9,7 @@ public class Agent implements Serializable {
     public String phone;
     public String email;
     public Float commission;
-    public static Object[] agentColumns = new Object[]{"ID","Name","Phone","Email","Commission"};
+    public static Object[] agentColumns = new Object[]{"ID","Nazwa","Telefon","Email","Należność"};
 
     public Agent(int par_id, String par_name,String par_phone, String par_email, Float par_commission){
         id  = par_id;

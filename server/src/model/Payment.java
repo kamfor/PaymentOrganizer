@@ -14,7 +14,7 @@ public class Payment implements Serializable {
     public int subject_id;
     public String document_name;
     public String notes;
-    public static Object[] paymentColumns = new Object[]{"Accepted","Type","Value","Begin Date","End Date","Owner","Subject","Document","Notes"};
+    public static final Object[] paymentColumns = new Object[]{"Zaakceptowano","Typ","Wartość","Data wystawienia","Termin płatności","Agent","Podmmiot","Nzawa dokumentu","Notatki"};
 
     public Payment(int par_id, Boolean par_accepted, String par_type, Float par_value,java.util.Date par_begin_date, java.util.Date par_end_date,
                    int par_owner_id, int par_subject_id, String par_document_name, String par_notes){

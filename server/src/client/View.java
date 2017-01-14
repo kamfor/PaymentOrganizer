@@ -14,12 +14,12 @@ public class View extends JFrame{
 
     public View(){
         super();
-        setTitle("Payment");
+        setTitle("Baza danych");
         this.setSize(1200, 600);
         jtp = new JTabbedPane();
-        jtp.addTab("Payments",panel1);
-        jtp.addTab("Agents",panel2);
-        jtp.addTab("Subjects",panel3);
+        jtp.addTab("Płatności",panel1);
+        jtp.addTab("Agenci",panel2);
+        jtp.addTab("Podmioty",panel3);
         add(jtp);
         jtp.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 
@@ -63,17 +63,17 @@ public class View extends JFrame{
         }
 
         private JPanel getjPanelInput() {
-            addRecord = new JButton("Add Record");
-            removeRecord = new JButton("Remove Record");
+            addRecord = new JButton("Dodaj rekord");
+            removeRecord = new JButton("Usuń rekord");
 
-            tfType = new JTextField("Type", 8);
-            tfValue = new JTextField("Value", 6);
-            tfBeginDate = new JTextField("Begin Date", 9);
-            tfEndDate = new JTextField("End Date", 9);
-            tfOwner = new JTextField("Owner", 5);
-            tfSubject = new JTextField("Subject", 5);
-            tfDocument = new JTextField("Document", 8);
-            tfNotes = new JTextField("Notes", 20);
+            tfType = new JTextField("Typ", 8);
+            tfValue = new JTextField("Wartość", 6);
+            tfBeginDate = new JTextField("Data wystawienia", 9);
+            tfEndDate = new JTextField("Termin płatności", 9);
+            tfOwner = new JTextField("Właściciel", 5);
+            tfSubject = new JTextField("Podmiot", 5);
+            tfDocument = new JTextField("Nazwa dokumentu", 8);
+            tfNotes = new JTextField("Notatki", 20);
 
             JPanel inputPanel = new JPanel();
             inputPanel.add(tfType);
@@ -135,12 +135,12 @@ public class View extends JFrame{
         }
 
         private JPanel getjPanelInput() {
-            addRecord = new JButton("Add Record");
-            removeRecord = new JButton("Remove Record");
+            addRecord = new JButton("Dodaj rekord");
+            removeRecord = new JButton("Usuń rekord");
 
-            tfName = new JTextField("Name", 10);
+            tfName = new JTextField("Nazwa", 10);
             tfEmail = new JTextField("Email", 9);
-            tfPhone = new JTextField("Phone", 9);
+            tfPhone = new JTextField("Telefon", 9);
 
             JPanel inputPanel = new JPanel();
             inputPanel.add(tfName);
@@ -197,14 +197,14 @@ public class View extends JFrame{
         }
 
         private JPanel getjPanelInput() {
-            addRecord = new JButton("Add Record");
-            removeRecord = new JButton("Remove Record");
+            addRecord = new JButton("Dodaj rekord");
+            removeRecord = new JButton("Usuń rekord");
 
-            tfName = new JTextField("Name", 10);
-            tfPhone = new JTextField("Phone", 9);
+            tfName = new JTextField("Nazwa", 10);
+            tfPhone = new JTextField("Telefon", 9);
             tfEmail = new JTextField("Email", 9);
-            tfAddress = new JTextField("Address", 20);
-            tfNotes = new JTextField("Notes", 20);
+            tfAddress = new JTextField("Adres", 20);
+            tfNotes = new JTextField("Notatki", 20);
 
             JPanel inputPanel = new JPanel();
             inputPanel.add(tfName);

@@ -16,7 +16,7 @@ public class ClientMain {
                 db = new Database();
                 break;
             }catch(IOException e1){
-                JOptionPane.showMessageDialog(ClientMain.ctrl.gui, "Błąd połączenia z serwerem", "Błąd połączenia", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(ClientMain.ctrl.gui, Messages.connectionError, Messages.error, JOptionPane.ERROR_MESSAGE);
                 continue;
             }
         }

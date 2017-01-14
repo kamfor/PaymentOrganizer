@@ -20,9 +20,12 @@ public class ServerMain {
         Remove, Add, Update, Message
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException { //catch parameters from args
+        String url="";
+        String user="";
+        String pass="";
         ServerSocket listener = new ServerSocket(9091);
-        DatabaseConnector data = new DatabaseConnector();
+        DatabaseConnector data = new DatabaseConnector(url,user,pass);
         int clientNumber;
         data.connectMysql();
 

@@ -10,11 +10,11 @@ public class DatabaseConnector {
 
     // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://s52.hekko.net.pl/kfforex_java";
+    static String DB_URL = "jdbc:mysql://s52.hekko.net.pl/kfforex_java";
 
     //  Database credentials
-    static final String USER = "kfforex_java";
-    static final String PASS = "fasada";
+    static String USER = "kfforex_java";
+    static String PASS = "fasada";
 
     private Connection conn;
 
@@ -25,7 +25,10 @@ public class DatabaseConnector {
     public Vector<Agent> dataAgent;
     public Vector<Subject> dataSubject;
 
-    public DatabaseConnector(){
+    public DatabaseConnector(String dbUrl, String dbUser, String dbPass){
+        //DB_URL = dbUrl;
+        //USER = dbUser;
+        //PASS = dbPass;
         dataPayment = new Vector<>();
         dataAgent = new Vector<>();
         dataSubject = new Vector<>();

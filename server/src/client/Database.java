@@ -51,7 +51,7 @@ public class Database {
                             case Add:
                                 temp= (Vector<Object>)ios.readObject();
                                 if(temp.size()>0) addLocalData(temp);
-                                else JOptionPane.showMessageDialog(ClientMain.ctrl.gui, "Empty client.Database");
+                                else JOptionPane.showMessageDialog(ClientMain.ctrl.gui, Messages.emptyDatabase);
                             break;
                             case Update:
                                 temp= (Vector<Object>)ios.readObject();
@@ -61,18 +61,17 @@ public class Database {
                                 System.out.println(ios.readObject());
                         }
                     }else{
-                        System.out.println("Unsupported data");
+                        System.out.println(Messages.unsupportedData);
                     }
                 }
             } catch (IOException | ClassNotFoundException e) {
-                System.out.println("Error handling data" + e);
-                JOptionPane.showMessageDialog(ClientMain.ctrl.gui, "Read Data error", "Error", JOptionPane.ERROR_MESSAGE);
+                System.out.println(Messages.dataReadError + e);
+                JOptionPane.showMessageDialog(ClientMain.ctrl.gui, Messages.dataReadError, Messages.error, JOptionPane.ERROR_MESSAGE);
             }
         }
 
         private void updateLocalData(Vector<Object> temp) {
             if(temp.elementAt(0) instanceof Payment){
-                System.out.println("Payment updated");
                 for(Object item: temp){
                     int rowPaymentToUpdate = getPaymentRow(((Payment)item).id);
                     rowDataPayment.setElementAt((Payment)item,rowPaymentToUpdate);
@@ -81,7 +80,6 @@ public class Database {
                 }
             }
             else if(temp.elementAt(0) instanceof Agent){
-                System.out.println("Agent updated");
                 for(Object item: temp){
                     int rowAgentToUpdate = getAgentRow(((Agent)item).id);
                     rowDataAgent.setElementAt((Agent) item,rowAgentToUpdate);
@@ -90,7 +88,6 @@ public class Database {
                 }
             }
             else if(temp.elementAt(0) instanceof Subject) {
-                System.out.println("Subject updated");
                 for(Object item: temp){
                     int rowSubjectToUpdate = getSubjectRow(((Subject)item).id);
                     rowDataSubject.setElementAt((Subject) item,rowSubjectToUpdate);
@@ -102,19 +99,16 @@ public class Database {
 
         private void addLocalData(Vector<Object> temp) {
             if (temp.elementAt(0) instanceof Payment) {
-                System.out.println("Payment added");
                 for (Object item : temp) {
                     rowDataPayment.addElement((Payment) item);
                     defaultTableModelPayment.addRow(((Payment) item).toVector());
                 }
             } else if (temp.elementAt(0) instanceof Agent) {
-                System.out.println("Agent added");
                 for (Object item : temp) {
                     rowDataAgent.addElement((Agent) item);
                     defaultTableModelAgent.addRow(((Agent) item).toVector());
                 }
             } else if (temp.elementAt(0) instanceof Subject) {
-                System.out.println("Subject added");
                 for (Object item : temp) {
                     rowDataSubject.addElement((Subject) item);
                     defaultTableModelSubject.addRow(((Subject) item).toVector());
@@ -124,21 +118,18 @@ public class Database {
 
         private void removeLocalData(Vector<Object> temp) {
             if (temp.elementAt(0) instanceof Payment) {
-                System.out.println("Payment removed");
                 for (Object item : temp) {
                     int rowPaymentToRemove = getPaymentRow(((Payment)item).id);
                     rowDataPayment.removeElementAt(rowPaymentToRemove);
                     defaultTableModelPayment.removeRow(rowPaymentToRemove);
                 }
             } else if (temp.elementAt(0) instanceof Agent) {
-                System.out.println("Agent removed");
                 for (Object item : temp) {
                     int rowAgentToRemove = getAgentRow(((Agent)item).id);
                     rowDataAgent.removeElementAt(rowAgentToRemove);
                     defaultTableModelAgent.removeRow(rowAgentToRemove);
                 }
             } else if (temp.elementAt(0) instanceof Subject) {
-                System.out.println("Subject removed");
                 for (Object item : temp) {
                     int rowSubjectToRemove = getSubjectRow(((Subject)item).id);
                     rowDataSubject.removeElementAt(rowSubjectToRemove);
@@ -152,9 +143,7 @@ public class Database {
 
         try{
             this.connectToServer();
-            System.out.println("connecting to server");
         }catch(IOException e){
-            System.out.println("connecting failed");
             throw new IOException();
         }
 
@@ -163,7 +152,7 @@ public class Database {
         defaultTableModelSubject = new DefaultTableModel(databaseSubjectResults, Subject.subjectColumns);
     }
 
-    public void connectToServer() throws IOException {
+    public void connectToServer() throws IOException { // catch connection parameters from user
         socket = new Socket(InetAddress.getLocalHost(), 9091);
         oos = new ObjectOutputStream(socket.getOutputStream());
         ios = new ObjectInputStream(socket.getInputStream());
@@ -196,7 +185,7 @@ public class Database {
         try{
             this.sendObject(toSend, ServerMain.Qualifier.Remove);
         } catch(IOException e1) {
-            return "Error while updating data";
+            return Messages.updatingError;
         }
         return "";
     }
@@ -208,27 +197,27 @@ public class Database {
             numberValue = Float.valueOf(value);
         }
         catch(NumberFormatException e1){
-            return "Incorrect Value";
+            return Messages.incorrectValue;
         }
         if(!beginDate.matches("[0-2][0-9]{3}-[0-1][0-2]-[0-3][0-9]")) {
-            return "The date should be in the following format: YYYY-MM-DD";
+            return Messages.dateFormat;
         }
         if(!endDate.matches("[0-2][0-9]{3}-[0-1][0-2]-[0-3][0-9]")) {
-            return "The date should be in the following format: YYYY-MM-DD";
+            return Messages.dateFormat;
         }
         try{
             dateBeginDate = getADate(beginDate);
             dateEndDate = getADate(endDate);
         }
         catch(ParseException e1){
-            return "Incorrect Date format should be YYYY-MM-DD";
+            return Messages.dateFormat;
         }
         int agentRow = getAgentRow(Integer.valueOf(owner));
         if(agentRow>=0);
-        else return "Owner doesn't exist"; //change to value receive from server
+        else return Messages.agentExist; //change to value receive from server
         int subjectRow = getSubjectRow(Integer.valueOf(subject));
         if(subjectRow>=0);
-        else return "Subject doesn't exist";
+        else return Messages.subjectExist;
         int paymentID = 0;
         for(Payment item: rowDataPayment){
             if(item.id>paymentID)paymentID = item.id;
@@ -239,7 +228,7 @@ public class Database {
         try {
             this.sendObject(toSend, ServerMain.Qualifier.Add);
         } catch (IOException e1) {
-            return "Error while sending data to server";
+            return Messages.dataSendingError;
         }
         return "";
     }
@@ -253,59 +242,59 @@ public class Database {
         oldOne.addElement(new Payment(temp.id,temp.accepted,temp.type,temp.value,temp.begin_date,temp.end_date,temp.owner_id,temp.subject_id,temp.document_name,temp.notes));
         Boolean isUpdated = Boolean.FALSE;
         switch(updatedColumn) {
-            case "Type":
+            case "Typ":
                 toSend.elementAt(0).type = (String)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
-            case "Accepted":
+            case "Zaakceptowano":
                 toSend.elementAt(0).accepted = (Boolean)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
-            case "Value":
+            case "Wartość":
                 try{numberValue = Float.valueOf((String)updatedField);}
-                catch(NumberFormatException e1){ return "Incorrect Value";}
+                catch(NumberFormatException e1){ return Messages.incorrectValue;}
                 toSend.elementAt(0).value = numberValue;
                 isUpdated = Boolean.TRUE;
                 break;
-            case "Begin Date":
+            case "Data wystawienia":
                 try{
                     toSend.elementAt(0).begin_date = getADate((String)updatedField);
                     isUpdated = Boolean.TRUE;
-                }catch(ParseException e2){return"Unparseable Begin Date";}
+                }catch(ParseException e2){return Messages.dateFormat;}
                 break;
-            case "End Date":
+            case "Termin płatności":
                 try{
                     toSend.elementAt(0).end_date = getADate((String)updatedField);
                     isUpdated = Boolean.TRUE;
-                }catch(ParseException e2){return"Unparseable End Date";}
+                }catch(ParseException e2){return Messages.dateFormat;}
                 break;
-            case "Owner":
+            case "Agent":
                 int updateAgentRow = getAgentRow(Integer.valueOf((String)updatedField));
                 if(updateAgentRow>=0){
                     toSend.elementAt(0).owner_id = Integer.valueOf((String)updatedField);
                     isUpdated = Boolean.TRUE;
-                }else return "Owner doesn't exist";
+                }else return Messages.incorrectOwner;
                 break;
-            case "Subject":
+            case "Podmmiot":
                 int updateSubjectRow = getSubjectRow(Integer.valueOf((String)updatedField));
                 if(updateSubjectRow>=0){
                     toSend.elementAt(0).subject_id = Integer.valueOf((String)updatedField);
                     isUpdated = Boolean.TRUE;
                 }
-                else return "Subject doesn't exist";
+                else return Messages.incorrectSubject;
                 break;
-            case "Document":
+            case "Nzawa dokumentu":
                 toSend.elementAt(0).document_name = (String)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
-            case "Notes":
+            case "Notatki":
                 toSend.elementAt(0).notes = (String)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
         }
         if(isUpdated){
             try{this.sendObjectUpdate(toSend,oldOne, ServerMain.Qualifier.Update);}
-            catch(IOException e1){return "Error while sending to server";}
+            catch(IOException e1){return Messages.dataSendingError;}
         }
         return"";
     }
@@ -316,13 +305,13 @@ public class Database {
         toSend.addElement(rowDataAgent.elementAt(rowIndex));
         for(Payment item:rowDataPayment){
             if(item.owner_id == toSend.elementAt(0).id){
-                return "Agent exist in Payment table";
+                return Messages.agentExist;
             }
         }
         try{
             this.sendObject(toSend, ServerMain.Qualifier.Remove);
         } catch( IOException e1) {
-            return "Error while updating data";
+            return Messages.updatingError;
         }
         return "";
     }
@@ -340,7 +329,7 @@ public class Database {
         try {
             this.sendObject(toSend, ServerMain.Qualifier.Add);
         } catch (IOException e1) {
-            return "Error while sending to data";
+            return Messages.dataSendingError;
         }
         return "";
     }
@@ -354,11 +343,11 @@ public class Database {
         Boolean isUpdated = false;
 
         switch(updatedColumn) {
-            case "Name":
+            case "Nazwa":
                 toSend.elementAt(0).name = (String)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
-            case "Phone":
+            case "Telefon":
                 toSend.elementAt(0).phone = (String)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
@@ -366,7 +355,7 @@ public class Database {
                 toSend.elementAt(0).email = (String)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
-            case "Commission":
+            case "Należność":
                 toSend.elementAt(0).commission += (Float)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
@@ -375,7 +364,7 @@ public class Database {
             try{
                 this.sendObjectUpdate(toSend,oldOne, ServerMain.Qualifier.Update);
             }catch(IOException e1){
-                return"Error while sending to server";
+                return Messages.dataSendingError;
             }
         }
         return "";
@@ -386,13 +375,13 @@ public class Database {
         toSend.addElement(rowDataSubject.elementAt(rowIndex));
         for(Payment item:rowDataPayment){
             if(item.subject_id == toSend.elementAt(0).id){
-                return "Subject exist in Payment table";
+                return Messages.subjectExist;
             }
         }
         try{
             this.sendObject(toSend, ServerMain.Qualifier.Remove);
         } catch(IOException e1) {
-            return "Error while updating data";
+            return Messages.updatingError;
         }
         return "";
     }
@@ -409,7 +398,7 @@ public class Database {
         try {
             this.sendObject(toSend, ServerMain.Qualifier.Add);
         } catch (IOException e1) {
-            return"Server sending error";
+            return Messages.dataSendingError;
         }
         return "";
     }
@@ -423,11 +412,11 @@ public class Database {
         Boolean isUpdated = false;
 
         switch(updatedColumn) {
-            case "Name":
+            case "Nazwa":
                 toSend.elementAt(0).name = (String)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
-            case "Phone":
+            case "Telefon":
                 toSend.elementAt(0).phone = (String)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
@@ -435,15 +424,15 @@ public class Database {
                 toSend.elementAt(0).email = (String)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
-            case "Address":
+            case "Adres":
                 toSend.elementAt(0).address = (String)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
-            case "Notes":
+            case "Notatki":
                 toSend.elementAt(0).notes = (String)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
-            case"Bill":
+            case "Rachunek":
                 toSend.elementAt(0).bill += (float)updatedField;
                 isUpdated = Boolean.TRUE;
                 break;
@@ -452,7 +441,7 @@ public class Database {
             try{
                 this.sendObjectUpdate(toSend,oldOne, ServerMain.Qualifier.Update);
             }catch(IOException e1){
-                return "Error while sending to server";
+                return Messages.dataSendingError;
             }
         }
         return"";

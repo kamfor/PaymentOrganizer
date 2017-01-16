@@ -11,9 +11,13 @@ public class ClientMain {
 
     public static void main (String[] args) {
 
-        for(int i=0; i<5; i++){
+
+        String serverIp;
+
+        for(int i=0; i<2; i++){
             try{
-                db = new Database();
+                serverIp = JOptionPane.showInputDialog("Enter Input:","localhost");
+                db = new Database(serverIp);
                 break;
             }catch(IOException e1){
                 JOptionPane.showMessageDialog(ClientMain.ctrl.gui, Messages.connectionError, Messages.error, JOptionPane.ERROR_MESSAGE);

@@ -8,11 +8,9 @@ import java.util.Vector;
 
 public class DatabaseConnector {
 
-    // JDBC driver name and database URL
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     static String DB_URL = "jdbc:mysql://s52.hekko.net.pl/kfforex_java";
 
-    //  Database credentials
     static String USER = "kfforex_java";
     static String PASS = "fasada";
 
@@ -26,9 +24,9 @@ public class DatabaseConnector {
     public Vector<Subject> dataSubject;
 
     public DatabaseConnector(String dbUrl, String dbUser, String dbPass){
-        //DB_URL = dbUrl;
-        //USER = dbUser;
-        //PASS = dbPass;
+        if(!dbUrl.isEmpty())DB_URL = dbUrl;
+        if(!dbUser.isEmpty())USER = dbUser;
+        if(!dbPass.isEmpty())PASS = dbPass;
         dataPayment = new Vector<>();
         dataAgent = new Vector<>();
         dataSubject = new Vector<>();
@@ -287,10 +285,18 @@ public class DatabaseConnector {
     }
 
     public Agent getAgentFromPayment (Payment element){
-        return dataAgent.elementAt(getAgentRow(element.owner_id));
+        try{
+            return dataAgent.elementAt(getAgentRow(element.owner_id));
+        }catch (ArrayIndexOutOfBoundsException e){
+            return null;
+        }
     }
 
     public Subject getSubjectFromPayment (Payment element){
-        return dataSubject.elementAt(getSubjectRow(element.subject_id));
+        try{
+            return dataSubject.elementAt(getSubjectRow(element.subject_id));
+        }catch (ArrayIndexOutOfBoundsException e){
+            return null;
+        }
     }
 }

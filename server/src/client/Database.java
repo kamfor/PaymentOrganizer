@@ -139,10 +139,10 @@ public class Database {
         }
     }
 
-    public Database() throws IOException{
+    public Database(String address) throws IOException{
 
         try{
-            this.connectToServer();
+            this.connectToServer(address);
         }catch(IOException e){
             throw new IOException();
         }
@@ -152,8 +152,13 @@ public class Database {
         defaultTableModelSubject = new DefaultTableModel(databaseSubjectResults, Subject.subjectColumns);
     }
 
-    public void connectToServer() throws IOException { // catch connection parameters from user
-        socket = new Socket(InetAddress.getLocalHost(), 9091);
+    public void connectToServer(String address) throws IOException {
+        InetAddress serverIp;
+        if(address!="localhost"){
+            serverIp = InetAddress.getByName(address);
+            socket = new Socket(serverIp, 9091);
+        }
+        else socket = new Socket(InetAddress.getLocalHost(), 9091);
         oos = new ObjectOutputStream(socket.getOutputStream());
         ios = new ObjectInputStream(socket.getInputStream());
     }
@@ -462,7 +467,7 @@ public class Database {
         return -1;
     }
 
-    public java.util.Date getADate(String dateRegistered) throws ParseException{
+    public static java.util.Date getADate(String dateRegistered) throws ParseException{
         SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
         java.util.Date toReturn;
 

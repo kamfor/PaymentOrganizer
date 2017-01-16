@@ -5,18 +5,18 @@ import java.io.IOException;
 
 public class ClientMain {
 
+
     static Controller ctrl;
 
     public static Database db;
 
     public static void main (String[] args) {
 
-
         String serverIp;
 
         for(int i=0; i<2; i++){
             try{
-                serverIp = JOptionPane.showInputDialog("Enter Input:","localhost");
+                serverIp = JOptionPane.showInputDialog("Wprowadź adres IP serwera:","localhost");
                 db = new Database(serverIp);
                 break;
             }catch(IOException e1){

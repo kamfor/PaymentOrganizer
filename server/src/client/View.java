@@ -66,14 +66,14 @@ public class View extends JFrame{
             addRecord = new JButton("Dodaj rekord");
             removeRecord = new JButton("Usuń rekord");
 
-            tfType = new JTextField("Typ", 8);
-            tfValue = new JTextField("Wartość", 6);
-            tfBeginDate = new JTextField("Data wystawienia", 9);
-            tfEndDate = new JTextField("Termin płatności", 9);
-            tfOwner = new JTextField("Właściciel", 5);
+            tfType = new JTextField("Typ", 6);
+            tfValue = new JTextField("Wartość", 5);
+            tfBeginDate = new JTextField("Data wystawienia", 11);
+            tfEndDate = new JTextField("Termin płatności", 11);
+            tfOwner = new JTextField("Właściciel", 6);
             tfSubject = new JTextField("Podmiot", 5);
-            tfDocument = new JTextField("Nazwa dokumentu", 8);
-            tfNotes = new JTextField("Notatki", 20);
+            tfDocument = new JTextField("Nazwa dokumentu", 11);
+            tfNotes = new JTextField("Notatki", 12);
 
             JPanel inputPanel = new JPanel();
             inputPanel.add(tfType);

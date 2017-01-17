@@ -50,7 +50,7 @@ W celu posortowania tabeli według kolumn należy dwukrotnie kliknąć na nazwę
 Dodatkowo można zmieniać kolejność kolumn na ekranie, poprzez przeciągnięcie kolumny na wybrane miejsce. 
 
 ###Logika 
-Możliwe jest uruchomienie wielu klientów jednocześnie, zmiany dokonane na jednym z kleintów są bezpośrednio przesyłane do pozostałych uruchomionch klietów. Przy każdorazowym dodaniu/usunięciu/edycji elemetu w tabeli płatności, obliczane są zmiany dla pozostałuch tabel. Kolumna **Należność** danego Agenta w tabeli Agenci jest sumą wartości z tabeli Płatności mających przypisane ID agenta. Podobnie kolumna **Racunek** jest sumą wartości z tabeli płatności gdzie id podmiotu w tabeli płatności i posmiotów są sobie równe.  
+Możliwe jest uruchomienie wielu klientów jednocześnie, zmiany dokonane na jednym z kleintów są bezpośrednio przesyłane do pozostałych uruchomionch klietów. Przy każdorazowym dodaniu/usunięciu/edycji elemetu w tabeli płatności, obliczane są zmiany dla pozostałuch tabel. Kolumna **Należność** danego Agenta w tabeli Agenci jest sumą wartości z tabeli Płatności mających przypisane ID agenta. Podobnie kolumna **Rachunek** jest sumą wartości z tabeli płatności gdzie id podmiotu w tabeli płatności i posmiotów są sobie równe.  
 
 ###Zamknięcie 
 Aby zakończyć pracę z aplikacją należy kliknąć lewym przyciskiem myszy na ikonę X w prawym górnym rogu. 

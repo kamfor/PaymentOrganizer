@@ -28,15 +28,19 @@ Podczas uruchamiania aplikacji pojawi się okno w którym należy wpisać adres 
 ###Dodawanie i usuwanie rekordów
 Po poprawnym połączeniu z serwerem pojawi się główne okno aplikacji zawierające widoki tabel bazy danych. Na zakładce płatności w dolnej częsci okna znajdują się pola tekstowe służące do wprowadzania nowych rekordów. Przysisk **Dodaj rekord** powoduje sprawdzene poprawności danych w polach tekstowych i w przypadku ich poprawności doda element o wpisanych wartościach pól do bazy danych. W przypadku niepowodzenia, w górnej części onka pojawi się czerwony komunikat informujący o błędzie i konieczoności poprawy danych. W celu usunuęcia rekordu z bazy danych należy zaznaczyć wiersz do usunięcia klikając jednkrotnie w dowolne pole wiersza, po czym nacisnąc przycisk **Usuń rekord**
 
-![Okno programu widok tabeli płatności](/img/paymentPanel.png)
+![*Okno programu widok tabeli płatności*](/img/paymentPanel.png)
+*Okno programu widok tabeli płatności*
 
-![Okno programu przykładowy komunikat o błędzie](/img/error.png)
+![*Okno programu przykładowy komunikat o błędzie*](/img/error.png)
+*Okno programu przykładowy komunikat o błędzie*
 
 Dodawanie i usuwanie rekordów dla pozostałych zakładek przebiega analogicznie, warto zwrócić uwagę na zalezności pomiedzy tabelami, nie da się usunąć rekordu który posiada zależności.
 
-![widok tabeli agentów](/img/agentPanel.png)
+![*widok tabeli agentów*](/img/agentPanel.png)
+*widok tabeli agentów*
 
-![widok tabeli podmiotów](/img/subjectPanel.png)
+![*widok tabeli podmiotów*](/img/subjectPanel.png)
+*widok tabeli podmiotów*
 
 ###Edycja rekordów 
 W celu edycji rekordu istniejącego w tabeli należy dwukrotnie kliknąć lewym przyciskiem myszy na pole w tabeli które chcemy edytować. Po wprowadzeniu danych naciśniięcie klawisza enter bądź kliknięcie w inną komórkę tabeli spowoduje walidację danych i w przypadku akceptacji zmiany zostaną zaakceptowane. W przypadku podania nieodpowiedniej wartości pola zostanie wyświetlony komunikat o błedzie. Niektóre pola tabeli nie mają możliwości edycji, są to pola których wartości zostały obliczone na podstawie zależności pomiędzy tabelami. 

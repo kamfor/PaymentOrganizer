@@ -23,24 +23,20 @@ W celu uruchomienia aplikacji na systemie Windows należy dwukrotnie kliknąć n
 java -jar client.jar
 ```
 Podczas uruchamiania aplikacji pojawi się okno w którym należy wpisać adres ip serwera. Domyślnie jest to localhost, więc jeżeli serwer pracuje na maszynie na której uruchamiamy klienta, nie należy edytować tego pola. 
-![GitHub Logo](/img/input.png)
+![](https://github.com/kamfor/PaymentOrganizer/tree/master/img/input.png)
 
-*Okno wprowadzania adresu serwera*
 ###Dodawanie i usuwanie rekordów
 Po poprawnym połączeniu z serwerem pojawi się główne okno aplikacji zawierające widoki tabel bazy danych. Na zakładce płatności w dolnej częsci okna znajdują się pola tekstowe służące do wprowadzania nowych rekordów. Przysisk **Dodaj rekord** powoduje sprawdzene poprawności danych w polach tekstowych i w przypadku ich poprawności doda element o wpisanych wartościach pól do bazy danych. W przypadku niepowodzenia, w górnej części onka pojawi się czerwony komunikat informujący o błędzie i konieczoności poprawy danych. W celu usunuęcia rekordu z bazy danych należy zaznaczyć wiersz do usunięcia klikając jednkrotnie w dowolne pole wiersza, po czym nacisnąc przycisk **Usuń rekord**
 
-![GitHub Logo](/img/paymentPanel.png)
-*Okno programu widok tabeli płatności*
-![GitHub Logo](/img/error.png)
-*Okno programu przykładowy komunikat o błędzie*
+![*Okno programu widok tabeli płatności*](https://github.com/kamfor/PaymentOrganizer/tree/master/img/paymentPanel.png)
+
+![*Okno programu przykładowy komunikat o błędzie*](https://github.com/kamfor/PaymentOrganizer/tree/master/img/error.png)
 
 Dodawanie i usuwanie rekordów dla pozostałych zakładek przebiega analogicznie, warto zwrócić uwagę na zalezności pomiedzy tabelami, nie da się usunąć rekordu który posiada zależności.
 
-![GitHub Logo](/img/agentPanel.png)
-*widok tabeli agentów*
+![*widok tabeli agentów*(https://github.com/kamfor/PaymentOrganizer/tree/master/img/agentPanel.png)
 
-![GitHub Logo](/img/subjectPanel.png)
-*widok tabeli podmiotów*
+![*widok tabeli podmiotów*](https://github.com/kamfor/PaymentOrganizer/tree/master/img/subjectPanel.png)
 
 ###Edycja rekordów 
 W celu edycji rekordu istniejącego w tabeli należy dwukrotnie kliknąć lewym przyciskiem myszy na pole w tabeli które chcemy edytować. Po wprowadzeniu danych naciśniięcie klawisza enter bądź kliknięcie w inną komórkę tabeli spowoduje walidację danych i w przypadku akceptacji zmiany zostaną zaakceptowane. W przypadku podania nieodpowiedniej wartości pola zostanie wyświetlony komunikat o błedzie. Niektóre pola tabeli nie mają możliwości edycji, są to pola których wartości zostały obliczone na podstawie zależności pomiędzy tabelami. 

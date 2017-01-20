@@ -75,14 +75,16 @@ public class DatabaseConnector {
         rowsAgent = sqlAgentStatement.executeQuery(selectAgent);
         dataAgent = new Vector<>();
         while (rowsAgent.next()) {
-            Agent sample = new Agent(rowsAgent.getInt(1), rowsAgent.getString(2), rowsAgent.getString(3), rowsAgent.getString(4), rowsAgent.getFloat(5));
+            Agent sample = new Agent(rowsAgent.getInt(1),rowsAgent.getString(2),rowsAgent.getString(3),
+                                    rowsAgent.getString(4),rowsAgent.getFloat(5));
             dataAgent.addElement(sample);
         }
     }
 
     private void readPaymentTable() throws SQLException {
         Statement sqlPaymentStatement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        String selectPayment = "SELECT id, accepted, type, value, begin_date, end_date, owner_id, subject_id, document_name, notes FROM payments";
+        String selectPayment = "SELECT id, accepted, type, value, begin_date, end_date, owner_id," +
+                                " subject_id, document_name, notes FROM payments";
         rowsPayment = sqlPaymentStatement.executeQuery(selectPayment);
         dataPayment = new Vector<>();
         while (rowsPayment.next()) {

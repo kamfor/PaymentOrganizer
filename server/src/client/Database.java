@@ -195,7 +195,8 @@ public class Database {
         return "";
     }
 
-    public String addPayment(String type, String value, String beginDate, String endDate, String owner, String subject, String document, String notes) {
+    public String addPayment(String type, String value, String beginDate, String endDate, String owner,
+                             String subject, String document, String notes) {
         java.util.Date dateBeginDate, dateEndDate;
         Float numberValue;
         try{
@@ -227,7 +228,8 @@ public class Database {
         for(Payment item: rowDataPayment){
             if(item.id>paymentID)paymentID = item.id;
         }
-        Payment toInsert = new Payment(paymentID+1,Boolean.FALSE, type, numberValue, dateBeginDate, dateEndDate, Integer.valueOf(owner), Integer.valueOf(subject), document, notes);
+        Payment toInsert = new Payment(paymentID+1,Boolean.FALSE, type, numberValue, dateBeginDate, dateEndDate,
+                                        Integer.valueOf(owner), Integer.valueOf(subject), document, notes);
         Vector<Payment> toSend = new Vector<>();
         toSend.addElement(toInsert);
         try {
@@ -244,7 +246,8 @@ public class Database {
         Payment temp = rowDataPayment.elementAt(rowIndex);
         toSend.addElement(rowDataPayment.elementAt(rowIndex));
         Vector<Payment> oldOne = new Vector<>();
-        oldOne.addElement(new Payment(temp.id,temp.accepted,temp.type,temp.value,temp.begin_date,temp.end_date,temp.owner_id,temp.subject_id,temp.document_name,temp.notes));
+        oldOne.addElement(new Payment(temp.id,temp.accepted,temp.type,temp.value,temp.begin_date,temp.end_date,
+                                        temp.owner_id,temp.subject_id,temp.document_name,temp.notes));
         Boolean isUpdated = Boolean.FALSE;
         switch(updatedColumn) {
             case "Typ":

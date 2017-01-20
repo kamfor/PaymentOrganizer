@@ -48,7 +48,8 @@ public class ClientHandlerTest {
         DatabaseConnector data = new DatabaseConnector("","","");
         ServerMain.ClientHandler test = new ServerMain.ClientHandler(new Socket(),1,data);
         Vector<Object> testPayment = new Vector<>();
-        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),new java.sql.Date(150),new Integer(1000000),new Integer(1000000),"Doc name","notes"));
+        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),
+                                new java.sql.Date(150),new Integer(1000000),new Integer(1000000),"Doc name","notes"));
         try{
             Vector<Subject> subjectToUpdate = test.getSubjectsOwnerDependent(testPayment,testPayment);
             fail();
@@ -63,7 +64,8 @@ public class ClientHandlerTest {
         DatabaseConnector data = new DatabaseConnector("","","");
         ServerMain.ClientHandler test = new ServerMain.ClientHandler(new Socket(),1,data);
         Vector<Object> testPayment = new Vector<>();
-        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes"));
+        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),
+                                new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes"));
         try{
             Vector<Agent> agentToUpdate = test.getAgentsOwnerDependent(testPayment,testPayment);
             fail();
@@ -77,7 +79,8 @@ public class ClientHandlerTest {
         DatabaseConnector data = new DatabaseConnector("","","");
         ServerMain.ClientHandler test = new ServerMain.ClientHandler(new Socket(),1,data);
         Vector<Object> testPayment = new Vector<>();
-        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes"));
+        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),
+                                new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes"));
         try{
             Vector<Subject> SubjectToUpdate = test.getSubjectsValueDependent(testPayment,testPayment);
             fail();
@@ -91,7 +94,8 @@ public class ClientHandlerTest {
         DatabaseConnector data = new DatabaseConnector("","","");
         ServerMain.ClientHandler test = new ServerMain.ClientHandler(new Socket(),1,data);
         Vector<Object> testPayment = new Vector<>();
-        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes"));
+        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),
+                                new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes"));
         try{
             Vector<Agent> agentToUpdate = test.getAgentsValueDependent(testPayment,testPayment);
             fail();
@@ -105,7 +109,8 @@ public class ClientHandlerTest {
         DatabaseConnector data = new DatabaseConnector("","","");
         ServerMain.ClientHandler test = new ServerMain.ClientHandler(new Socket(),1,data);
         Vector<Object> testPayment = new Vector<>();
-        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes"));
+        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),
+                                new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes"));
         try{
             Vector<Subject> SubjectToUpdate = test.getSubjectsPaymentAddDependent(testPayment);
             fail();
@@ -119,7 +124,8 @@ public class ClientHandlerTest {
         DatabaseConnector data = new DatabaseConnector("","","");
         ServerMain.ClientHandler test = new ServerMain.ClientHandler(new Socket(),1,data);
         Vector<Object> testPayment = new Vector<>();
-        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes"));
+        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),
+                                new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes"));
         try{
             Vector<Agent> agentToUpdate = test.getAgentsPaymentAddDependent(testPayment);
             fail();
@@ -133,7 +139,8 @@ public class ClientHandlerTest {
         DatabaseConnector data = new DatabaseConnector("","","");
         ServerMain.ClientHandler test = new ServerMain.ClientHandler(new Socket(),1,data);
         Vector<Object> testPayment = new Vector<>();
-        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes"));
+        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),
+                                new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes"));
         try{
             Vector<Subject> SubjectToUpdate = test.getSubjectsPaymentRemoveDependent(testPayment);
             fail();
@@ -148,7 +155,8 @@ public class ClientHandlerTest {
         DatabaseConnector data = new DatabaseConnector("","","");
         ServerMain.ClientHandler test = new ServerMain.ClientHandler(new Socket(),1,data);
         Vector<Object> testPayment = new Vector<>();
-        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes"));
+        testPayment.addElement(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),
+                                new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes"));
         try{
             Vector<Agent> agentToUpdate = test.getAgentsPaymentRemoveDependent(testPayment);
             fail();

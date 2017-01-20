@@ -11,9 +11,11 @@ public class Subject implements Serializable {
     public String address;
     public Float bill;
     public String notes;
-    public static Object[] subjectColumns = new Object[]{"ID","Nazwa","Telefon","Email","Adres","Rachunek","Notatki"};
+    public static Object[] subjectColumns = new Object[]{"ID","Nazwa","Telefon","Email",
+                                                        "Adres","Rachunek","Notatki"};
 
-    public Subject(int par_id, String par_name,String par_phone, String par_email, String par_address, Float par_bill, String par_notes){
+    public Subject(int par_id, String par_name,String par_phone, String par_email,
+                   String par_address, Float par_bill, String par_notes){
         id  = par_id;
         name = par_name;
         phone = par_phone;

@@ -149,7 +149,8 @@ public class ServerMain {
         }
 
         public Subject getSubjectUpdated(Subject tempSubject, float updateValue) {
-            return new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,tempSubject.address,tempSubject.bill+=updateValue,tempSubject.notes);
+            return new Subject(tempSubject.id,tempSubject.name,tempSubject.phone,tempSubject.email,
+                                tempSubject.address,tempSubject.bill+=updateValue,tempSubject.notes);
         }
 
         public Vector<Agent> getAgentsOwnerDependent(Vector<Object> temp, Vector<Object> oldOne) {
@@ -164,7 +165,8 @@ public class ServerMain {
         }
 
         public Agent getAgentUpdated(Agent tempAgent, float updateValue) {
-            return new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,tempAgent.commission+=updateValue);
+            return new Agent(tempAgent.id,tempAgent.name,tempAgent.phone,tempAgent.email,
+                                tempAgent.commission+=updateValue);
         }
 
         public Vector<Subject> getSubjectsValueDependent(Vector<Object> temp, Vector<Object> oldOne) {

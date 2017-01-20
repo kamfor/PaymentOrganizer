@@ -42,11 +42,18 @@ public class DatabaseTest {
     @Test
     public void addPayment() throws Exception {
         try {
-            assertEquals("Incorrect Value",new Database("localhost").addPayment("Type","Incorrect","2017-01-02","2017-01-03","1","1","Name","notes"));
-            assertEquals("The date should be in the following format: YYYY-MM-DD",new Database("localhost").addPayment("Type","Incorrect","Date","2017-01-03","1","1","Name","notes"));
-            assertEquals("The date should be in the following format: YYYY-MM-DD",new Database("localhost").addPayment("Type","Incorrect","2017-01-02","Date","1","1","Name","notes"));
-            assertEquals("Owner doesn't exist",new Database("localhost").addPayment("Type","Incorrect","2017-01-02","2017-01-03","0","1","Name","notes"));
-            assertEquals("Subject doesn't exist",new Database("localhost").addPayment("Type","Incorrect","2017-01-02","2017-01-03","1","0","Name","notes"));
+            assertEquals("Incorrect Value",new Database("localhost").addPayment("Type","Incorrect","2017-01-02",
+                                                                                "2017-01-03","1","1","Name","notes"));
+            assertEquals("The date should be in the following format: YYYY-MM-DD",
+                        new Database("localhost").addPayment("Type","Incorrect","Date","2017-01-03","1","1",
+                                                                "Name","notes"));
+            assertEquals("The date should be in the following format: YYYY-MM-DD",
+                        new Database("localhost").addPayment("Type","Incorrect","2017-01-02","Date","1","1",
+                                                                "Name","notes"));
+            assertEquals("Owner doesn't exist",new Database("localhost").addPayment("Type","Incorrect","2017-01-02",
+                                                                                    "2017-01-03","0","1","Name","notes"));
+            assertEquals("Subject doesn't exist",new Database("localhost").addPayment("Type","Incorrect","2017-01-02",
+                                                                                    "2017-01-03","1","0","Name","notes"));
             fail("expected IllegalArgumentException");
         }catch (IOException e){
 
@@ -76,7 +83,8 @@ public class DatabaseTest {
     @Test
     public void addAgent() throws Exception {
         try {
-            assertEquals("Error while sending to data",new Database("localhost").addAgent("Name","email@email.com","500500100"));
+            assertEquals("Error while sending to data",new Database("localhost").addAgent("Name","email@email.com",
+                                                                                            "500500100"));
             fail();
         }catch (IOException e){
 
@@ -106,7 +114,8 @@ public class DatabaseTest {
     @Test
     public void addSubject() throws Exception {
         try {
-            assertEquals("Server sending error",new Database("localhost").addSubject("Name","5000000","email@email.com","Address","Notes"));
+            assertEquals("Server sending error",new Database("localhost").addSubject("Name","5000000","email@email.com",
+                                                                                        "Address","Notes"));
             fail("expected IllegalArgumentException");
         }catch (IOException e){
 

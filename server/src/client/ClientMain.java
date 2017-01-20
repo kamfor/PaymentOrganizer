@@ -20,7 +20,7 @@ public class ClientMain {
                 db = new Database(serverIp);
                 break;
             }catch(IOException e1){
-                JOptionPane.showMessageDialog(ClientMain.ctrl.gui, Messages.connectionError, Messages.error, JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(Controller.gui, Messages.connectionError, Messages.error, JOptionPane.ERROR_MESSAGE);
                 continue;
             }
         }

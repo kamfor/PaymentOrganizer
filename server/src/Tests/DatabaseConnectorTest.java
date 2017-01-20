@@ -68,7 +68,8 @@ public class DatabaseConnectorTest {
         DatabaseConnector testDatabase = new DatabaseConnector("","","");
         testDatabase.connectMysql();
         testDatabase.readMysqlData();
-        Payment paymentToAdd  = new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes");
+        Payment paymentToAdd  = new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),
+                                            new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes");
 
         Vector<Payment> paymentVectorToAdd = new Vector<>();
 
@@ -136,7 +137,8 @@ public class DatabaseConnectorTest {
         DatabaseConnector testDatabase = new DatabaseConnector("","","");
         testDatabase.connectMysql();
         testDatabase.readMysqlData();
-        Payment paymentToAdd  = new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes");
+        Payment paymentToAdd  = new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),
+                                            new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes");
 
         Vector<Payment> paymentVectorToAdd = new Vector<>();
 
@@ -199,7 +201,8 @@ public class DatabaseConnectorTest {
         DatabaseConnector testDatabase = new DatabaseConnector("","","");
         testDatabase.connectMysql();
         testDatabase.readMysqlData();
-        Payment paymentToAdd  = new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes");
+        Payment paymentToAdd  = new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),
+                                            new java.sql.Date(150),new Integer(1),new Integer(1),"Doc name","notes");
 
         Vector<Payment> paymentVectorToAdd = new Vector<>();
 
@@ -219,13 +222,17 @@ public class DatabaseConnectorTest {
     @Test
     public void getAgentFromPayment() throws Exception {
         DatabaseConnector testDatabase = new DatabaseConnector("","","");
-        assertNull(testDatabase.getAgentFromPayment(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),new java.sql.Date(150),new Integer(1000),new Integer(1000),"Doc name","notes")));
+        assertNull(testDatabase.getAgentFromPayment(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),
+                                                    new java.sql.Date(100),new java.sql.Date(150),new Integer(1000),
+                                                    new Integer(1000),"Doc name","notes")));
     }
 
     @Test
     public void getSubjectFromPayment() throws Exception {
         DatabaseConnector testDatabase = new DatabaseConnector("","","");
-        assertNull(testDatabase.getAgentFromPayment(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),new java.sql.Date(100),new java.sql.Date(150),new Integer(1000),new Integer(1000),"Doc name","notes")));
+        assertNull(testDatabase.getAgentFromPayment(new Payment(1000000,Boolean.FALSE,"type",new Float(100.0),
+                                                    new java.sql.Date(100),new java.sql.Date(150),new Integer(1000),
+                                                    new Integer(1000),"Doc name","notes")));
     }
 
 

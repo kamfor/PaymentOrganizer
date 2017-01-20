@@ -9,10 +9,10 @@ import java.util.Vector;
 public class DatabaseConnector {
 
     static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static String DB_URL = "jdbc:mysql://s52.hekko.net.pl/kfforex_java";
+    static String DB_URL = "";
 
-    static String USER = "kfforex_java";
-    static String PASS = "fasada";
+    static String USER = "";
+    static String PASS = "";
 
     private Connection conn;
 

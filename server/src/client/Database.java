@@ -58,7 +58,7 @@ public class Database {
                                 if(temp.size()>0) updateLocalData(temp);
                             break;
                             case Message:
-                                System.out.println(ios.readObject());
+                                JOptionPane.showMessageDialog(ClientMain.ctrl.gui, ios.readObject(), Messages.error, JOptionPane.ERROR_MESSAGE);
                         }
                     }else{
                         System.out.println(Messages.unsupportedData);
